@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Edit property string MySQL value in appsettings.json
+      uses: benday-inc/set-property-value-in-appsettings@v1.3
+      with:
+        pathtosettingsfile: 'appsettings.json'
+        keyname1: 'ConnectionStrings'
+        keyname2: 'MySQL'
+        valuetoset: ${{ secrets.ConnectionStrings }}
+    - name: Edit property string JWT Key value in appsettings.json
+      uses: benday-inc/set-property-value-in-appsettings@v1.3
+      with:
+        pathtosettingsfile: 'appsettings.json'
+        keyname1: 'JwtKey'
+        valuetoset: ${{ secrets.JWT_KEY }}
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
