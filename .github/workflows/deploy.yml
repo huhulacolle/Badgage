@@ -1,8 +1,10 @@
 name: Deploy
 
 on:
-  pull_request:
-    branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
+  push:
+    branches: [ "feature/deployment" ]
 
 jobs:
   build:
