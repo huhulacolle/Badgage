@@ -20,7 +20,7 @@ namespace Badgage.Services
         public string GenerateToken(int Id, string Nom, string Email)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.UTF8.GetBytes(configuration["Jwt"]);
+            var tokenKey = Encoding.UTF8.GetBytes(configuration["JwtKey"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
