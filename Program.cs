@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FluentMigrator.Runner;
 using System.Reflection;
+using Badgage.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ string ConnectionString = builder.Configuration.GetConnectionString("MySQL");
 // Add services to the container.
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Configure le middleware pour le token JWT
 string JwtKey = builder.Configuration["JwtKey"];
