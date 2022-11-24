@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FluentMigrator.Runner;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+string ConnectionString = builder.Configuration.GetConnectionString("MySQL");
 
 // Add services to the container.
 builder.Services.AddSwaggerGen();
@@ -19,6 +23,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey))
     };
 });
+// Configure la migration 
+builder.Services.AddFluentMigratorCore()
+    .ConfigureRunner(config => config
+        .AddMySql5()
+        .WithGlobalConnectionString(ConnectionString)
+        .ScanIn(Assembly.GetExecutingAssembly()).For.All())
+    .AddLogging(lb => lb.AddFluentMigratorConsole()
+    );
 
 var app = builder.Build();
 
@@ -33,6 +45,12 @@ else
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Lance la migration
+using var scope = app.Services.CreateScope();
+var migrator = scope.ServiceProvider.GetService<IMigrationRunner>()!;
+migrator.MigrateUp();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
