@@ -1,0 +1,1 @@
+﻿global using Badgage.Interfaces.Services;
