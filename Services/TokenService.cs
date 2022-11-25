@@ -22,7 +22,7 @@ namespace Badgage.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
               {
-                  new Claim(ClaimTypes.Email, Email),
+                  new Claim("email", Email),
                   new Claim("name", Nom),
                   new Claim("id", Id.ToString())
               }),
