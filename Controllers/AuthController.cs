@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Badgage.Controllers
 {
@@ -9,14 +11,16 @@ namespace Badgage.Controllers
     {
         private readonly IAuthRepository authRepository;
         private readonly ITokenService tokenService;
+        private readonly ClaimsPrincipal jwt;
 
-        public AuthController(IAuthRepository authRepository, ITokenService tokenService)
+        public AuthController(IAuthRepository authRepository, ITokenService tokenService, ClaimsPrincipal jwt)
         {
             this.authRepository = authRepository;
             this.tokenService = tokenService;
+            this.jwt = jwt;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register(User user)
         {
             try
@@ -30,7 +34,7 @@ namespace Badgage.Controllers
             }
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLogin userLogin)
         {
             var result = await authRepository.Login(userLogin);
@@ -38,6 +42,7 @@ namespace Badgage.Controllers
             if (result != null)
             {
                 string nom = result.Prenom + " " + result.Nom;
+
                 string token = tokenService.GenerateToken(result.IdUtil, nom, result.AdresseMail);
 
                 return Ok(token);
@@ -46,6 +51,14 @@ namespace Badgage.Controllers
             {
                 return Unauthorized();
             }
+        }
+
+        [Authorize]
+        [HttpGet("test")]
+        public IActionResult Test()
+        {
+
+            return Ok();
         }
     }
 }
