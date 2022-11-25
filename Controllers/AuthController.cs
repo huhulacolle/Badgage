@@ -26,7 +26,7 @@ namespace Badgage.Controllers
             try
             {
                 await authRepository.Register(user);
-                return Ok();
+                return Ok("Compte créé");
             }
             catch (Exception ex)
             {
