@@ -23,8 +23,8 @@ namespace Badgage.Services
                 Subject = new ClaimsIdentity(new Claim[]
               {
                   new Claim(ClaimTypes.Email, Email),
-                  new Claim(ClaimTypes.Name, Nom),
-                  new Claim(ClaimTypes.Sid, Id.ToString())
+                  new Claim("name", Nom),
+                  new Claim("id", Id.ToString())
               }),
 
                 Expires = DateTime.Now.AddDays(1),

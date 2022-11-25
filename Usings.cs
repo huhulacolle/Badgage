@@ -3,3 +3,4 @@ global using Badgage.Models;
 global using Badgage.Interfaces.Repositories;
 global using Badgage.Repositories;
 global using Dapper;
+global using Badgage.Infrastructure;
