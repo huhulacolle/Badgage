@@ -1,23 +1,28 @@
+using Badgage.Infrastructure;
+using Badgage.Services;
+using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using FluentMigrator.Runner;
 using System.Reflection;
-using Badgage.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-string ConnectionString = builder.Configuration.GetConnectionString("MySQL");
 
 // Add services to the container.
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
 
+string ConnectionString = builder.Configuration.GetConnectionString("MySQL");
+
+builder.Services.AddSingleton(new DefaultSqlConnectionFactory(ConnectionString));
+
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 // Configure le middleware pour le token JWT
 string JwtKey = builder.Configuration["JwtKey"];
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = false,
@@ -26,6 +31,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey))
     };
 });
+
 // Configure la migration 
 builder.Services.AddFluentMigratorCore()
     .ConfigureRunner(config => config

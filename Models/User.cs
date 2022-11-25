@@ -2,9 +2,11 @@
 {
     public class User
     {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public DateTime DateNaissance { get; set; }
+        public int? Id { get; set; }
+        public string Nom { get; set; } = null!;
+        public string Prenom { get; set; } = null!;
+        public string AdresseMail { get; set; } = null!;
+        public string Mdp { get; set; } = null!;
+        public DateTime DateNaiss { get; set; }
     }
 }
