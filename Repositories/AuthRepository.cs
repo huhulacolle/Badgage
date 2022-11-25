@@ -10,9 +10,18 @@
         {
             this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
         }
-        public Task<string> Login(User user)
+        public async Task<User?> Login(UserLogin userLogin)
         {
-            throw new NotImplementedException();
+            string sql = "SELECT IdUtil, adressemail, mdp FROM user WHERE adressemail = @adressemail";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            var result = await connec.QueryFirstOrDefaultAsync<User>(sql, userLogin);
+            
+            if (result != null && BCrypt.Verify(userLogin.Mdp, result.Mdp))
+            {
+                return result;
+            }
+            return null;
         }
 
         public async Task Register(User user)

@@ -2,7 +2,7 @@
 {
     public interface IAuthRepository
     {
-        public Task<string> Login(User user);
+        public Task<User> Login(UserLogin userLogin);
         public Task Register(User user);
     }
 }
