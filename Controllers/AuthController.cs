@@ -52,13 +52,13 @@ namespace Badgage.Controllers
                 return Unauthorized();
             }
         }
-
+        
+        // pour tester la récupération de l'id via le token jwt
         [Authorize]
         [HttpGet("test")]
-        public IActionResult Test()
+        public ActionResult<int> Test()
         {
-
-            return Ok();
+            return Ok(jwt.FindFirstValue("id"));
         }
     }
 }

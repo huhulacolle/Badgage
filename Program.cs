@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors();
 
 string ConnectionString = builder.Configuration.GetConnectionString("MySQL");
@@ -19,6 +20,12 @@ builder.Services.AddSingleton(new DefaultSqlConnectionFactory(ConnectionString))
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+builder.Services.AddScoped(provider =>
+{
+    var context = provider.GetRequiredService<IHttpContextAccessor>();
+    return context.HttpContext.User;
+});
 
 // Configure le middleware pour le token JWT
 string JwtKey = builder.Configuration["JwtKey"];
