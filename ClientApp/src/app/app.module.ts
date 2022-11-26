@@ -1,6 +1,6 @@
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
-import { API_BASE_URL, UserBadgageClient } from './client/badgageClient';
+import { API_BASE_URL, AuthBadgageClient } from './client/badgageClient';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -32,7 +32,7 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
     ])
   ],
   providers: [
-    UserBadgageClient,
+    AuthBadgageClient,
     {
 			provide: APP_INITIALIZER,
 			useFactory: apiUrlServiceFactory,

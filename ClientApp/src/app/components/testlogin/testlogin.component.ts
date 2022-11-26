@@ -1,3 +1,4 @@
+import { StorageService } from './../../services/storage.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./testlogin.component.css']
 })
 export class TestloginComponent {
+
+  constructor(
+    private storageService: StorageService
+  ) { }
+
+  disconnect(): void {
+    this.storageService.removeUser();
+  }
 
 }

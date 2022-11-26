@@ -2,10 +2,10 @@
 <br><br>
 Login
 <br><br>
-<form action="">
-  <input type="email" placeholder="email">
+<form (ngSubmit)="login()">
+  <input type="email" [(ngModel)]="email" name="email" placeholder="email">
   <br>
-  <input type="password" placeholder="mot de passe">
+  <input type="password" [(ngModel)]="mdp" name="mdp" placeholder="mot de passe">
   <br>
   <input type="submit">
 </form>
