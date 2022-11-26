@@ -19,6 +19,7 @@ export class IsSignedInGuard implements CanActivate {
     const isLoginIn = this.storageService.isLoggedIn();
 
     if (!isLoginIn) {
+      this.storageService.removeUser();
       this.router.navigateByUrl("/");
     }
 
