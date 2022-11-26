@@ -4,12 +4,13 @@ import { API_BASE_URL, UserBadgageClient } from './client/badgageClient';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { ApiUrlService, apiUrlServiceFactory } from './services/api-url.service';
 import { TestloginComponent } from './components/testlogin/testlogin.component';
+import { TokenInterceptorService } from './services/token-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,11 @@ import { TestloginComponent } from './components/testlogin/testlogin.component';
     { provide: API_BASE_URL,
       useFactory: (service: ApiUrlService) => service.apiUrl,
       deps: [ApiUrlService]
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true,
     },
   ],
   bootstrap: [AppComponent]
