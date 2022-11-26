@@ -1,23 +1,36 @@
+using Badgage.Infrastructure;
+using Badgage.Services;
+using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using FluentMigrator.Runner;
 using System.Reflection;
-using Badgage.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+builder.Services.AddSwaggerDocument();
+builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddCors();
+
 string ConnectionString = builder.Configuration.GetConnectionString("MySQL");
 
-// Add services to the container.
-builder.Services.AddSwaggerGen();
-builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton(new DefaultSqlConnectionFactory(ConnectionString));
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+builder.Services.AddScoped(provider =>
+{
+    var context = provider.GetRequiredService<IHttpContextAccessor>();
+    return context.HttpContext.User;
+});
 
 // Configure le middleware pour le token JWT
 string JwtKey = builder.Configuration["JwtKey"];
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = false,
@@ -26,6 +39,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey))
     };
 });
+
 // Configure la migration 
 builder.Services.AddFluentMigratorCore()
     .ConfigureRunner(config => config
@@ -45,8 +59,8 @@ if (!app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseOpenApi();
+    app.UseSwaggerUi3();
 }
 
 // Lance la migration
@@ -58,6 +72,15 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseCors(c =>
+{
+    c.AllowAnyHeader();
+    c.AllowAnyMethod();
+    c.AllowAnyOrigin();
+});
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
