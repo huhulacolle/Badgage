@@ -1,0 +1,17 @@
+<a routerLink="/login">Login</a>
+<br><br>
+Register
+<br><br>
+<form ngNativeValidate (ngSubmit)="register()">
+  <input type="email" [(ngModel)]="email" name="email" placeholder="email" required>
+  <br>
+  <input type="password" [(ngModel)]="mdp" name="mdp" placeholder="mot de passe" required>
+  <br>
+  <input type="text" [(ngModel)]="nom" name="nom" placeholder="nom" required>
+  <br>
+  <input type="text" [(ngModel)]="prenom" name="prenom" placeholder="prenom" required>
+  <br>
+  <input type="date" [(ngModel)]="naissance" name="naissance" placeholder="Date de naissance" required>
+  <br>
+  <input type="submit">
+</form>
