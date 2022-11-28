@@ -7,29 +7,24 @@ namespace Badgage.Controllers
     public class UserController : ControllerBase
     {
 
+        private readonly IUserRepository userRepository;
+        
+        public UserController(IUserRepository userRepository) { 
+            this.userRepository = userRepository;
+        }
+
         [HttpGet]
-        public async Task<ActionResult<User>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return Ok("No data");
+            var result = await userRepository.GetUsers();
+            return Ok(result);
         }
 
-        [HttpGet(":Email/:Nom")]
-        public async Task<ActionResult<User>> GetUser(string? Email, string? Nom)
+        [HttpGet("{Email}")]
+        public async Task<ActionResult<User>> GetUser(string Email)
         {
-            return Ok("No data found with the specified criterias");
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> CreateUser(User user)
-        {
-            try
-            {
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = await userRepository.GetUser(Email);
+            return Ok(result);
         }
     }
 }
