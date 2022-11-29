@@ -13,7 +13,7 @@ namespace Badgage.Migrations
         public override void Up()
         {
             Create.Table("Role")
-                .WithColumn("idRole").AsInt32().PrimaryKey()
+                .WithColumn("idRole").AsInt32().PrimaryKey().Identity()
                 .WithColumn("libelle").AsString().NotNullable().Unique();
         }
     }
