@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "feature/FixUrlApiAngularDevAndProd" ]
 
 jobs:
   build:
@@ -22,6 +22,12 @@ jobs:
         pathtosettingsfile: 'appsettings.json'
         keyname1: 'JwtKey'
         valuetoset: ${{ secrets.JWT_KEY }}
+    - name: Edit property string Url Api Key value in settings.json for Front
+      uses: benday-inc/set-property-value-in-appsettings@v1.3
+      with:
+        pathtosettingsfile: 'ClientApp/src/assets/settings.json'
+        keyname1: 'url'
+        valuetoset: 'https://badgage.herokuapp.com/'
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
