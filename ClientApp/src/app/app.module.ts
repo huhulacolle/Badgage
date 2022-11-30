@@ -41,7 +41,7 @@ import { TokenInterceptorService } from './services/token-interceptor.service';
 			multi: true,
     },
     { provide: API_BASE_URL,
-      useFactory: (service: ApiUrlService) => service.apiUrl,
+      useFactory: (service: ApiUrlService) => service.apiUrl.url,
       deps: [ApiUrlService]
     },
     {

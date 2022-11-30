@@ -1,18 +1,25 @@
+import { lastValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { Settings } from '../interfaces/settings';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiUrlService {
 
-  public apiUrl = "";
+  constructor(
+    private http: HttpClient
+  ) { }
 
-  load(): void {
-    this.apiUrl = environment.api;
+  public apiUrl!: Settings;
+
+  async load(): Promise<void> {
+    this.apiUrl = await lastValueFrom(this.http.get<Settings>("assets/settings.json"));
+    console.log(this.apiUrl);
   }
 }
 
 export function apiUrlServiceFactory(apiUrlService: ApiUrlService) {
-	return (): void => apiUrlService.load();
+	return (): Promise<void> => apiUrlService.load();
 }
