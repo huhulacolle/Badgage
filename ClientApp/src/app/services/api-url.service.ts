@@ -16,7 +16,6 @@ export class ApiUrlService {
 
   async load(): Promise<void> {
     this.apiUrl = await lastValueFrom(this.http.get<Settings>("assets/settings.json"));
-    console.log(this.apiUrl);
   }
 }
 
