@@ -27,7 +27,7 @@ jobs:
       with:
         pathtosettingsfile: 'ClientApp/src/assets/settings.json'
         keyname1: 'url'
-        valuetoset: 'https://badgage.herokuapp.com/'
+        valuetoset: 'https://badgage.herokuapp.com'
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
