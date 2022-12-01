@@ -5,12 +5,12 @@ namespace Badgage.Repositories
 {
     public class RoleRepository : IRoleRepository
     {
-        private readonly DefaultSqlConnectionFactory defaultSqlConnectionFactory;
+            private readonly DefaultSqlConnectionFactory defaultSqlConnectionFactory;
 
-        public RoleRepository(DefaultSqlConnectionFactory defaultSqlConnectionFactory)
-        {
-            this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
-        }
+            public RoleRepository(DefaultSqlConnectionFactory defaultSqlConnectionFactory)
+            {
+                this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
+            }
 
         public async Task createRole(Role role)
         {
