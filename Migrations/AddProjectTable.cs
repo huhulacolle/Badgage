@@ -14,7 +14,7 @@ namespace Badgage.Migrations
         {
             Create.Table("Project")
                 .WithColumn("idProject").AsInt32().PrimaryKey().Identity()
-                .WithColumn("projectName").AsString().NotNullable().Unique();
+                .WithColumn("projectName").AsString().NotNullable();
         }
     }
 }
