@@ -5,7 +5,7 @@ namespace Badgage.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class RoleController : Controller
+    public class RoleController : ControllerBase
     {
         private readonly IRoleRepository iRoleRepository;
 
@@ -15,15 +15,17 @@ namespace Badgage.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Role>> getRoles()
+        public async Task<ActionResult<IEnumerable<Role>>> getRoles()
         {
-            return await iRoleRepository.getRoles();
+            var result = await iRoleRepository.getRoles();
+            return Ok(result);
         }
 
         [HttpGet("{idRole}")]
         public async Task<ActionResult<Role>> getRole(int idRole)
         {
-            return await iRoleRepository.getRole(idRole);
+            var result = await iRoleRepository.getRole(idRole); ;
+            return Ok(result);
         }
 
         [HttpPost]
