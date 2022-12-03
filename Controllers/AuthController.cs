@@ -65,7 +65,7 @@ namespace Badgage.Controllers
             }
             catch (Exception e)
             {
-                return Forbid(e.Message);
+                return Unauthorized(e.Message);
             }
         }
      
