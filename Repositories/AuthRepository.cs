@@ -3,6 +3,8 @@
     using Badgage.Exceptions;
     using System.ComponentModel.DataAnnotations;
     using BCrypt.Net;
+    using Badgage.Models;
+    using MySqlX.XDevAPI.Common;
 
     public class AuthRepository : IAuthRepository
     {
@@ -41,6 +43,37 @@
 
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, user);  
+        }
+
+        public async Task UpdateMdp(MdpInput mdpInput, int id)
+        {
+            var dictionary = new Dictionary<string, object>()
+            {
+                { "@id", id },
+            };
+            var param = new DynamicParameters(dictionary);
+
+            string getMdpSql = "SELECT mdp FROM user WHERE idUtil = @id";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            string currentMdp = await connec.QueryFirstOrDefaultAsync<string>(getMdpSql, param);
+
+            if(BCrypt.Verify(mdpInput.OldMdp, currentMdp))
+            {
+                dictionary = new Dictionary<string, object>()
+                {
+                    {"@id", id },
+                    {"mdp", BCrypt.HashPassword(mdpInput.NewMdp) }
+                };
+                param = new DynamicParameters(dictionary);
+
+                string newMdpSql = "UPDATE user SET mdp = @mdp WHERE idUtil = @id";
+                await connec.ExecuteAsync(newMdpSql, param);
+            }
+            else
+            {
+                throw new PasswordDoesNotMatchException();
+            }
         }
     }
 }
