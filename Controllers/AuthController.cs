@@ -68,6 +68,19 @@ namespace Badgage.Controllers
                 return Unauthorized(e.Message);
             }
         }
-     
+
+        [HttpPost("forgotMdp")]
+        public async Task<IActionResult> ForgotMdp(UserLogin userLogin)
+        {
+            try
+            {
+                await authRepository.ForgotMdp(userLogin);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
+        }
     }
 }

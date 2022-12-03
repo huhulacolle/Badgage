@@ -1,6 +1,7 @@
 ﻿namespace Badgage.Repositories
 {
     using System.ComponentModel.DataAnnotations;
+    using Badgage.Models;
     using BCrypt.Net;
 
     public class AuthRepository : IAuthRepository
@@ -11,6 +12,7 @@
         {
             this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
         }
+
         public async Task<User?> Login(UserLogin userLogin)
         {
             string sql = "SELECT IdUtil, adressemail, nom, prenom, mdp FROM user WHERE adressemail = @adressemail";
@@ -71,6 +73,17 @@
             {
                 throw new PasswordDoesNotMatchException();
             }
+        }
+
+        // méthode temporaire
+        public async Task ForgotMdp(UserLogin userLogin)
+        {
+            userLogin.Mdp = BCrypt.HashPassword(userLogin.Mdp);
+
+            string sql = "UPDATE user SET mdp = @Mdp WHERE adressemail = @AdresseMail";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, userLogin);
         }
     }
 }
