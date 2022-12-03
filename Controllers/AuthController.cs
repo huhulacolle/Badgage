@@ -54,7 +54,7 @@ namespace Badgage.Controllers
         }
 
         [Authorize]
-        [HttpPost("updateMdp")]
+        [HttpPut("updateMdp")]
         public async Task<IActionResult> UpdateMdp(MdpInput mdpInput)
         {
             try
@@ -69,7 +69,7 @@ namespace Badgage.Controllers
             }
         }
 
-        [HttpPost("forgotMdp")]
+        [HttpPut("forgotMdp")]
         public async Task<IActionResult> ForgotMdp(UserLogin userLogin)
         {
             try
