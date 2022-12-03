@@ -1,10 +1,7 @@
 ﻿namespace Badgage.Repositories
 {
-    using Badgage.Exceptions;
     using System.ComponentModel.DataAnnotations;
     using BCrypt.Net;
-    using Badgage.Models;
-    using MySqlX.XDevAPI.Common;
 
     public class AuthRepository : IAuthRepository
     {
