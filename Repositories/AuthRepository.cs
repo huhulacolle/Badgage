@@ -1,7 +1,7 @@
 ﻿namespace Badgage.Repositories
 {
-    using Badgage.Exceptions;
     using System.ComponentModel.DataAnnotations;
+    using Badgage.Models;
     using BCrypt.Net;
 
     public class AuthRepository : IAuthRepository
@@ -12,6 +12,7 @@
         {
             this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
         }
+
         public async Task<User?> Login(UserLogin userLogin)
         {
             string sql = "SELECT IdUtil, adressemail, nom, prenom, mdp FROM user WHERE adressemail = @adressemail";
@@ -41,6 +42,48 @@
 
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, user);  
+        }
+
+        public async Task UpdateMdp(MdpInput mdpInput, int id)
+        {
+            var dictionary = new Dictionary<string, object>()
+            {
+                { "@id", id },
+            };
+            var param = new DynamicParameters(dictionary);
+
+            string getMdpSql = "SELECT mdp FROM user WHERE idUtil = @id";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            string currentMdp = await connec.QueryFirstOrDefaultAsync<string>(getMdpSql, param);
+
+            if(BCrypt.Verify(mdpInput.OldMdp, currentMdp))
+            {
+                dictionary = new Dictionary<string, object>()
+                {
+                    {"@id", id },
+                    {"mdp", BCrypt.HashPassword(mdpInput.NewMdp) }
+                };
+                param = new DynamicParameters(dictionary);
+
+                string newMdpSql = "UPDATE user SET mdp = @mdp WHERE idUtil = @id";
+                await connec.ExecuteAsync(newMdpSql, param);
+            }
+            else
+            {
+                throw new PasswordDoesNotMatchException();
+            }
+        }
+
+        // méthode temporaire
+        public async Task ForgotMdp(UserLogin userLogin)
+        {
+            userLogin.Mdp = BCrypt.HashPassword(userLogin.Mdp);
+
+            string sql = "UPDATE user SET mdp = @Mdp WHERE adressemail = @AdresseMail";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, userLogin);
         }
     }
 }

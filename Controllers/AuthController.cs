@@ -49,16 +49,38 @@ namespace Badgage.Controllers
             }
             else
             {
-                return Unauthorized();
+                return Forbid();
             }
         }
-        
-        // pour tester la récupération de l'id via le token jwt
+
         [Authorize]
-        [HttpGet("test")]
-        public ActionResult<int> Test()
+        [HttpPut("updateMdp")]
+        public async Task<IActionResult> UpdateMdp(MdpInput mdpInput)
         {
-            return Ok(jwt.FindFirstValue("id"));
+            try
+            {
+                int id = int.Parse(jwt.FindFirstValue("id"));
+                await authRepository.UpdateMdp(mdpInput, id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
+        }
+
+        [HttpPut("forgotMdp")]
+        public async Task<IActionResult> ForgotMdp(UserLogin userLogin)
+        {
+            try
+            {
+                await authRepository.ForgotMdp(userLogin);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return Unauthorized(e.Message);
+            }
         }
     }
 }
