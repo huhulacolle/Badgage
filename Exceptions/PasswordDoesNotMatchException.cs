@@ -4,6 +4,6 @@
     public class PasswordDoesNotMatchException : Exception
     {
         public PasswordDoesNotMatchException() 
-            : base("Mot de passe incorrect") { }
+            : base("les mots de passes ne correspondent pas") { }
     }
 }
