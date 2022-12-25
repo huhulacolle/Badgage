@@ -29,7 +29,7 @@ export class RegisterComponent {
   nom!: string;
   prenom!: string;
   naissance!: string;
-  loginPage: boolean;
+  loginPage = true;
   register(): void {
     const user = new User;
     user.adresseMail = this.email;
