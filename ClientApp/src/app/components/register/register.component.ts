@@ -23,13 +23,13 @@ export class RegisterComponent {
     private authService: AuthService,
     private storageService: StorageService,
     private router: Router
-  ) 
+  ){}
   email!: string;
   mdp!: string;
   nom!: string;
   prenom!: string;
   naissance!: string;
-  loginPage: true;
+  loginPage: boolean;
   register(): void {
     const user = new User;
     user.adresseMail = this.email;
