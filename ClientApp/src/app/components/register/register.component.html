@@ -1,17 +1,73 @@
-<a routerLink="/login">Login</a>
-<br><br>
-Register
-<br><br>
-<form ngNativeValidate (ngSubmit)="register()">
-  <input type="email" [(ngModel)]="email" name="email" placeholder="email" required>
-  <br>
-  <input type="password" [(ngModel)]="mdp" name="mdp" placeholder="mot de passe" required>
-  <br>
-  <input type="text" [(ngModel)]="nom" name="nom" placeholder="nom" required>
-  <br>
-  <input type="text" [(ngModel)]="prenom" name="prenom" placeholder="prenom" required>
-  <br>
-  <input type="date" [(ngModel)]="naissance" name="naissance" placeholder="Date de naissance" required>
-  <br>
-  <input type="submit">
-</form>
+<div class="vh-100">
+  <div class="container py-5 h-100" *ngIf="!loginPage" [@enterR] [@leaveR]>
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+            <form ngNativeValidate (ngSubmit)="register()">
+              <div class="mb-md-5 mt-md-4 pb-5">
+                <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label" for="email">Email :</label>
+                  <input type="email" [(ngModel)]="email" name="email" placeholder="email"
+                    class="form-control form-control-lg" required>
+                </div>
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label" for="mdp">Mot de passe :</label>
+                  <input type="password" [(ngModel)]="mdp" name="mdp" placeholder="mot de passe"
+                    class="form-control form-control-lg" required>
+                </div>
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label" for="nom">Nom :</label>
+                  <input type="text" [(ngModel)]="nom" name="nom" placeholder="nom" class="form-control form-control-lg"
+                    required>
+                </div>
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label" for="prenom">Prenom :</label>
+                  <input type="text" [(ngModel)]="prenom" name="prenom" class="form-control form-control-lg"
+                    placeholder="prenom" required>
+                </div>
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label" for="naissance" [@enterL]>Date de naissance :</label>
+                  <input type="date" [(ngModel)]="naissance" name="naissance" class="form-control form-control-lg"
+                    placeholder="Date de naissance" required>
+                </div>
+              </div>
+              <input class="btn btn-outline-light btn-lg px-5" type="submit" />
+              <br>
+              <button class="btn btn-link" style="cursor: pointer;" (click)="toLogin()">Vous avez déjà un compte ?</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container py-5 h-100" *ngIf="loginPage" [@enterL]>
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+            <form ngNativeValidate (ngSubmit)="login()">
+              <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+              <div class="form-outline form-white mb-4">
+                <label class="form-label" for="email">Email :</label>
+                <input type="email" [(ngModel)]="email" name="email" placeholder="email"
+                  class="form-control form-control-lg" required>
+              </div>
+              <br>
+              <div class="form-outline form-white mb-4">
+                <label class="form-label" for="mdp">Mot de passe :</label>
+                <input type="password" [(ngModel)]="mdp" name="mdp" placeholder="mot de passe"
+                  class="form-control form-control-lg" required>
+              </div>
+              <br>
+              <input class="btn btn-outline-light btn-lg px-5" type="submit">
+              <br>
+              <button class="btn btn-link" style="cursor: pointer;" (click)="toRegister()">Vous n'avez pas de compte ? </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

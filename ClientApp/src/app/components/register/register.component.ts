@@ -4,11 +4,18 @@ import { Router } from '@angular/router';
 import { UserLogin } from 'src/app/client/badgageClient';
 import { AuthService } from 'src/app/services/auth.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { bounceInLeftOnEnterAnimation, bounceOutLeftOnLeaveAnimation, bounceInRightOnEnterAnimation, bounceOutRightOnLeaveAnimation } from 'angular-animations';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
+  animations: [
+    bounceInLeftOnEnterAnimation({anchor: 'enterL', delay : 100,animateChildren: 'together'}),
+    bounceOutLeftOnLeaveAnimation({anchor: 'leaveL', animateChildren:'together'}),
+    bounceInRightOnEnterAnimation({anchor: 'enterR', animateChildren: 'before'}),
+  ]
 })
 export class RegisterComponent {
 
@@ -16,14 +23,13 @@ export class RegisterComponent {
     private authService: AuthService,
     private storageService: StorageService,
     private router: Router
-  )  { }
-
+  ){}
   email!: string;
   mdp!: string;
   nom!: string;
   prenom!: string;
   naissance!: string;
-
+  loginPage = true;
   register(): void {
     const user = new User;
     user.adresseMail = this.email;
@@ -43,6 +49,14 @@ export class RegisterComponent {
         console.error(err);
       }
     )
+  }
+
+  toLogin(): void {
+    this.loginPage = true;
+  }
+
+  toRegister(): void {
+    this.loginPage = false;
   }
 
   login(): void {
