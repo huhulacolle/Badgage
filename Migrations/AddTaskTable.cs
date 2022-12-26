@@ -2,7 +2,7 @@
 
 namespace Badgage.Migrations
 {
-    [Migration(2)]
+    [Migration(4)]
     public class AddTaskTable : Migration
     {
         public override void Down()
@@ -14,10 +14,10 @@ namespace Badgage.Migrations
         {
             Create.Table("Task")
                 .WithColumn("idtache").AsInt32().PrimaryKey().Identity()
-                .WithColumn("nomdetache").AsString().NotNullable().Unique()
-                .WithColumn("description").AsString().NotNullable().Unique()
-                .WithColumn("datefin").AsDateTime().NotNullable().Unique()
-                .WithColumn("datecreation").AsDateTime().NotNullable().Unique();
+                .WithColumn("nomdetache").AsString()
+                .WithColumn("description").AsString()
+                .WithColumn("datefin").AsDateTime()
+                .WithColumn("datecreation").AsDateTime();
         }
     }
 }
