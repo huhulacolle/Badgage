@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Badgage.Interfaces.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Badgage.Controllers
@@ -7,12 +8,53 @@ namespace Badgage.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
+        private readonly ITaskRepository _taskRepository;
 
+        public TaskController(ITaskRepository taskRepository)
+        {
+            this._taskRepository = taskRepository;
+        }
 
         [HttpGet]
-        public async Task<ActionResult<Models.Task>> GetTask()
+        public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasks()
         {
-            return Ok("No Task");
+            var result = await _taskRepository.GetTasks();
+            return Ok(result);
+        }
+
+        [HttpGet("{idTask}")]
+        public async Task<ActionResult<Role>> GetTask(int idRole)
+        {
+            var result = await _taskRepository.GetTask(idRole);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetTask(TaskModel taskModel)
+        {
+            try
+            {
+                await _taskRepository.SetTask(taskModel);
+                return Ok("tâche créé");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{idRole}")]
+        public async Task<IActionResult> DeleteTask(int idTask)
+        {
+            try
+            {
+                await _taskRepository.DeleteTask(idTask);
+                return Ok("Tâche supprimé");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
