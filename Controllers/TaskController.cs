@@ -30,6 +30,8 @@ namespace Badgage.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
         public async Task<IActionResult> SetTask(TaskModel taskModel)
         {
             try
@@ -44,6 +46,8 @@ namespace Badgage.Controllers
         }
 
         [HttpDelete("{idRole}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
         public async Task<IActionResult> DeleteTask(int idTask)
         {
             try
