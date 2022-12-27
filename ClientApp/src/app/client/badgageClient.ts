@@ -26,7 +26,7 @@ export class AuthBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
-    register(user: User): Observable<void> {
+    register(user: UserModel): Observable<void> {
         let url_ = this.baseUrl + "/api/Auth/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -263,7 +263,7 @@ export class ProjectBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
-    getProjects(): Observable<Project[]> {
+    getProjects(): Observable<ProjectModel[]> {
         let url_ = this.baseUrl + "/api/Project";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -282,14 +282,14 @@ export class ProjectBadgageClient {
                 try {
                     return this.processGetProjects(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Project[]>;
+                    return _observableThrow(e) as any as Observable<ProjectModel[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Project[]>;
+                return _observableThrow(response_) as any as Observable<ProjectModel[]>;
         }));
     }
 
-    protected processGetProjects(response: HttpResponseBase): Observable<Project[]> {
+    protected processGetProjects(response: HttpResponseBase): Observable<ProjectModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -303,7 +303,7 @@ export class ProjectBadgageClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(Project.fromJS(item));
+                    result200!.push(ProjectModel.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -318,7 +318,7 @@ export class ProjectBadgageClient {
         return _observableOf(null as any);
     }
 
-    createProject(project: Project): Observable<string> {
+    createProject(project: ProjectModel): Observable<string> {
         let url_ = this.baseUrl + "/api/Project";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -378,7 +378,7 @@ export class ProjectBadgageClient {
         return _observableOf(null as any);
     }
 
-    getProject(idProject: number): Observable<Project> {
+    getProject(idProject: number): Observable<ProjectModel> {
         let url_ = this.baseUrl + "/api/Project/{idProject}";
         if (idProject === undefined || idProject === null)
             throw new Error("The parameter 'idProject' must be defined.");
@@ -400,14 +400,14 @@ export class ProjectBadgageClient {
                 try {
                     return this.processGetProject(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Project>;
+                    return _observableThrow(e) as any as Observable<ProjectModel>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Project>;
+                return _observableThrow(response_) as any as Observable<ProjectModel>;
         }));
     }
 
-    protected processGetProject(response: HttpResponseBase): Observable<Project> {
+    protected processGetProject(response: HttpResponseBase): Observable<ProjectModel> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -418,7 +418,7 @@ export class ProjectBadgageClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Project.fromJS(resultData200);
+            result200 = ProjectModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -500,7 +500,7 @@ export class RoleBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
-    getRoles(): Observable<Role[]> {
+    getRoles(): Observable<RoleModel[]> {
         let url_ = this.baseUrl + "/api/Role";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -519,14 +519,14 @@ export class RoleBadgageClient {
                 try {
                     return this.processGetRoles(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Role[]>;
+                    return _observableThrow(e) as any as Observable<RoleModel[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Role[]>;
+                return _observableThrow(response_) as any as Observable<RoleModel[]>;
         }));
     }
 
-    protected processGetRoles(response: HttpResponseBase): Observable<Role[]> {
+    protected processGetRoles(response: HttpResponseBase): Observable<RoleModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -540,7 +540,7 @@ export class RoleBadgageClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(Role.fromJS(item));
+                    result200!.push(RoleModel.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -555,7 +555,7 @@ export class RoleBadgageClient {
         return _observableOf(null as any);
     }
 
-    createRole(role: Role): Observable<string> {
+    createRole(role: RoleModel): Observable<string> {
         let url_ = this.baseUrl + "/api/Role";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -615,7 +615,7 @@ export class RoleBadgageClient {
         return _observableOf(null as any);
     }
 
-    getRole(idRole: number): Observable<Role> {
+    getRole(idRole: number): Observable<RoleModel> {
         let url_ = this.baseUrl + "/api/Role/{idRole}";
         if (idRole === undefined || idRole === null)
             throw new Error("The parameter 'idRole' must be defined.");
@@ -637,14 +637,14 @@ export class RoleBadgageClient {
                 try {
                     return this.processGetRole(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Role>;
+                    return _observableThrow(e) as any as Observable<RoleModel>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Role>;
+                return _observableThrow(response_) as any as Observable<RoleModel>;
         }));
     }
 
-    protected processGetRole(response: HttpResponseBase): Observable<Role> {
+    protected processGetRole(response: HttpResponseBase): Observable<RoleModel> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -655,7 +655,7 @@ export class RoleBadgageClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Role.fromJS(resultData200);
+            result200 = RoleModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -737,7 +737,7 @@ export class TaskBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
-    getTasks(): Observable<TaskModel[]> {
+    getTasksByUser(): Observable<TaskModel[]> {
         let url_ = this.baseUrl + "/api/Task";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -750,11 +750,11 @@ export class TaskBadgageClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTasks(response_);
+            return this.processGetTasksByUser(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetTasks(response_ as any);
+                    return this.processGetTasksByUser(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<TaskModel[]>;
                 }
@@ -763,7 +763,7 @@ export class TaskBadgageClient {
         }));
     }
 
-    protected processGetTasks(response: HttpResponseBase): Observable<TaskModel[]> {
+    protected processGetTasksByUser(response: HttpResponseBase): Observable<TaskModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -852,7 +852,7 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
-    getTask(idRole: number | undefined, idTask: string): Observable<Role> {
+    getTask(idRole: number | undefined, idTask: string): Observable<TaskModel> {
         let url_ = this.baseUrl + "/api/Task/{idTask}?";
         if (idTask === undefined || idTask === null)
             throw new Error("The parameter 'idTask' must be defined.");
@@ -878,14 +878,14 @@ export class TaskBadgageClient {
                 try {
                     return this.processGetTask(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Role>;
+                    return _observableThrow(e) as any as Observable<TaskModel>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Role>;
+                return _observableThrow(response_) as any as Observable<TaskModel>;
         }));
     }
 
-    protected processGetTask(response: HttpResponseBase): Observable<Role> {
+    protected processGetTask(response: HttpResponseBase): Observable<TaskModel> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -896,7 +896,7 @@ export class TaskBadgageClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Role.fromJS(resultData200);
+            result200 = TaskModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -907,15 +907,11 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
-    deleteTask(idTask: number | undefined, idRole: string): Observable<string> {
-        let url_ = this.baseUrl + "/api/Task/{idRole}?";
-        if (idRole === undefined || idRole === null)
-            throw new Error("The parameter 'idRole' must be defined.");
-        url_ = url_.replace("{idRole}", encodeURIComponent("" + idRole));
-        if (idTask === null)
-            throw new Error("The parameter 'idTask' cannot be null.");
-        else if (idTask !== undefined)
-            url_ += "idTask=" + encodeURIComponent("" + idTask) + "&";
+    deleteTask(idTask: number): Observable<string> {
+        let url_ = this.baseUrl + "/api/Task/{idTask}";
+        if (idTask === undefined || idTask === null)
+            throw new Error("The parameter 'idTask' must be defined.");
+        url_ = url_.replace("{idTask}", encodeURIComponent("" + idTask));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -969,6 +965,64 @@ export class TaskBadgageClient {
         }
         return _observableOf(null as any);
     }
+
+    getTaskFromProject(id: number): Observable<TaskModel[]> {
+        let url_ = this.baseUrl + "/api/Task/Project/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTaskFromProject(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTaskFromProject(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TaskModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TaskModel[]>;
+        }));
+    }
+
+    protected processGetTaskFromProject(response: HttpResponseBase): Observable<TaskModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(TaskModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable()
@@ -982,7 +1036,7 @@ export class UserBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
-    getUsers(): Observable<User[]> {
+    getUsers(): Observable<UserModel[]> {
         let url_ = this.baseUrl + "/api/User";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1001,14 +1055,14 @@ export class UserBadgageClient {
                 try {
                     return this.processGetUsers(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<User[]>;
+                    return _observableThrow(e) as any as Observable<UserModel[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<User[]>;
+                return _observableThrow(response_) as any as Observable<UserModel[]>;
         }));
     }
 
-    protected processGetUsers(response: HttpResponseBase): Observable<User[]> {
+    protected processGetUsers(response: HttpResponseBase): Observable<UserModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1022,7 +1076,7 @@ export class UserBadgageClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(User.fromJS(item));
+                    result200!.push(UserModel.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -1037,7 +1091,7 @@ export class UserBadgageClient {
         return _observableOf(null as any);
     }
 
-    getUser(email: string | null): Observable<User> {
+    getUser(email: string | null): Observable<UserModel> {
         let url_ = this.baseUrl + "/api/User/{Email}";
         if (email === undefined || email === null)
             throw new Error("The parameter 'email' must be defined.");
@@ -1059,14 +1113,14 @@ export class UserBadgageClient {
                 try {
                     return this.processGetUser(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<User>;
+                    return _observableThrow(e) as any as Observable<UserModel>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<User>;
+                return _observableThrow(response_) as any as Observable<UserModel>;
         }));
     }
 
-    protected processGetUser(response: HttpResponseBase): Observable<User> {
+    protected processGetUser(response: HttpResponseBase): Observable<UserModel> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1077,7 +1131,7 @@ export class UserBadgageClient {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = User.fromJS(resultData200);
+            result200 = UserModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1137,7 +1191,7 @@ export interface IException {
     stackTrace?: string | undefined;
 }
 
-export class User implements IUser {
+export class UserModel implements IUserModel {
     idUtil!: number;
     nom!: string;
     prenom!: string;
@@ -1145,7 +1199,7 @@ export class User implements IUser {
     mdp!: string;
     dateNaiss!: Date;
 
-    constructor(data?: IUser) {
+    constructor(data?: IUserModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1165,9 +1219,9 @@ export class User implements IUser {
         }
     }
 
-    static fromJS(data: any): User {
+    static fromJS(data: any): UserModel {
         data = typeof data === 'object' ? data : {};
-        let result = new User();
+        let result = new UserModel();
         result.init(data);
         return result;
     }
@@ -1184,7 +1238,7 @@ export class User implements IUser {
     }
 }
 
-export interface IUser {
+export interface IUserModel {
     idUtil: number;
     nom: string;
     prenom: string;
@@ -1337,10 +1391,11 @@ export interface IMdpInput {
     newMdp: string;
 }
 
-export class Project implements IProject {
+export class ProjectModel implements IProjectModel {
+    idProject!: number;
     projectName!: string;
 
-    constructor(data?: IProject) {
+    constructor(data?: IProjectModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1351,32 +1406,36 @@ export class Project implements IProject {
 
     init(_data?: any) {
         if (_data) {
+            this.idProject = _data["idProject"];
             this.projectName = _data["projectName"];
         }
     }
 
-    static fromJS(data: any): Project {
+    static fromJS(data: any): ProjectModel {
         data = typeof data === 'object' ? data : {};
-        let result = new Project();
+        let result = new ProjectModel();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["idProject"] = this.idProject;
         data["projectName"] = this.projectName;
         return data;
     }
 }
 
-export interface IProject {
+export interface IProjectModel {
+    idProject: number;
     projectName: string;
 }
 
-export class Role implements IRole {
+export class RoleModel implements IRoleModel {
+    idRole?: number | undefined;
     libelle!: string;
 
-    constructor(data?: IRole) {
+    constructor(data?: IRoleModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1387,32 +1446,37 @@ export class Role implements IRole {
 
     init(_data?: any) {
         if (_data) {
+            this.idRole = _data["idRole"];
             this.libelle = _data["libelle"];
         }
     }
 
-    static fromJS(data: any): Role {
+    static fromJS(data: any): RoleModel {
         data = typeof data === 'object' ? data : {};
-        let result = new Role();
+        let result = new RoleModel();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["idRole"] = this.idRole;
         data["libelle"] = this.libelle;
         return data;
     }
 }
 
-export interface IRole {
+export interface IRoleModel {
+    idRole?: number | undefined;
     libelle: string;
 }
 
 export class TaskModel implements ITaskModel {
     idTache?: number | undefined;
+    idProjet!: number;
+    idUtil!: number;
     nomDeTache!: string;
-    descripton!: string;
+    description!: string;
     dateFin!: Date;
     dateCreation!: Date;
 
@@ -1428,8 +1492,10 @@ export class TaskModel implements ITaskModel {
     init(_data?: any) {
         if (_data) {
             this.idTache = _data["idTache"];
+            this.idProjet = _data["idProjet"];
+            this.idUtil = _data["idUtil"];
             this.nomDeTache = _data["nomDeTache"];
-            this.descripton = _data["descripton"];
+            this.description = _data["description"];
             this.dateFin = _data["dateFin"] ? new Date(_data["dateFin"].toString()) : <any>undefined;
             this.dateCreation = _data["dateCreation"] ? new Date(_data["dateCreation"].toString()) : <any>undefined;
         }
@@ -1445,8 +1511,10 @@ export class TaskModel implements ITaskModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["idTache"] = this.idTache;
+        data["idProjet"] = this.idProjet;
+        data["idUtil"] = this.idUtil;
         data["nomDeTache"] = this.nomDeTache;
-        data["descripton"] = this.descripton;
+        data["description"] = this.description;
         data["dateFin"] = this.dateFin ? this.dateFin.toISOString() : <any>undefined;
         data["dateCreation"] = this.dateCreation ? this.dateCreation.toISOString() : <any>undefined;
         return data;
@@ -1455,8 +1523,10 @@ export class TaskModel implements ITaskModel {
 
 export interface ITaskModel {
     idTache?: number | undefined;
+    idProjet: number;
+    idUtil: number;
     nomDeTache: string;
-    descripton: string;
+    description: string;
     dateFin: Date;
     dateCreation: Date;
 }
