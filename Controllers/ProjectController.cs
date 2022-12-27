@@ -15,14 +15,14 @@ namespace Badgage.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjects()
         {
             var result = await iProjectRepository.GetAllProjects();
             return Ok(result);
         }
 
         [HttpGet("{idProject}")]
-        public async Task<ActionResult<Project>> GetProject(int idProject)
+        public async Task<ActionResult<ProjectModel>> GetProject(int idProject)
         {
             var result = await iProjectRepository.GetProject(idProject);
             return Ok(result);
@@ -31,7 +31,7 @@ namespace Badgage.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
-        public async Task<IActionResult> CreateProject(Project project)
+        public async Task<IActionResult> CreateProject(ProjectModel project)
         {
             try
             {

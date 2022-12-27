@@ -23,7 +23,7 @@ namespace Badgage.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
-        public async Task<IActionResult> Register(User user)
+        public async Task<IActionResult> Register(UserModel user)
         {
             try
             {

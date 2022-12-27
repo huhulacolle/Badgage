@@ -1,4 +1,5 @@
 ﻿using Badgage.Models;
+using System.Threading.Tasks;
 
 namespace Badgage.Repositories
 {
@@ -25,7 +26,7 @@ namespace Badgage.Repositories
             await connec.ExecuteAsync(sql, parameters);
         }
 
-        public async Task<TaskModel> GetTask(int idTask)
+        public async Task<TaskModel> GetTaskById(int idTask)
         {
             var dictionnary = new Dictionary<string, object>()
             {
@@ -38,18 +39,41 @@ namespace Badgage.Repositories
             return await connec.QueryFirstOrDefaultAsync<TaskModel>(sql, parameters);
         }
 
-        public async Task<IEnumerable<TaskModel>> GetTasks()
+        public async Task<IEnumerable<TaskModel>> GetTasksByUser(int id)
         {
-            string sql = "Select * FROM Task";
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idUtil", id },
+            };
+            var parameters = new DynamicParameters(dictionnary);
+
+            string sql = "Select * FROM Task where idUtil = @idUtil";
             using var connec = defaultSqlConnectionFactory.Create();
-            return await connec.QueryAsync<TaskModel>(sql);
+
+            return await connec.QueryAsync<TaskModel>(sql, parameters);
         }
 
         public async Task SetTask(TaskModel taskModel)
         {
-            string sql = "INSERT INTO Task (nomdetache, description, datefin, datecreation) VALUES (@nomdetache, @description, @datefin, @datecreation)";
+            string sql = @"INSERT INTO Task (idProjet, idUtil, nomdetache, description, datefin, datecreation) 
+                            VALUES (@idProjet, @idUtil, @nomdetache, @description, @datefin, @datecreation)";
+
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, taskModel);
+        }
+
+        public Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idProject", idProject },
+            };
+            var parameters = new DynamicParameters(dictionnary);
+
+            string sql = "SELECT nomdetache, description, datefin, datecreation FROM task WHERE idProjet = @idProject";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            return connec.QueryAsync<TaskModel>(sql, parameters);
         }
     }
 }

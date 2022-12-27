@@ -12,7 +12,7 @@ namespace Badgage.Repositories
             this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
         }
 
-        public async Task createRole(Role role)
+        public async Task createRole(RoleModel role)
         {
 
             string sql = "INSERT INTO role (libelle) VALUES (@libelle)";
@@ -33,7 +33,7 @@ namespace Badgage.Repositories
             await connec.ExecuteAsync(sql, paramDic);
         }
 
-        public async Task<Role> getRole(int idRole)
+        public async Task<RoleModel> getRole(int idRole)
         {
             var roleDic = new Dictionary<string, object>()
             {
@@ -43,14 +43,14 @@ namespace Badgage.Repositories
 
             string sql = "Select * FROM role WHERE idRole = @idRole";
             using var connec = defaultSqlConnectionFactory.Create();
-            return await connec.QueryFirstOrDefaultAsync<Role>(sql, paramDic);
+            return await connec.QueryFirstOrDefaultAsync<RoleModel>(sql, paramDic);
         }
 
-        public async Task<IEnumerable<Role>> getRoles()
+        public async Task<IEnumerable<RoleModel>> getRoles()
         {
             string sql = "Select * FROM role";
             using var connec = defaultSqlConnectionFactory.Create();
-            return await connec.QueryAsync<Role>(sql);
+            return await connec.QueryAsync<RoleModel>(sql);
         }
     }
 }

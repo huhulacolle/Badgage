@@ -3,13 +3,28 @@ using Badgage.Services;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using NSwag.Generation.Processors.Security;
+using NSwag;
 using System.Reflection;
 using System.Text;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSwaggerDocument();
+builder.Services.AddSwaggerDocument(config =>
+{
+    config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT Token"));
+    config.AddSecurity("JWT Token", Enumerable.Empty<string>(),
+        new OpenApiSecurityScheme()
+        {
+            Type = OpenApiSecuritySchemeType.ApiKey,
+            Name = "Authorization",
+            In = OpenApiSecurityApiKeyLocation.Header,
+            Description = "Copiez ceci dans le champ : Bearer {token}"
+        }
+    );
+});
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors();

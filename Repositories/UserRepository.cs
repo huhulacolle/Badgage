@@ -18,7 +18,7 @@
             this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
         }
 
-        public async Task<User> GetUser(string Email)
+        public async Task<UserModel> GetUser(string Email)
         {
             var emailDic = new Dictionary<string, object>()
             {
@@ -28,15 +28,15 @@
 
             string sql = "SELECT * FROM user WHERE adressemail = @email";
             using var connec = defaultSqlConnectionFactory.Create();
-            var result = await connec.QueryFirstOrDefaultAsync<User>(sql, param);
+            var result = await connec.QueryFirstOrDefaultAsync<UserModel>(sql, param);
             return result;
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<UserModel>> GetUsers()
         {
             string sql = "SELECT * FROM user ";
             using var connec = defaultSqlConnectionFactory.Create();
-            var result = await connec.QueryAsync<User>(sql);
+            var result = await connec.QueryAsync<UserModel>(sql);
             return result;
         }
 
