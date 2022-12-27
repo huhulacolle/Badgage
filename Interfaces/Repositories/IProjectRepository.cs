@@ -2,11 +2,11 @@
 {
     public interface IProjectRepository
     {
-        public Task<IEnumerable<Project>> GetAllProjects();
+        public Task<IEnumerable<ProjectModel>> GetAllProjects();
 
-        public Task<Project> GetProject(int idProject);
+        public Task<ProjectModel> GetProject(int idProject);
 
-        public Task CreateProject(Project project);
+        public Task CreateProject(ProjectModel project);
 
         public Task DeleteProject(int idProject);
     }

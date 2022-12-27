@@ -2,8 +2,8 @@
 {
     public interface IAuthRepository
     {
-        public Task<User?> Login(UserLogin userLogin);
-        public Task Register(User user);
+        public Task<UserModel?> Login(UserLogin userLogin);
+        public Task Register(UserModel user);
 
         public Task UpdateMdp(MdpInput mdpInput, int id);
 

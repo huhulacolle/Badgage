@@ -13,12 +13,12 @@
             this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
         }
 
-        public async Task<User?> Login(UserLogin userLogin)
+        public async Task<UserModel?> Login(UserLogin userLogin)
         {
             string sql = "SELECT IdUtil, adressemail, nom, prenom, mdp FROM user WHERE adressemail = @adressemail";
 
             using var connec = defaultSqlConnectionFactory.Create();
-            var result = await connec.QueryFirstOrDefaultAsync<User>(sql, userLogin);
+            var result = await connec.QueryFirstOrDefaultAsync<UserModel>(sql, userLogin);
             
             if (result != null && BCrypt.Verify(userLogin.Mdp, result.Mdp))
             {
@@ -27,7 +27,7 @@
             return null;
         }
 
-        public async Task Register(User user)
+        public async Task Register(UserModel user)
         {
             user.Mdp = BCrypt.HashPassword(user.Mdp);
 

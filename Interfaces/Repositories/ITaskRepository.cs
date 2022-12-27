@@ -2,12 +2,14 @@
 {
     public interface ITaskRepository
     {
-        public Task<IEnumerable<TaskModel>> GetTasks();
+        public Task<IEnumerable<TaskModel>> GetTasksByUser(int id);
 
-        public Task<TaskModel> GetTask(int idTask);
+        public Task<TaskModel> GetTaskById(int idTask);
 
         public Task SetTask(TaskModel taskModel);
 
         public Task DeleteTask(int idTask);
+
+        public Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject);
     }
 }

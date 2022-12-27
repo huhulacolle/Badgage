@@ -2,7 +2,7 @@
 
 namespace Badgage.Models
 {
-    public class User
+    public class UserModel
     {
         [Required(AllowEmptyStrings = true)]
         public int IdUtil { get; set; }

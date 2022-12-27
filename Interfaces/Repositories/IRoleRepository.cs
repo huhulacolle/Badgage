@@ -4,11 +4,11 @@ namespace Badgage.Interfaces.Repositories
 {
     public interface IRoleRepository
     {
-        public Task<IEnumerable<Role>> getRoles();
+        public Task<IEnumerable<RoleModel>> getRoles();
 
-        public Task<Role> getRole(int idRole);
+        public Task<RoleModel> getRole(int idRole);
 
-        public Task createRole(Role role);
+        public Task createRole(RoleModel role);
 
         public Task deleteRole(int idRole);
     }

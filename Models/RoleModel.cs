@@ -1,7 +1,8 @@
 ﻿namespace Badgage.Models
 {
-    public class Role
+    public class RoleModel
     {
+        public int? IdRole { get; set; }
         public string libelle { get; set; }
     }
 }
