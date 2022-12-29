@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
-import { TicketsUser} from './tickets-user/tickets-user';
+
 
 
 @Component({

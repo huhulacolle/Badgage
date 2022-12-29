@@ -15,6 +15,9 @@ import { FormsModule} from '@angular/forms';
 import { ProjetsComponent } from './components/home/projets/projets.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { TicketsUserComponent } from './components/tickets-user/tickets-user.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     RegisterComponent,
     HomeComponent,
     ProjetsComponent,
+    TicketsUserComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,6 +40,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
       { path: 'home', component: HomeComponent, canActivate: [IsSignedInGuard] }
     ]),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
+    FlatpickrModule.forRoot(),
+    NgbModule,
   ],
   providers: [
     AuthBadgageClient,
