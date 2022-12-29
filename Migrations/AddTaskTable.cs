@@ -13,13 +13,14 @@ namespace Badgage.Migrations
         public override void Up()
         {
             Create.Table("Task")
-                .WithColumn("idtache").AsInt32().PrimaryKey().Identity()
+                .WithColumn("idTask").AsInt32().PrimaryKey().Identity()
                 .WithColumn("idprojet").AsInt32().ForeignKey("Project", "idProject")
                 .WithColumn("idutil").AsInt32().ForeignKey("User", "idUtil")
                 .WithColumn("nomdetache").AsString()
                 .WithColumn("description").AsString()
                 .WithColumn("datefin").AsDateTime()
-                .WithColumn("datecreation").AsDateTime();
+                .WithColumn("datecreation").AsDateTime()
+                .WithColumn("idProject").AsInt32().ForeignKey("Project", "idProject");
         }
     }
 }
