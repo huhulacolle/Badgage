@@ -2,14 +2,9 @@
 
 namespace Badgage.Migrations
 {
-    [Migration(3)]
-    public class AddProjectUserTable : Migration
+    [Migration(4)]
+    public class AddProjectUserTable : ForwardOnlyMigration
     {
-        public override void Down()
-        {
-            Delete.Table("ProjectUser");
-        }
-
         public override void Up()
         {
             Create.Table("ProjectUser")
