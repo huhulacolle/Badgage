@@ -2,7 +2,7 @@
 
 namespace Badgage.Migrations
 {
-    [Migration(2)]
+    [Migration(3)]
     public class AddProjectTable : Migration
     {
         public override void Down()
@@ -14,8 +14,7 @@ namespace Badgage.Migrations
         {
             Create.Table("Project")
                 .WithColumn("idProject").AsInt32().PrimaryKey().Identity()
-                .WithColumn("projectName").AsString().NotNullable()
-                .WithColumn("ByUser").AsInt32().ForeignKey("User", "idUtil");
+                .WithColumn("projectName").AsString().NotNullable();
         }
     }
 }
