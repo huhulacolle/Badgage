@@ -35,7 +35,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
       { path: 'register', component: RegisterComponent },
       { path: 'home', component: HomeComponent, canActivate: [IsSignedInGuard] }
     ]),
-    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
   ],
   providers: [
     AuthBadgageClient,
