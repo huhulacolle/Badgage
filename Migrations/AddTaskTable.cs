@@ -19,7 +19,8 @@ namespace Badgage.Migrations
                 .WithColumn("nomdetache").AsString()
                 .WithColumn("description").AsString()
                 .WithColumn("datefin").AsDateTime()
-                .WithColumn("datecreation").AsDateTime();
+                .WithColumn("datecreation").AsDateTime()
+                .WithColumn("idProject").AsInt32().ForeignKey("Project", "idProject");
         }
     }
 }
