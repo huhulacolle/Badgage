@@ -23,7 +23,7 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService,
     private storageService: StorageService,
-    private router: Router
+    private router: Router,
   ){}
   email!: string;
   mdp!: string;

@@ -1,6 +1,6 @@
 import { IsSignedInGuard } from './guards/is-signed-in.guard';
 import { RegisterComponent } from './components/register/register.component';
-import { API_BASE_URL, AuthBadgageClient } from './client/badgageClient';
+import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient } from './client/badgageClient';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -12,12 +12,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './components/home/home.component';
 import { MaterialsModule } from 'src/material.module';
 import { FormsModule} from '@angular/forms';
-import { ProjetsComponent } from './components/home/projets/projets.component';
+import { ProjetsComponent } from './components/projets/projets.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { TicketsUserComponent } from './components/tickets-user/tickets-user.component';
+import { ModalCreateProjectComponent } from './modals/modal-create-project/modal-create-project.component';
+import { TeamsComponent } from './components/teams/teams.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { TicketsUserComponent } from './components/tickets-user/tickets-user.com
     RegisterComponent,
     HomeComponent,
     ProjetsComponent,
-    TicketsUserComponent
+    TicketsUserComponent,
+    TeamsComponent,
+    ModalCreateProjectComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -34,10 +38,11 @@ import { TicketsUserComponent } from './components/tickets-user/tickets-user.com
     MaterialsModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '',   redirectTo: '/register', pathMatch: 'full' },
+      { path: '',   redirectTo: '/home', pathMatch: 'full' },
       // { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'register', component: RegisterComponent },
-      { path: 'home', component: HomeComponent, canActivate: [IsSignedInGuard] }
+      { path: 'home', component: HomeComponent, canActivate: [IsSignedInGuard] },
+      { path: 'tickets', component: TicketsUserComponent, canActivate: [IsSignedInGuard]}
     ]),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     FlatpickrModule.forRoot(),
@@ -45,6 +50,7 @@ import { TicketsUserComponent } from './components/tickets-user/tickets-user.com
   ],
   providers: [
     AuthBadgageClient,
+    ProjectBadgageClient,
     {
 			provide: APP_INITIALIZER,
 			useFactory: apiUrlServiceFactory,

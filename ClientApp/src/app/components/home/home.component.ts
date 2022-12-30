@@ -11,8 +11,10 @@ import { StorageService } from '../../services/storage.service';
 export class HomeComponent {
 
   constructor(
-    private storageService: StorageService
+    private storageService: StorageService,
   ) { }
+
+  
 
   disconnect(): void {
     this.storageService.removeUser();

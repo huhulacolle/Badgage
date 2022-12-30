@@ -41,7 +41,7 @@ const colors: Record<string, EventColor> = {
 };
 
 @Component({
-  selector: 'tickets-user.component',
+  selector: 'app-tickets-user',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./tickets-user.component.css'],
   templateUrl: './tickets-user.component.html',
