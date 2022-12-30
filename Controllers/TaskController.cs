@@ -20,6 +20,21 @@ namespace Badgage.Controllers
             this.jwt = jwt;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SetTask(TaskModel taskModel)
+        {
+            try
+            {
+                int idUser = int.Parse(jwt.FindFirstValue("id"));
 
+                var verif = taskRepository.VerifUserOnProject(taskModel.IdProjet, idUser);
+
+                return Ok(verif);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

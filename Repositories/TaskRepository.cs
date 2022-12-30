@@ -55,14 +55,14 @@ namespace Badgage.Repositories
 
         public async Task SetTask(TaskModel taskModel)
         {
-            string sql = @"INSERT INTO Task (idProjet, idUtil, nomdetache, description, datefin, datecreation) 
-                            VALUES (@idProjet, @idUtil, @nomdetache, @description, @datefin, @datecreation)";
+            string sql = @"INSERT INTO Task (idProjet, nomdetache, description, datefin, datecreation) 
+                            VALUES (@idProjet, @nomdetache, @description, @datefin, @datecreation)";
 
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, taskModel);
         }
 
-        public Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject)
+        public async Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject)
         {
             var dictionnary = new Dictionary<string, object>()
             {
@@ -73,7 +73,28 @@ namespace Badgage.Repositories
             string sql = "SELECT nomdetache, description, datefin, datecreation FROM task WHERE idProjet = @idProject";
 
             using var connec = defaultSqlConnectionFactory.Create();
-            return connec.QueryAsync<TaskModel>(sql, parameters);
+            return await connec.QueryAsync<TaskModel>(sql, parameters);
+        }
+
+        public async Task<bool> VerifUserOnProject(int idProject, int idUser)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idProject", idProject },
+                { "@idUser", idUser },
+            };
+            var parameters = new DynamicParameters(dictionnary);
+
+            string sql = "SELECT project.* FROM project LEFT JOIN teamuser on teamuser.idTeam = project.idTeam WHERE idProject = @idProject AND teamuser.idUser = @idUser";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            var verif = await connec.QueryFirstOrDefaultAsync(sql, parameters);
+
+            if (verif != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -12,6 +12,6 @@
 
         public Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject);
 
-        Task VerifUserProject();
+        public Task<bool> VerifUserOnProject(int idProject, int idUser);
     }
 }
