@@ -20,6 +20,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { TicketsUserComponent } from './components/tickets-user/tickets-user.component';
 import { ModalCreateProjectComponent } from './modals/modal-create-project/modal-create-project.component';
 import { TeamsComponent } from './components/teams/teams.component';
+import { ModalCreateTeamComponent } from './modals/modal-create-team/modal-create-team.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { TeamsComponent } from './components/teams/teams.component';
     ProjetsComponent,
     TicketsUserComponent,
     TeamsComponent,
-    ModalCreateProjectComponent
+    ModalCreateProjectComponent,
+    ModalCreateTeamComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -38,11 +40,9 @@ import { TeamsComponent } from './components/teams/teams.component';
     MaterialsModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '',   redirectTo: '/home', pathMatch: 'full' },
-      // { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '',   redirectTo: '/register', pathMatch: 'full' },
       { path: 'register', component: RegisterComponent },
       { path: 'home', component: HomeComponent, canActivate: [IsSignedInGuard] },
-      { path: 'tickets', component: TicketsUserComponent, canActivate: [IsSignedInGuard]}
     ]),
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     FlatpickrModule.forRoot(),
@@ -50,7 +50,6 @@ import { TeamsComponent } from './components/teams/teams.component';
   ],
   providers: [
     AuthBadgageClient,
-    ProjectBadgageClient,
     {
 			provide: APP_INITIALIZER,
 			useFactory: apiUrlServiceFactory,
