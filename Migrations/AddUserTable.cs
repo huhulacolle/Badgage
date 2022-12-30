@@ -3,13 +3,8 @@
 namespace Badgage.Migrations
 {
     [Migration(1)]
-    public class AddUserTable : Migration
+    public class AddUserTable : ForwardOnlyMigration
     {
-        public override void Down()
-        {
-            Delete.Table("User");
-        }
-
         public override void Up()
         {
             Create.Table("User")

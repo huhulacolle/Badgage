@@ -1,4 +1,6 @@
 ﻿using Badgage.Interfaces.Repositories;
+using Badgage.Models;
+using Badgage.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,58 +25,52 @@ namespace Badgage.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByUser()
         {
-            int id = int.Parse(jwt.FindFirstValue("id"));
+            int idUser = int.Parse(jwt.FindFirstValue("id"));
 
-            var result = await taskRepository.GetTasksByUser(id);
-            return Ok(result);
-        }
-
-        [HttpGet("{idTask}")]
-        public async Task<ActionResult<TaskModel>> GetTask(int idRole)
-        {
-            var result = await taskRepository.GetTaskById(idRole);
-            return Ok(result);
-        }
-
-        [HttpGet("Project/{id}")]
-        public async Task<ActionResult<IEnumerable<TaskModel>>> GetTaskFromProject(int id)
-        {
-            var result = await taskRepository.GetTaskFromProject(id);
+            var result = await taskRepository.GetTasksByUser(idUser);
             return Ok(result);
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
         public async Task<IActionResult> SetTask(TaskModel taskModel)
         {
             try
             {
-                await taskRepository.SetTask(taskModel);
-                return Ok("tâche créé");
+                int idUser = int.Parse(jwt.FindFirstValue("id"));
+
+                bool verif = await taskRepository.VerifUserOnProject(taskModel.IdProjet, idUser);
+
+                if (verif)
+                {
+                    await taskRepository.SetTask(taskModel, idUser);
+                    return StatusCode(201);
+                }
+                return Unauthorized();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(e.Message);
             }
         }
 
-        [HttpDelete("{idTask}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
-        public async Task<IActionResult> DeleteTask(int idTask)
+        [HttpPost("Join")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
+        public async Task<IActionResult> JoinTask(int idTask)
         {
             try
             {
-                await taskRepository.DeleteTask(idTask);
-                return Ok("Tâche supprimé");
+                int IdUser = int.Parse(jwt.FindFirstValue("id"));
+                await taskRepository.SetUserOnTask(new UserOnTaskModel() { IdUser = IdUser, IdTask = idTask });
+                return Ok();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(e.Message);
             }
         }
-
-
     }
 }

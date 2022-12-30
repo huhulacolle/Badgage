@@ -2,23 +2,17 @@
 
 namespace Badgage.Migrations
 {
-    [Migration(4)]
-    public class AddTaskTable : Migration
+    [Migration(5)]
+    public class AddTaskTable : ForwardOnlyMigration
     {
-        public override void Down()
-        {
-            Delete.Table("Task");
-        }
-
         public override void Up()
         {
             Create.Table("Task")
-                .WithColumn("idtache").AsInt32().PrimaryKey().Identity()
+                .WithColumn("idTask").AsInt32().PrimaryKey().Identity()
                 .WithColumn("idprojet").AsInt32().ForeignKey("Project", "idProject")
-                .WithColumn("idutil").AsInt32().ForeignKey("User", "idUtil")
                 .WithColumn("nomdetache").AsString()
-                .WithColumn("description").AsString()
-                .WithColumn("datefin").AsDateTime()
+                .WithColumn("description").AsString().Nullable()
+                .WithColumn("datefin").AsDateTime().Nullable()
                 .WithColumn("datecreation").AsDateTime();
         }
     }

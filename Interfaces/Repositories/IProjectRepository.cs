@@ -2,12 +2,12 @@
 {
     public interface IProjectRepository
     {
-        public Task<IEnumerable<ProjectModel>> GetAllProjects();
-
-        public Task<ProjectModel> GetProject(int idProject);
+        public Task<IEnumerable<ProjectModel>> GetProjectsByUser(int idUser);
 
         public Task CreateProject(ProjectModel project);
 
         public Task DeleteProject(int idProject);
+
+        public Task<bool> VerifTeamUser(int idUser, int idTeam);
     }
 }
