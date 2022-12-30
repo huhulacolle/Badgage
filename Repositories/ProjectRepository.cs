@@ -31,24 +31,11 @@ namespace Badgage.Repositories
             await connec.ExecuteAsync(sql, paramDic);
         }
 
-        public async Task<IEnumerable<ProjectModel>> GetAllProjects()
+        public async Task<IEnumerable<ProjectModel>> GetProjectsByUser(int idUser)
         {
-            string sql = "SELECT * FROM project";
+            string sql = "SELECT project.* FROM project";
             using var connec = defaultSqlConnectionFactory.Create();
             return await connec.QueryAsync<ProjectModel>(sql);
-        }
-
-        public async Task<ProjectModel> GetProject(int idProject)
-        {
-            var projectDic = new Dictionary<string, object>()
-            {
-                { "@idProject", idProject },
-            };
-            var paramDic = new DynamicParameters(projectDic);
-
-            string sql = "SELECT * FROM project WHERE idProject = @idProject";
-            using var connec = defaultSqlConnectionFactory.Create();
-            return await connec.QueryFirstOrDefaultAsync<ProjectModel>(sql,paramDic);
         }
     }
 }

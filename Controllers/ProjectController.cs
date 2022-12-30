@@ -9,7 +9,7 @@ namespace Badgage.Controllers
     {
         private readonly IProjectRepository iProjectRepository;
 
-        public ProjectController(IProjectRepository iProjectRepository)
+/*        public ProjectController(IProjectRepository iProjectRepository)
         {
             this.iProjectRepository = iProjectRepository;
         }
@@ -26,7 +26,7 @@ namespace Badgage.Controllers
         {
             var result = await iProjectRepository.GetProject(idProject);
             return Ok(result);
-        }
+        }*/
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
