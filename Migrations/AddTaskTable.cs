@@ -10,12 +10,10 @@ namespace Badgage.Migrations
             Create.Table("Task")
                 .WithColumn("idTask").AsInt32().PrimaryKey().Identity()
                 .WithColumn("idprojet").AsInt32().ForeignKey("Project", "idProject")
-                .WithColumn("idutil").AsInt32().ForeignKey("User", "idUtil")
                 .WithColumn("nomdetache").AsString()
-                .WithColumn("description").AsString()
+                .WithColumn("description").AsString().Nullable()
                 .WithColumn("datefin").AsDateTime().Nullable()
-                .WithColumn("datecreation").AsDateTime()
-                .WithColumn("idProject").AsInt32().ForeignKey("Project", "idProject");
+                .WithColumn("datecreation").AsDateTime();
         }
     }
 }

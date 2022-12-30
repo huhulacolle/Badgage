@@ -11,5 +11,7 @@
         public Task DeleteTask(int idTask);
 
         public Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject);
+
+        Task VerifUserProject();
     }
 }

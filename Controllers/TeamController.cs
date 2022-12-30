@@ -49,7 +49,8 @@ namespace Badgage.Controllers
 
         [HttpPost("Join")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
         public async Task<IActionResult> JoinTeam(UserOnTeamModel userOnTeamModel)
         {
             try
