@@ -47,19 +47,28 @@ namespace Badgage.Repositories
             };
             var parameters = new DynamicParameters(dictionnary);
 
-            string sql = "Select * FROM Task where idUtil = @idUtil";
+            string sql = "Select task.* FROM task LEFT JOIN taskuser ON taskuser.idTask = task.idTask WHERE taskuser.idUser = @idUtil";
             using var connec = defaultSqlConnectionFactory.Create();
 
             return await connec.QueryAsync<TaskModel>(sql, parameters);
         }
 
-        public async Task SetTask(TaskModel taskModel)
+        public async Task SetTask(TaskModel taskModel, int idUser)
         {
             string sql = @"INSERT INTO Task (idProjet, nomdetache, description, datefin, datecreation) 
-                            VALUES (@idProjet, @nomdetache, @description, @datefin, @datecreation)";
+                            VALUES (@idProjet, @nomdetache, @description, @datefin, @datecreation); SELECT LAST_INSERT_ID()";
 
             using var connec = defaultSqlConnectionFactory.Create();
-            await connec.ExecuteAsync(sql, taskModel);
+            int idTask = await connec.QueryFirstOrDefaultAsync<int>(sql, taskModel);
+            await SetUserOnTask(new UserOnTaskModel() { IdTask = idTask, IdUser = idUser });
+        }
+
+        public async Task SetUserOnTask(UserOnTaskModel userOnTaskModel)
+        {
+            string sql = "INSERT INTO TaskUser (idUser, IdTask) VALUES (@idUser, @IdTask)";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, userOnTaskModel);
         }
 
         public async Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject)

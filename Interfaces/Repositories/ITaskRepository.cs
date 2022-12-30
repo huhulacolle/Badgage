@@ -6,12 +6,14 @@
 
         public Task<TaskModel> GetTaskById(int idTask);
 
-        public Task SetTask(TaskModel taskModel);
+        public Task SetTask(TaskModel taskModel, int idUser);
 
         public Task DeleteTask(int idTask);
 
         public Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject);
 
         public Task<bool> VerifUserOnProject(int idProject, int idUser);
+
+        public Task SetUserOnTask(UserOnTaskModel userOnTaskModel);
     }
 }
