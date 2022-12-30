@@ -14,8 +14,9 @@ namespace Badgage.Repositories
 
         public async Task CreateProject(ProjectModel project)
         {
-            string sql = "INSERT INTO project (projectName) VALUES (@projectName)";
             using var connec = defaultSqlConnectionFactory.Create();
+
+            string sql = "INSERT INTO project (projectName, idTeam, ByUser) VALUES (@projectName, @idTeam, @ByUser)";
             await connec.ExecuteAsync(sql, project);
         }
 
@@ -33,9 +34,37 @@ namespace Badgage.Repositories
 
         public async Task<IEnumerable<ProjectModel>> GetProjectsByUser(int idUser)
         {
-            string sql = "SELECT project.* FROM project";
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idUser", idUser },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = "SELECT project.* FROM project LEFT JOIN teamuser on teamuser.idTeam = project.idTeam WHERE teamuser.idUser = @idUser";
+
             using var connec = defaultSqlConnectionFactory.Create();
-            return await connec.QueryAsync<ProjectModel>(sql);
+            return await connec.QueryAsync<ProjectModel>(sql, param);
+        }
+
+        public async Task<bool> VerifTeamUser(int idUser, int idTeam)
+        {
+            var dictionary = new Dictionary<string, object>()
+            {
+                { "@idUser", idUser },
+                { "@idTeam", idTeam }
+            };
+            var param = new DynamicParameters(dictionary);
+
+            string sqlVerif = "SELECT * FROM TeamUser WHERE idUser = @idUser AND idTeam = @idTeam";
+            using var connec = defaultSqlConnectionFactory.Create();
+            
+            var verif = await connec.QueryFirstOrDefaultAsync(sqlVerif, param);
+
+            if (verif != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

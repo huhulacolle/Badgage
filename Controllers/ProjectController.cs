@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Badgage.Controllers
 {
@@ -7,26 +8,23 @@ namespace Badgage.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly IProjectRepository iProjectRepository;
+        private readonly IProjectRepository projectRepository;
+        private readonly ClaimsPrincipal jwt;
 
-/*        public ProjectController(IProjectRepository iProjectRepository)
+        public ProjectController(IProjectRepository projectRepository, ClaimsPrincipal jwt)
         {
-            this.iProjectRepository = iProjectRepository;
+            this.projectRepository = projectRepository;
+            this.jwt = jwt;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectsByUser()
         {
-            var result = await iProjectRepository.GetAllProjects();
+            int idUser = int.Parse(jwt.FindFirstValue("id"));
+
+            var result = await projectRepository.GetProjectsByUser(idUser);
             return Ok(result);
         }
-
-        [HttpGet("{idProject}")]
-        public async Task<ActionResult<ProjectModel>> GetProject(int idProject)
-        {
-            var result = await iProjectRepository.GetProject(idProject);
-            return Ok(result);
-        }*/
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
@@ -35,9 +33,19 @@ namespace Badgage.Controllers
         {
             try
             {
-                await iProjectRepository.CreateProject(project);
-                return Ok("Projet créé");
-            }catch(Exception ex)
+                int idUser = int.Parse(jwt.FindFirstValue("id"));
+                var verif = await projectRepository.VerifTeamUser(idUser, project.IdTeam);
+
+                if (verif)
+                {
+                    project.ByUser = idUser;
+                    await projectRepository.CreateProject(project);
+                    return Ok("Projet créé");
+                }
+                return Unauthorized();
+
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -50,7 +58,7 @@ namespace Badgage.Controllers
         {
             try
             {
-                await iProjectRepository.DeleteProject(idProject);
+                await projectRepository.DeleteProject(idProject);
                 return Ok("Projet supprimé");
             }catch(Exception ex)
             {

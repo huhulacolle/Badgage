@@ -47,7 +47,7 @@ namespace Badgage.Repositories
             string sql = "SELECT * FROM TeamUser WHERE idTeam = @idTeam AND idUser = @IdUser";
 
             using var connec = defaultSqlConnectionFactory.Create();
-            var result = await connec.QueryFirstOrDefaultAsync<TeamModel>(sql, userOnTeamModel);
+            var result = await connec.QueryFirstOrDefaultAsync(sql, userOnTeamModel);
             if (result != null)
             {
                 return true;

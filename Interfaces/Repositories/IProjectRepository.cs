@@ -7,5 +7,7 @@
         public Task CreateProject(ProjectModel project);
 
         public Task DeleteProject(int idProject);
+
+        public Task<bool> VerifTeamUser(int idUser, int idTeam);
     }
 }
