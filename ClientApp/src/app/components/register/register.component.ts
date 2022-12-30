@@ -12,7 +12,8 @@ import { bounceInLeftOnEnterAnimation, bounceOutLeftOnLeaveAnimation, bounceInRi
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
   animations: [
-    bounceInLeftOnEnterAnimation({anchor: 'enterL', delay : 100,animateChildren: 'together'}),
+    bounceInLeftOnEnterAnimation({ anchor: 'enterL', delay: 100, animateChildren: 'together' }),
+    bounceOutRightOnLeaveAnimation({ anchor: 'leaveR', delay: 100, animateChildren: 'together' }),
     bounceOutLeftOnLeaveAnimation({anchor: 'leaveL', animateChildren:'together'}),
     bounceInRightOnEnterAnimation({anchor: 'enterR', animateChildren: 'before'}),
   ]
@@ -22,7 +23,7 @@ export class RegisterComponent {
   constructor(
     private authService: AuthService,
     private storageService: StorageService,
-    private router: Router
+    private router: Router,
   ){}
   email!: string;
   mdp!: string;
@@ -67,7 +68,7 @@ export class RegisterComponent {
     .then(
       data => {
         this.storageService.saveUser(data);
-        this.router.navigateByUrl("/test");
+        this.router.navigateByUrl("/home");
       }
     )
     .catch(
