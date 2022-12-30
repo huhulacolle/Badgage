@@ -21,12 +21,14 @@ namespace Badgage.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(User user)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
+        public async Task<IActionResult> Register(UserModel user)
         {
             try
             {
                 await authRepository.Register(user);
-                return Ok("Compte créé");
+                return StatusCode(201);
             }
             catch (Exception ex)
             {
@@ -35,6 +37,8 @@ namespace Badgage.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<string>> Login(UserLogin userLogin)
         {
             var result = await authRepository.Login(userLogin);
@@ -55,6 +59,8 @@ namespace Badgage.Controllers
 
         [Authorize]
         [HttpPut("updateMdp")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
         public async Task<IActionResult> UpdateMdp(MdpInput mdpInput)
         {
             try
@@ -70,6 +76,8 @@ namespace Badgage.Controllers
         }
 
         [HttpPut("forgotMdp")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
         public async Task<IActionResult> ForgotMdp(UserLogin userLogin)
         {
             try

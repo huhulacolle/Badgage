@@ -12,7 +12,7 @@ namespace Badgage.Repositories
             this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
         }
 
-        public async Task CreateProject(Project project)
+        public async Task CreateProject(ProjectModel project)
         {
             string sql = "INSERT INTO project (projectName) VALUES (@projectName)";
             using var connec = defaultSqlConnectionFactory.Create();
@@ -31,14 +31,14 @@ namespace Badgage.Repositories
             await connec.ExecuteAsync(sql, paramDic);
         }
 
-        public async Task<IEnumerable<Project>> GetAllProjects()
+        public async Task<IEnumerable<ProjectModel>> GetAllProjects()
         {
             string sql = "SELECT * FROM project";
             using var connec = defaultSqlConnectionFactory.Create();
-            return await connec.QueryAsync<Project>(sql);
+            return await connec.QueryAsync<ProjectModel>(sql);
         }
 
-        public async Task<Project> GetProject(int idProject)
+        public async Task<ProjectModel> GetProject(int idProject)
         {
             var projectDic = new Dictionary<string, object>()
             {
@@ -48,7 +48,7 @@ namespace Badgage.Repositories
 
             string sql = "SELECT * FROM project WHERE idProject = @idProject";
             using var connec = defaultSqlConnectionFactory.Create();
-            return await connec.QueryFirstOrDefaultAsync<Project>(sql,paramDic);
+            return await connec.QueryFirstOrDefaultAsync<ProjectModel>(sql,paramDic);
         }
     }
 }

@@ -15,21 +15,23 @@ namespace Badgage.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Role>>> getRoles()
+        public async Task<ActionResult<IEnumerable<RoleModel>>> getRoles()
         {
             var result = await iRoleRepository.getRoles();
             return Ok(result);
         }
 
         [HttpGet("{idRole}")]
-        public async Task<ActionResult<Role>> getRole(int idRole)
+        public async Task<ActionResult<RoleModel>> getRole(int idRole)
         {
             var result = await iRoleRepository.getRole(idRole); ;
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> createRole(Role role)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
+        public async Task<IActionResult> createRole(RoleModel role)
         {
             try
             {
@@ -42,6 +44,8 @@ namespace Badgage.Controllers
         }
 
         [HttpDelete("{idRole}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
         public async Task<IActionResult> deleteRole(int IdRole)
         {
             try

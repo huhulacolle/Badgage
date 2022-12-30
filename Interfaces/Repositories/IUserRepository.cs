@@ -4,9 +4,9 @@ namespace Badgage.Interfaces.Repositories
 {
     public interface IUserRepository
     {
-        public Task<IEnumerable<User?>> GetUsers();
+        public Task<IEnumerable<UserModel?>> GetUsers();
 
-        public Task<User?> GetUser(string? Email);
+        public Task<UserModel?> GetUser(string? Email);
 
     }
 }
