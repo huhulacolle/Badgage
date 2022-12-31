@@ -1,11 +1,17 @@
 <h1 mat-dialog-title>Création du projet</h1>
 <div mat-dialog-content>
-  <mat-form-field appearance="fill">
-    <mat-label>Nom du projet</mat-label>
-    <input matInput [(ngModel)]="data.projectName">
-  </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Nom du projet</mat-label>
+        <input matInput [(ngModel)]="data.projectName" required>
+    </mat-form-field><br>
+    <mat-form-field>
+        <mat-label>Equipe</mat-label>
+        <mat-select mat-input [(ngModel)]="data.idTeam" required>
+            <mat-option *ngFor="let team of teams" [value]="team.idTeam">{{team.nom}}</mat-option>
+        </mat-select>
+    </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onCancelClick()">Annuler</button>
-  <button mat-button [mat-dialog-close]="data.projectName" cdkFocusInitial>Confirmer</button>
+    <button mat-button (click)="onCancelClick()">Annuler</button>
+    <button  type="submit" mat-button [disabled]="!data.idTeam || !data.projectName" [mat-dialog-close]="data" cdkFocusInitial>Confirmer</button>
 </div>

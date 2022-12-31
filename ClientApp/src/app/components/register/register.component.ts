@@ -1,4 +1,4 @@
-import { User } from './../../client/badgageClient';
+import { UserModel } from './../../client/badgageClient';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserLogin } from 'src/app/client/badgageClient';
@@ -32,7 +32,7 @@ export class RegisterComponent {
   naissance!: string;
   loginPage = true;
   register(): void {
-    const user = new User;
+    const user = new UserModel;
     user.adresseMail = this.email;
     user.dateNaiss = new Date(this.naissance);
     user.mdp = this.mdp;

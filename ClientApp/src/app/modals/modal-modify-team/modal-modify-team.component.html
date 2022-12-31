@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Modification de l'équipe</h1>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label>Equipe</mat-label>
+        <mat-select mat-input [(ngModel)]="data.idUser" required>
+            <mat-option *ngFor="let user of users" [value]="user.idUtil">{{user.adresseMail}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Annuler</button>
+    <button type="submit" [disabled]="!data.idUser" mat-button [mat-dialog-close]="data.idUser" cdkFocusInitial>Confirmer</button>
+</div>

@@ -27,7 +27,7 @@ export class StorageService {
   getUser(): any {
     const user = localStorage.getItem("Token");
     if (user) {
-      return JSON.parse(user);
+      return user;
     }
 
     return {};
@@ -37,7 +37,7 @@ export class StorageService {
     const user = localStorage.getItem("Token");
     const helper = new JwtHelperService();
 
-    if (user || !helper.isTokenExpired(user?.toString())) {
+    if (user || !helper.isTokenExpired(user!.toString())) {
       return true;
     }
     return false;

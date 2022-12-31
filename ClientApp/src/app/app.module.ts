@@ -1,6 +1,6 @@
 import { IsSignedInGuard } from './guards/is-signed-in.guard';
 import { RegisterComponent } from './components/register/register.component';
-import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient } from './client/badgageClient';
+import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient, TeamBadgageClient, UserBadgageClient } from './client/badgageClient';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -21,6 +21,8 @@ import { TicketsUserComponent } from './components/tickets-user/tickets-user.com
 import { ModalCreateProjectComponent } from './modals/modal-create-project/modal-create-project.component';
 import { TeamsComponent } from './components/teams/teams.component';
 import { ModalCreateTeamComponent } from './modals/modal-create-team/modal-create-team.component';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { ModalModifyTeamComponent } from './modals/modal-modify-team/modal-modify-team.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { ModalCreateTeamComponent } from './modals/modal-create-team/modal-creat
     TicketsUserComponent,
     TeamsComponent,
     ModalCreateProjectComponent,
-    ModalCreateTeamComponent
+    ModalCreateTeamComponent,
+    ModalModifyTeamComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -50,6 +53,9 @@ import { ModalCreateTeamComponent } from './modals/modal-create-team/modal-creat
   ],
   providers: [
     AuthBadgageClient,
+    ProjectBadgageClient,
+    TeamBadgageClient,
+    UserBadgageClient,
     {
 			provide: APP_INITIALIZER,
 			useFactory: apiUrlServiceFactory,
