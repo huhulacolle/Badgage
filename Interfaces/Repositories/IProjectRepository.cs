@@ -2,7 +2,7 @@
 {
     public interface IProjectRepository
     {
-        public Task<IEnumerable<ProjectModel>> GetProjectsByUser(int idUser);
+        public Task<IEnumerable<ProjectModel>> GetProjectByTeam(int idUser);
 
         public Task CreateProject(ProjectModel project);
 
