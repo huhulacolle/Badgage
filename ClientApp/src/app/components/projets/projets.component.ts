@@ -29,7 +29,7 @@ export class ProjetsComponent {
           .then( () =>{
             this._snackBar.open('Projet créé');
         }).catch( () => {
-          this._snackBar.open('Erreur lors de la création du projet')
+          this._snackBar.open('Erreur lors de la création du projet', '', {duration: 3000});
         })
       })
     }
