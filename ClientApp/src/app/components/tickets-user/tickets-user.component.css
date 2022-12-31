@@ -6,3 +6,12 @@ h3 {
     background-color: #f5f5f5;
     padding: 15px;
   }
+
+  .scrollColumn {
+    height: 30%;
+    overflow-y: scroll;
+  }
+
+  body {
+    overflow: hidden!important;
+  }

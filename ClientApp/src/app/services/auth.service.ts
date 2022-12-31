@@ -1,4 +1,4 @@
-import { AuthBadgageClient, User, UserLogin } from './../client/badgageClient';
+import { AuthBadgageClient, UserModel, UserLogin } from './../client/badgageClient';
 import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 
@@ -15,7 +15,7 @@ export class AuthService {
     return lastValueFrom(this.authClient.login(user));
   }
 
-  register(user: User): Promise<any> {
+  register(user: UserModel): Promise<any> {
     return lastValueFrom(this.authClient.register(user));
   }
 
