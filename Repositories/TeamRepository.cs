@@ -44,7 +44,7 @@ namespace Badgage.Repositories
 
         public async Task<bool> VerifUserBossTeam(UserOnTeamModel userOnTeamModel)
         {
-            string sql = "SELECT * FROM TeamUser WHERE idTeam = @idTeam AND idUser = @IdUser";
+            string sql = "SELECT * FROM team WHERE byUser = @IdUser and idTeam = @IdTeam";
 
             using var connec = defaultSqlConnectionFactory.Create();
             var result = await connec.QueryFirstOrDefaultAsync(sql, userOnTeamModel);
