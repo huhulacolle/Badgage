@@ -9,5 +9,5 @@
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onCancelClick()">Annuler</button>
-    <button type="submit" [disabled]="!data.idUser" mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmer</button>
+    <button type="submit" [disabled]="!data.idUser" mat-button [mat-dialog-close]="data.idUser" cdkFocusInitial>Confirmer</button>
 </div>

@@ -14,7 +14,7 @@ export class ModalCreateProjectComponent {
   ) { }
 
   ngOnInit() : void {
-    this.teamService.getTeamsByUser(this.data.idTeam).then((result) => { this.teams = result });
+    this.teamService.getTeamsByUser().then((result) => { this.teams = result });
     console.log(this.data);
   }
     

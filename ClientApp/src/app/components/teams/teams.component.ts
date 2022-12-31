@@ -19,7 +19,8 @@ export class TeamsComponent {
   ) { }
 
   ngOnInit(): void {
-    this.teamService.getTeamsByUser(new JwtHelperService().decodeToken(this.storageService.getUser()).id).then((result) => { this.teams = result });
+    this.teamService.getTeamsByUser().then((result) => { this.teams = result });
+    console.log(this.teams);
   }
 
   teams!: TeamModel[];
@@ -45,7 +46,8 @@ export class TeamsComponent {
     userOnTeam.idTeam = idTeam as number;
     const dialogRef = this.dialog.open(ModalModifyTeamComponent, { data: { userOnTeam } });
     dialogRef.afterClosed().subscribe((result) => {
-      this.teamService.joinTeam(result).then(() => {
+      userOnTeam.idUser = result;
+      this.teamService.joinTeam(userOnTeam).then(() => {
         this._snackBar.open("Utilisateur ajouté avec succès dans l'équipe");
       }).catch(() => {
         this._snackBar.open("Erreur lors de l'ajout de l'utilisateur dans l'équipe")

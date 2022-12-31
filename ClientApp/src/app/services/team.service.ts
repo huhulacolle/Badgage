@@ -13,7 +13,7 @@ export class TeamService {
     return lastValueFrom(this.teamClient.setTeam(team));
   }
 
-  getTeamsByUser(idUser : number): Promise<TeamModel[]> {
+  getTeamsByUser(): Promise<TeamModel[]> {
     return lastValueFrom(this.teamClient.getTeamByUser());
   }
 

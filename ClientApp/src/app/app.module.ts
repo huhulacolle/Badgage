@@ -1,6 +1,6 @@
 import { IsSignedInGuard } from './guards/is-signed-in.guard';
 import { RegisterComponent } from './components/register/register.component';
-import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient, TeamBadgageClient } from './client/badgageClient';
+import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient, TeamBadgageClient, UserBadgageClient } from './client/badgageClient';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -55,6 +55,7 @@ import { ModalModifyTeamComponent } from './modals/modal-modify-team/modal-modif
     AuthBadgageClient,
     ProjectBadgageClient,
     TeamBadgageClient,
+    UserBadgageClient,
     {
 			provide: APP_INITIALIZER,
 			useFactory: apiUrlServiceFactory,
