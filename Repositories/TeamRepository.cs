@@ -19,7 +19,11 @@ namespace Badgage.Repositories
             };
             var param = new DynamicParameters(dictionary);
 
-            string sql = "SELECT * FROM team LEFT JOIN teamuser ON teamuser.idTeam = team.idTeam WHERE teamuser.idUser = @idUser";
+            string sql = @"SELECT team.*, count(teamuser.idTeam) as NbTeam 
+                            FROM team 
+                            LEFT JOIN teamuser ON teamuser.idTeam = team.idTeam 
+                            WHERE teamuser.idUser = @idUser 
+                            GROUP BY teamuser.idTeam";
 
             using var connec = defaultSqlConnectionFactory.Create();
             return await connec.QueryAsync<TeamModel>(sql, param);
