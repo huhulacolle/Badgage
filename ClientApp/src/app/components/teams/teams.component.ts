@@ -19,11 +19,15 @@ export class TeamsComponent {
   ) { }
 
   ngOnInit(): void {
-    this.teamService.getTeamsByUser().then((result) => { this.teams = result });
-    console.log(this.teams);
+    this.getTeamByUser();
   }
 
   teams!: TeamModel[];
+
+  getTeamByUser() : void {
+    this.teamService.getTeamsByUser().then((result) => { this.teams = result });
+    console.log(this.teams);
+  }
 
   createTeamModal(): void {
     const dialogRef = this.dialog.open(ModalCreateTeamComponent, { data: { TeamModel } });
@@ -34,6 +38,7 @@ export class TeamsComponent {
       this.teamService.createTeam(team)
         .then(() => {
           this._snackBar.open('Equipe créée');
+          this.getTeamByUser();
         }).catch(() => {
           this._snackBar.open('Erreur lors de la création de l\'équipe');
         });
@@ -49,6 +54,7 @@ export class TeamsComponent {
       userOnTeam.idUser = result;
       this.teamService.joinTeam(userOnTeam).then(() => {
         this._snackBar.open("Utilisateur ajouté avec succès dans l'équipe");
+        this.getTeamByUser();
       }).catch(() => {
         this._snackBar.open("Erreur lors de l'ajout de l'utilisateur dans l'équipe")
       })
