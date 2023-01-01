@@ -40,7 +40,7 @@ namespace Badgage.Repositories
             };
             var param = new DynamicParameters(dictionnary);
 
-            string sql = "SELECT project.* FROM project WHERE idTeam = 4";
+            string sql = "SELECT project.* FROM project WHERE idTeam = @idTeam";
 
             using var connec = defaultSqlConnectionFactory.Create();
             return await connec.QueryAsync<ProjectModel>(sql, param);

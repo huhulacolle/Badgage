@@ -26,7 +26,6 @@ export class TeamsComponent {
 
   getTeamByUser() : void {
     this.teamService.getTeamsByUser().then((result) => { this.teams = result });
-    console.log(this.teams);
   }
 
   createTeamModal(): void {

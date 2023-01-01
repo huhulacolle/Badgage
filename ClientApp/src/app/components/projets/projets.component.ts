@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ProjectModel } from 'src/app/client/badgageClient';
+import { ProjectModel, TeamModel } from 'src/app/client/badgageClient';
 import { ModalCreateProjectComponent } from 'src/app/modals/modal-create-project/modal-create-project.component';
 import { ProjectService } from 'src/app/services/project.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { StorageService } from 'src/app/services/storage.service';
+import { TeamService } from 'src/app/services/team.service';
 
 @Component({
   selector: 'app-projets',
@@ -14,7 +15,7 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class ProjetsComponent {
 
-  constructor(public dialog: MatDialog, private projectService: ProjectService, private _snackBar: MatSnackBar, private storageService: StorageService
+  constructor(public dialog: MatDialog, private projectService: ProjectService, private _snackBar: MatSnackBar, private storageService: StorageService, private teamService : TeamService
   ) { }
 
   ngOnInt() : void {
@@ -22,14 +23,26 @@ export class ProjetsComponent {
   }
 
   getProjetsByUser(): void {
-    this.projectService.getProjectByUser().then((result) => {
-      this.projects = result;
+    this.teamService.getTeamsByUser().then((result) => {
+      this.teams = result;
+      console.log(this.teams);
     }).catch((error) => {
-      this._snackBar.open(error);
+      console.log(error);
     })
+    if(this.teams != null)
+    {
+      this.teams.map(t => this.projectService.getProjectByTeam(t.idTeam as number).then((result) => {
+        this.projects.push.apply(result);
+        console.log(this.projects);
+      }).catch((error) => {
+        this._snackBar.open(error);
+      }))
+      console.log(this.projects);
+    }
   }
 
   projects!: ProjectModel[];
+  teams!: TeamModel[];
 
   createProject(): void {
     const projet = new ProjectModel();

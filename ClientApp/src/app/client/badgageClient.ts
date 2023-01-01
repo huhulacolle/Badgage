@@ -263,8 +263,11 @@ export class ProjectBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
-    getProjectsByUser(): Observable<ProjectModel[]> {
-        let url_ = this.baseUrl + "/api/Project";
+    getProjectByTeam(idTeam: number): Observable<ProjectModel[]> {
+        let url_ = this.baseUrl + "/api/Project/{idTeam}";
+        if (idTeam === undefined || idTeam === null)
+            throw new Error("The parameter 'idTeam' must be defined.");
+        url_ = url_.replace("{idTeam}", encodeURIComponent("" + idTeam));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -276,11 +279,11 @@ export class ProjectBadgageClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetProjectsByUser(response_);
+            return this.processGetProjectByTeam(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetProjectsByUser(response_ as any);
+                    return this.processGetProjectByTeam(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<ProjectModel[]>;
                 }
@@ -289,7 +292,7 @@ export class ProjectBadgageClient {
         }));
     }
 
-    protected processGetProjectsByUser(response: HttpResponseBase): Observable<ProjectModel[]> {
+    protected processGetProjectByTeam(response: HttpResponseBase): Observable<ProjectModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :

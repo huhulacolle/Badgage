@@ -19,5 +19,7 @@ export class TeamService {
 
   joinTeam(newUser: UserOnTeamModel): Promise<any> {
     return lastValueFrom(this.teamClient.joinTeam(newUser))
+
   }
+
 }
