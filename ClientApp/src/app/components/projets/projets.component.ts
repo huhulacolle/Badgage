@@ -14,24 +14,38 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class ProjetsComponent {
 
-  constructor(public dialog: MatDialog, private projectService : ProjectService, private _snackBar: MatSnackBar, private storageService : StorageService
-    ) { }
+  constructor(public dialog: MatDialog, private projectService: ProjectService, private _snackBar: MatSnackBar, private storageService: StorageService
+  ) { }
 
+  ngOnInt() : void {
+    this.getProjetsByUser();
+  }
 
-    openDialog(): void {
-      const projet = new ProjectModel();
-      projet.byUser = new JwtHelperService().decodeToken(this.storageService.getUser()).id;
-      const dialogRef = this.dialog.open(ModalCreateProjectComponent, {data: {projet} } );
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(result);
-        if(result != null)
-          this.projectService.createProject(result)
-          .then( () =>{
+  getProjetsByUser(): void {
+    this.projectService.getProjectByUser().then((result) => {
+      this.projects = result;
+    }).catch((error) => {
+      this._snackBar.open(error);
+    })
+  }
+
+  projects!: ProjectModel[];
+
+  createProject(): void {
+    const projet = new ProjectModel();
+    projet.byUser = new JwtHelperService().decodeToken(this.storageService.getUser()).id;
+    const dialogRef = this.dialog.open(ModalCreateProjectComponent, { data: { projet } });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result != null)
+        this.projectService.createProject(result)
+          .then(() => {
             this._snackBar.open('Projet créé');
-        }).catch( () => {
-          this._snackBar.open('Erreur lors de la création du projet')
-        })
-      })
-    }
+            this.getProjetsByUser();
+          }).catch(() => {
+            this._snackBar.open('Erreur lors de la création du projet');
+          })
+    })
+  }
 
 }

@@ -8,8 +8,6 @@ h3 {
   }
 
   .scrollColumn {
-    height: 30%;
+    height: 70%;
     overflow-y: scroll;
   }
-
- 

@@ -13,7 +13,7 @@ export class ProjectService {
     return lastValueFrom(this.projectClient.createProject(project));
   }
 
-  getProjectByUser(idUser: number): Promise<any> {
+  getProjectByUser(): Promise<any> {
     return lastValueFrom(this.projectClient.getProjectsByUser());
   }
 }
