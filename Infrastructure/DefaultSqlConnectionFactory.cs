@@ -5,7 +5,7 @@ namespace Badgage.Infrastructure
 {
     public class DefaultSqlConnectionFactory
     {
-        public string ConnectionString { get; } = null!;
+        private string ConnectionString;
 
         public DefaultSqlConnectionFactory(string connectionString)
         {

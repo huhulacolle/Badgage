@@ -47,7 +47,7 @@ namespace Badgage.Repositories
             };
             var parameters = new DynamicParameters(dictionnary);
 
-            string sql = "Select task.* FROM task LEFT JOIN taskuser ON taskuser.idTask = task.idTask WHERE taskuser.idUser = @idUtil";
+            string sql = "SELECT task.* FROM task LEFT JOIN taskuser ON taskuser.idTask = task.idTask WHERE taskuser.idUser = @idUtil";
             using var connec = defaultSqlConnectionFactory.Create();
 
             return await connec.QueryAsync<TaskModel>(sql, parameters);
