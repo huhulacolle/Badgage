@@ -46,6 +46,20 @@ namespace Badgage.Repositories
             return await connec.QueryAsync<ProjectModel>(sql, param);
         }
 
+        public async Task<IEnumerable<ProjectModel>> GetProjectByUser(int idUser)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idUser", idUser },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = "SELECT project.* FROM project LEFT JOIN teamuser ON teamuser.idTeam = project.idTeam WHERE teamuser.idUser = @idUser";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            return await connec.QueryAsync<ProjectModel>(sql, param);
+        }
+
         public async Task<bool> VerifTeamUser(int idUser, int idTeam)
         {
             var dictionary = new Dictionary<string, object>()
