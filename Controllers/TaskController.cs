@@ -31,6 +31,13 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{IdUser}")]
+        public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByIdUser(int idUser)
+        {
+            var result = await taskRepository.GetTasksByUser(idUser);
+            return Ok(result);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

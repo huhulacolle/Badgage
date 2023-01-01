@@ -1,4 +1,3 @@
-using Badgage.Infrastructure;
 using Badgage.Services;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,7 +6,6 @@ using NSwag.Generation.Processors.Security;
 using NSwag;
 using System.Reflection;
 using System.Text;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 var builder = WebApplication.CreateBuilder(args);
 

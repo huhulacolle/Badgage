@@ -32,13 +32,18 @@
             return result;
         }
 
-        public async Task<IEnumerable<UserModel>> GetUsers()
+        public async Task<IEnumerable<UserModel>> GetUsersOnTeam(int idTeam)
         {
-            string sql = "SELECT * FROM user ";
-            using var connec = defaultSqlConnectionFactory.Create();
-            var result = await connec.QueryAsync<UserModel>(sql);
-            return result;
-        }
+            var dictionary = new Dictionary<string, object>()
+            {
+                { "@idTeam", idTeam },
+            };
+            var param = new DynamicParameters(dictionary);
 
+            string sql = "SELECT idUtil, prenom, nom, datenaiss, adressemail FROM user LEFT JOIN teamuser ON teamuser.idUser = idUtil WHERE idTeam = @idTeam";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            return await connec.QueryAsync<UserModel>(sql, param);
+        }
     }
 }
