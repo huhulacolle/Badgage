@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Badgage.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -13,14 +15,14 @@ namespace Badgage.Controllers
             this.userRepository = userRepository;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserModel>>> GetUsers()
+        [HttpGet("Team/{idTeam}")]
+        public async Task<ActionResult<IEnumerable<UserModel>>> GetUsersOnTeam(int idTeam)
         {
-            var result = await userRepository.GetUsers();
+            var result = await userRepository.GetUsersOnTeam(idTeam);
             return Ok(result);
         }
 
-        [HttpGet("{Email}")]
+        [HttpGet("Email/{Email}")]
         public async Task<ActionResult<UserModel>> GetUser(string Email)
         {
             var result = await userRepository.GetUser(Email);
