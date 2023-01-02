@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Badgage.Models
+namespace Badgage.Models.Models
 {
     public class UserModel
     {

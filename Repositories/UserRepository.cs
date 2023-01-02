@@ -1,6 +1,6 @@
 ﻿namespace Badgage.Repositories
 {
-    using Badgage.Models;
+    using Badgage.Models.Models;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

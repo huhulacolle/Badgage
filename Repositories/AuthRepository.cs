@@ -1,6 +1,7 @@
 ﻿namespace Badgage.Repositories
 {
-    using Badgage.Models;
+    using Badgage.Models.Inputs;
+    using Badgage.Models.Models;
     using BCrypt.Net;
     using System.ComponentModel.DataAnnotations;
 
