@@ -38,6 +38,14 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+        [HttpDelete("{IdTask}")]
+        public async Task<ActionResult<IEnumerable<TaskModel>>> DeleteTask(int idTask)
+        {
+            await taskRepository.DeleteTask(idTask);
+            return StatusCode(201);
+        }
+
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

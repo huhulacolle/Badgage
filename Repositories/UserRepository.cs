@@ -32,6 +32,13 @@
             return result;
         }
 
+        public async Task<IEnumerable<UserModel>> GetUsers()
+        {
+            string sql = "SELECT idUtil, nom, prenom, adresseMail FROM user ";
+            using var connec = defaultSqlConnectionFactory.Create();
+            return await connec.QueryAsync<UserModel>(sql);
+        }
+
         public async Task<IEnumerable<UserModel>> GetUsersOnTeam(int idTeam)
         {
             var dictionary = new Dictionary<string, object>()
