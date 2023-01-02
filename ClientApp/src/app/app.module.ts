@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { ApiUrlService, apiUrlServiceFactory } from './services/api-url.service'
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HomeComponent } from './components/home/home.component';
 import { MaterialsModule } from 'src/material.module';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ProjetsComponent } from './components/projets/projets.component';
@@ -32,7 +31,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     AppComponent,
     NavbarComponent,
     RegisterComponent,
-    HomeComponent,
     ProjetsComponent,
     TicketsUserComponent,
     TeamsComponent,

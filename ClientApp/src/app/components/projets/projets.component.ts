@@ -25,6 +25,7 @@ export class ProjetsComponent {
   getProjetsByUser(): void {
       this.projectService.getProjectByUser().then((result) => {
         this.projects = result;
+        console.log(this.projects);
       })
   }
 

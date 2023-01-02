@@ -37,7 +37,7 @@
   <div class="row">
     <div class="col-3 text-center">
       <button class="btn btn-primary" (click)="createTask()">+ Ajouter un ticket</button>
-      <div *ngIf="tasks.length > 0">
+        <div *ngIf="this.tasks.length > 0">
         <mat-card *ngFor="let task of this.tasks">
           <mat-card-header>
             <div mat-card-avatar *ngIf="task.dateFin" class="taskComplete"></div>
@@ -52,6 +52,9 @@
           </mat-card-actions>
         </mat-card>
         <br>
+      </div>
+      <div *ngIf="this.tasks.length == 0">
+        <h1 mat-dialog-title>Aucunes tâches présentes</h1>
       </div>
     </div>
     <div class="col-9">
