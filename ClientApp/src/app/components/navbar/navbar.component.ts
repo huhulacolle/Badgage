@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent {
 
-  constructor(private router: Router,) { }
+  constructor(private router: Router, private storageService: StorageService) { }
 
   goToHome(): void {
     this.router.navigateByUrl("/home");
@@ -20,5 +21,9 @@ export class NavbarComponent {
 
   goToProjets(): void {
     this.router.navigateByUrl("/projets");
+  }
+
+  disconnect(): void {
+    this.storageService.removeUser();
   }
 }
