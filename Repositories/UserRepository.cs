@@ -1,13 +1,8 @@
 ﻿namespace Badgage.Repositories
 {
-
-    using Badgage.Exceptions;
-    using System.ComponentModel.DataAnnotations;
-    using BCrypt.Net;
-    using System.Threading.Tasks;
-    using Badgage.Models;
+    using Badgage.Models.Models;
     using System.Collections.Generic;
-    using System.Collections;
+    using System.Threading.Tasks;
 
     public class UserRepository : IUserRepository
     {

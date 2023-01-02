@@ -1,7 +1,4 @@
-﻿using Badgage.Models;
-using System.Threading.Tasks;
-
-namespace Badgage.Repositories
+﻿namespace Badgage.Repositories
 {
     public class TaskRepository : ITaskRepository
     {
@@ -21,7 +18,9 @@ namespace Badgage.Repositories
             };
             var parameters = new DynamicParameters(dictionnary);
 
-            string sql = "DELETE FROM Task WHERE idtache = @idTask";
+            string sql = @"DELETE FROM Sessions WHERE idTask = @idTask;
+                            DELETE FROM TaskUser WHERE idTask = @idTask;
+                            DELETE FROM Task WHERE idTask = @idTask;";
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, parameters);
         }
@@ -53,14 +52,13 @@ namespace Badgage.Repositories
             return await connec.QueryAsync<TaskModel>(sql, parameters);
         }
 
-        public async Task SetTask(TaskModel taskModel, int idUser)
+        public async Task SetTask(TaskModel taskModel)
         {
             string sql = @"INSERT INTO Task (idProjet, nomdetache, description, datefin, datecreation) 
                             VALUES (@idProjet, @nomdetache, @description, @datefin, @datecreation); SELECT LAST_INSERT_ID()";
 
             using var connec = defaultSqlConnectionFactory.Create();
             int idTask = await connec.QueryFirstOrDefaultAsync<int>(sql, taskModel);
-            await SetUserOnTask(new UserOnTaskModel() { IdTask = idTask, IdUser = idUser });
         }
 
         public async Task SetUserOnTask(UserOnTaskModel userOnTaskModel)
@@ -104,6 +102,21 @@ namespace Badgage.Repositories
                 return true;
             }
             return false;
+        }
+
+        public async Task UpdateTaskName(string name, int idTask)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idTask", idTask },
+                { "@name", name },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = "UPDATE project SET nomdetache = @name WHERE idTask = @idTask";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, param);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace Badgage.Interfaces.Repositories
+﻿namespace Badgage.Interfaces.Repositories
 {
     public interface IRoleRepository
     {

@@ -1,6 +1,5 @@
-﻿using Badgage.Models;
+﻿using Badgage.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -47,6 +46,22 @@ namespace Badgage.Controllers
             }
         }
 
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
+        public async Task<IActionResult> UpdateTeamName(int idTeam, string name)
+        {
+            try
+            {
+                await teamRepository.UpdateTeamName(name, idTeam);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost("Join")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -67,6 +82,20 @@ namespace Badgage.Controllers
 
                 return Unauthorized();
 
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{idTeam}")]
+        public async Task<IActionResult> DeleteTeam(int idTeam)
+        {
+            try
+            {
+                await teamRepository.DeleteTeam(idTeam);
+                return Ok();
             }
             catch (Exception e)
             {

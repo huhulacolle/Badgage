@@ -1,8 +1,9 @@
 ﻿namespace Badgage.Repositories
 {
-    using System.ComponentModel.DataAnnotations;
-    using Badgage.Models;
+    using Badgage.Models.Inputs;
+    using Badgage.Models.Models;
     using BCrypt.Net;
+    using System.ComponentModel.DataAnnotations;
 
     public class AuthRepository : IAuthRepository
     {
@@ -19,7 +20,7 @@
 
             using var connec = defaultSqlConnectionFactory.Create();
             var result = await connec.QueryFirstOrDefaultAsync<UserModel>(sql, userLogin);
-            
+
             if (result != null && BCrypt.Verify(userLogin.Mdp, result.Mdp))
             {
                 return result;
@@ -36,12 +37,12 @@
             user.Nom = char.ToUpper(user.Nom[0]) + user.Nom[1..];
 
             var email = new EmailAddressAttribute();
-            if(!email.IsValid(user.AdresseMail)) throw new EmailNotValidException();
+            if (!email.IsValid(user.AdresseMail)) throw new EmailNotValidException();
 
             string sql = "INSERT INTO user (prenom, nom, datenaiss, adressemail, mdp) VALUES (@Prenom, @Nom, @DateNaiss, @AdresseMail, @Mdp)";
 
             using var connec = defaultSqlConnectionFactory.Create();
-            await connec.ExecuteAsync(sql, user);  
+            await connec.ExecuteAsync(sql, user);
         }
 
         public async Task UpdateMdp(MdpInput mdpInput, int id)
@@ -57,7 +58,7 @@
             using var connec = defaultSqlConnectionFactory.Create();
             string currentMdp = await connec.QueryFirstOrDefaultAsync<string>(getMdpSql, param);
 
-            if(BCrypt.Verify(mdpInput.OldMdp, currentMdp))
+            if (BCrypt.Verify(mdpInput.OldMdp, currentMdp))
             {
                 dictionary = new Dictionary<string, object>()
                 {
