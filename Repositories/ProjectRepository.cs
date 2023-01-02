@@ -1,7 +1,4 @@
-﻿using Badgage.Models;
-using Microsoft.AspNetCore.Rewrite;
-
-namespace Badgage.Repositories
+﻿namespace Badgage.Repositories
 {
     public class ProjectRepository : IProjectRepository
     {
@@ -76,7 +73,7 @@ namespace Badgage.Repositories
 
             string sqlVerif = "SELECT * FROM TeamUser WHERE idUser = @idUser AND idTeam = @idTeam";
             using var connec = defaultSqlConnectionFactory.Create();
-            
+
             var verif = await connec.QueryFirstOrDefaultAsync(sqlVerif, param);
 
             if (verif != null)

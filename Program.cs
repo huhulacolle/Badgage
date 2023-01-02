@@ -2,8 +2,8 @@ using Badgage.Services;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using NSwag.Generation.Processors.Security;
 using NSwag;
+using NSwag.Generation.Processors.Security;
 using System.Reflection;
 using System.Text;
 

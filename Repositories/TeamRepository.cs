@@ -1,6 +1,4 @@
-﻿using Badgage.Models;
-
-namespace Badgage.Repositories
+﻿namespace Badgage.Repositories
 {
     public class TeamRepository : ITeamRepository
     {
@@ -59,7 +57,7 @@ namespace Badgage.Repositories
 
             using var connec = defaultSqlConnectionFactory.Create();
             int idTeam = await connec.QueryFirstOrDefaultAsync<int>(sql, teamModel);
-            await SetUserOnTeam(new UserOnTeamModel() { IdUser = teamModel.ByUser , IdTeam = idTeam });
+            await SetUserOnTeam(new UserOnTeamModel() { IdUser = teamModel.ByUser, IdTeam = idTeam });
         }
 
         public async Task SetUserOnTeam(UserOnTeamModel userOnTeamModel)

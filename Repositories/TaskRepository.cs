@@ -1,7 +1,4 @@
-﻿using Badgage.Models;
-using System.Threading.Tasks;
-
-namespace Badgage.Repositories
+﻿namespace Badgage.Repositories
 {
     public class TaskRepository : ITaskRepository
     {

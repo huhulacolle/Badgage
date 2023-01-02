@@ -1,6 +1,4 @@
-﻿using Badgage.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -86,6 +84,6 @@ namespace Badgage.Controllers
             {
                 return BadRequest(e.Message);
             }
-        } 
+        }
     }
 }
