@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>Ajout d'une session de travail manuelle</h1>
+<div mat-dialog-content>
+        <h1>{{data.description}}</h1>
+        <p>Projet: {{nomProjetSeeing}}</p>
+        <mat-form-field appearance="fill">
+            <mat-label>Date début Tâche</mat-label>
+            <input matInput [matDatepicker]="pickerDebut" [(ngModel)]="session.dateDebut">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerDebut"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDebut></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>HH:MM</mat-label>
+            <input matInput type="time" [(ngModel)]="hoursDateDebut" required>
+        </mat-form-field><br>
+        <mat-form-field appearance="fill">
+            <mat-label>Date début Tâche</mat-label>
+            <input matInput [matDatepicker]="pickerFin" [(ngModel)]="session.dateFin">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFin></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>HH:MM</mat-label>
+            <input matInput type="time" [(ngModel)]="hoursDateFin" required>
+            <ngx-material-timepicker #timeFin></ngx-material-timepicker>
+        </mat-form-field><br>
+    </div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Annuler</button>
+    <button mat-button (click)="onCancelClick()">Fermer</button>
+    <button mat-button [disabled]="!session.dateDebut || !session.dateFin || !hoursDateDebut || !hoursDateFin" [mat-dialog-close]="session"
+        cdkFocusInitial>Confirmer</button>
+</div>

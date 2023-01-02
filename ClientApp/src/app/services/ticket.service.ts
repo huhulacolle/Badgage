@@ -17,6 +17,10 @@ export class TicketService {
     return lastValueFrom(this.ticketService.getTasksByIdUser(idUser));
   }
 
+  getTaskByProject(idProject: number): Promise<TaskModel[]> {
+    return lastValueFrom(this.ticketService.getTaskFromProject(idProject));
+  }
+
   joinTask(idUser: number): Promise<any> {
     return lastValueFrom(this.ticketService.joinTask(idUser));
   }

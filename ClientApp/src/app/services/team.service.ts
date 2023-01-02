@@ -9,7 +9,7 @@ export class TeamService {
 
   constructor(private teamClient : TeamBadgageClient) { }
 
-  createTeam(team: TeamModel): Promise<any> {
+  createTeam(team: TeamModel): Promise<void> {
     return lastValueFrom(this.teamClient.setTeam(team));
   }
 
@@ -17,9 +17,8 @@ export class TeamService {
     return lastValueFrom(this.teamClient.getTeamByUser());
   }
 
-  joinTeam(newUser: UserOnTeamModel): Promise<any> {
-    return lastValueFrom(this.teamClient.joinTeam(newUser))
-
+  joinTeam(newUser: UserOnTeamModel): Promise<void> {
+    return lastValueFrom(this.teamClient.joinTeam(newUser));
   }
 
 }
