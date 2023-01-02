@@ -12,18 +12,19 @@ export class ModalAddSessionComponent {
   @ViewChild('picker') picker: any;
 
   constructor(public dialogRef: MatDialogRef<ModalAddSessionComponent>, private projetService: ProjectService,
-     @Inject(MAT_DIALOG_DATA) public data: TaskModel
+    @Inject(MAT_DIALOG_DATA) public data: TaskModel
   ) { }
 
   ngOnInit(): void {
     this.session = new SessionInput();
-    this.session.idTask = this.data.idTache as number;
+    this.session.idTask = this.data.idTask as number;
+    console.log(this.data);
     this.projetService.getProjectByUser().then((result) => {
       this.projets = result;
-        this.projets.map(p => {
-          if (this.data.idProjet == p.idProject)
-            this.nomProjetSeeing = p.projectName;
-        })
+      this.projets.map(p => {
+        if (this.data.idProjet == p.idProject)
+          this.nomProjetSeeing = p.projectName;
+      })
     }).catch((error) => {
       console.log(error);
     })
@@ -32,21 +33,30 @@ export class ModalAddSessionComponent {
   nomProjetSeeing!: string;
   projets!: ProjectModel[];
   error!: boolean;
-  hoursDateDebut!: Date;
-  hoursDateFin!: Date;
+  hoursDateDebut!: string;
+  hoursDateFin!: string;
   session!: SessionInput;
 
   onCancelClick(): void {
     this.dialogRef.close();
   }
 
+  sendSession(): SessionInput {
+    if (this.session.dateFin != undefined && this.session.dateDebut != undefined) {
+      const timeDebut = this.hoursDateDebut.split(':');
+      const timeFin = this.hoursDateFin.split(':');
+      console.log(this.hoursDateFin, this.hoursDateDebut);
+    this.session.dateDebut = new Date(this.session.dateDebut.getFullYear(),
+      this.session.dateDebut.getMonth(), this.session.dateDebut.getDate(),+timeDebut[0] + 1,+timeDebut[1]);
+      this.session.dateFin = new Date(this.session.dateFin.getFullYear(),
+        this.session.dateFin.getMonth(), this.session.dateFin.getDate(),+timeFin[0] + 1,+timeFin[1]);
+    }
+    return this.session;
+  }
+
   checkDate(): boolean {
-    this.session.dateDebut.setHours(this.hoursDateDebut.getHours());
-    this.session.dateDebut.setMinutes(this.hoursDateDebut.getMinutes());
-    if(this.session.dateFin != undefined){
-      this.session.dateFin.setMinutes(this.hoursDateFin.getMinutes());
-      this.session.dateFin.setHours(this.hoursDateFin.getHours());
-      return (this.session.dateDebut.getTime() < this.session.dateFin.getTime());
+    if (this.session.dateFin != undefined) {
+      return ((this.session.dateDebut.getTime() <= this.session.dateFin.getTime()) && (this.session.dateDebut.getTime() <= this.session.dateFin.getTime()));
     }
     return false;
   }

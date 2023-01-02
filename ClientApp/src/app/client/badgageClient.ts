@@ -1923,7 +1923,6 @@ export interface IProjectModel {
 
 export class SessionInput implements ISessionInput {
     idTask!: number;
-    idUser!: number;
     dateDebut!: Date;
     dateFin?: Date | undefined;
 
@@ -1939,7 +1938,6 @@ export class SessionInput implements ISessionInput {
     init(_data?: any) {
         if (_data) {
             this.idTask = _data["idTask"];
-            this.idUser = _data["idUser"];
             this.dateDebut = _data["dateDebut"] ? new Date(_data["dateDebut"].toString()) : <any>undefined;
             this.dateFin = _data["dateFin"] ? new Date(_data["dateFin"].toString()) : <any>undefined;
         }
@@ -1955,7 +1953,6 @@ export class SessionInput implements ISessionInput {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["idTask"] = this.idTask;
-        data["idUser"] = this.idUser;
         data["dateDebut"] = this.dateDebut ? this.dateDebut.toISOString() : <any>undefined;
         data["dateFin"] = this.dateFin ? this.dateFin.toISOString() : <any>undefined;
         return data;
@@ -1964,7 +1961,6 @@ export class SessionInput implements ISessionInput {
 
 export interface ISessionInput {
     idTask: number;
-    idUser: number;
     dateDebut: Date;
     dateFin?: Date | undefined;
 }
@@ -2022,7 +2018,7 @@ export interface ISessionModel {
 }
 
 export class TaskModel implements ITaskModel {
-    idTache?: number | undefined;
+    idTask?: number | undefined;
     idProjet!: number;
     nomDeTache!: string;
     description?: string | undefined;
@@ -2040,7 +2036,7 @@ export class TaskModel implements ITaskModel {
 
     init(_data?: any) {
         if (_data) {
-            this.idTache = _data["idTache"];
+            this.idTask = _data["idTask"];
             this.idProjet = _data["idProjet"];
             this.nomDeTache = _data["nomDeTache"];
             this.description = _data["description"];
@@ -2058,7 +2054,7 @@ export class TaskModel implements ITaskModel {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["idTache"] = this.idTache;
+        data["idTask"] = this.idTask;
         data["idProjet"] = this.idProjet;
         data["nomDeTache"] = this.nomDeTache;
         data["description"] = this.description;
@@ -2069,7 +2065,7 @@ export class TaskModel implements ITaskModel {
 }
 
 export interface ITaskModel {
-    idTache?: number | undefined;
+    idTask?: number | undefined;
     idProjet: number;
     nomDeTache: string;
     description?: string | undefined;

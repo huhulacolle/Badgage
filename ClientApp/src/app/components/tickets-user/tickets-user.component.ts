@@ -89,7 +89,6 @@ export class TicketsUserComponent {
 
   createTask(): void {
     const dialogRef = this.dialog.open(ModalCreateTaskComponent);
-    dialogRef.updateSize('lg','lg');
     dialogRef.afterClosed().subscribe(result => {
         result.dateCreation = new Date();
         result.idTache = undefined;
@@ -125,6 +124,7 @@ export class TicketsUserComponent {
   }
 
   addSession(task: TaskModel): void {
+    console.log(task);
     const dialogRef = this.dialog.open(ModalAddSessionComponent, {data : task});
     dialogRef.afterClosed().subscribe(result => {
         if(result){

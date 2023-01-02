@@ -28,7 +28,6 @@
     </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onCancelClick()">Annuler</button>
-    <button mat-button (click)="onCancelClick()">Fermer</button>
-    <button mat-button [disabled]="!session.dateDebut || !session.dateFin || !hoursDateDebut || !hoursDateFin" [mat-dialog-close]="session"
+    <button mat-button [disabled]="!session.dateDebut || !session.dateFin || !hoursDateDebut || !hoursDateFin" [mat-dialog-close]="session" (click)="sendSession()"
         cdkFocusInitial>Confirmer</button>
 </div>
