@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Badgage.Controllers
 {
@@ -8,11 +9,13 @@ namespace Badgage.Controllers
     public class SessionController : ControllerBase
     {
         private readonly ISessionRepository sessionRepository;
+        private readonly ClaimsPrincipal jwt;
 
-        public SessionController(ISessionRepository sessionRepository)
+        public SessionController(ISessionRepository sessionRepository, ClaimsPrincipal jwt)
         {
             this.sessionRepository = sessionRepository;
-        }
+            this.jwt = jwt;
+    }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -21,7 +24,14 @@ namespace Badgage.Controllers
         {
             try
             {
-                await sessionRepository.SetSession(sessionInput);
+                var session = new SessionModel()
+                {
+                    IdUser = int.Parse(jwt.FindFirstValue("id")),
+                    IdTask = sessionInput.IdTask,
+                    DateDebut = sessionInput.DateDebut,
+                    DateFin = sessionInput.DateFin,
+            };
+                await sessionRepository.SetSession(session);
                 return StatusCode(201);
             }
             catch (Exception e)
