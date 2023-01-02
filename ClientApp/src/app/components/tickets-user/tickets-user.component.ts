@@ -52,7 +52,7 @@ export class TicketsUserComponent {
       setInterval(() => {
         this.numberOfTicks++;
         this.ref.detectChanges();
-      }, 100);
+      }, 500);
     }
 
   ngOnInit(): void {
