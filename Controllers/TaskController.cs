@@ -27,6 +27,22 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
+        public async Task<IActionResult> UpdateTaskName(int idTask, string name)
+        {
+            try
+            {
+                await taskRepository.UpdateTaskName(name, idTask);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("User/{IdUser}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByIdUser(int idUser)
         {

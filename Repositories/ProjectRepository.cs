@@ -62,6 +62,21 @@
             return await connec.QueryAsync<ProjectModel>(sql, param);
         }
 
+        public async Task UpdateProjectName(int idProject, string name)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idProject", idProject },
+                { "@name", name },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = "UPDATE project SET projectName = @name WHERE idProject = @idProject";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, param);
+        }
+
         public async Task<bool> VerifTeamUser(int idUser, int idTeam)
         {
             var dictionary = new Dictionary<string, object>()

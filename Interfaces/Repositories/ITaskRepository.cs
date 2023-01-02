@@ -10,6 +10,8 @@
 
         public Task DeleteTask(int idTask);
 
+        public Task UpdateTaskName(string name, int idTask);
+
         public Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject);
 
         public Task<bool> VerifUserOnProject(int idProject, int idUser);

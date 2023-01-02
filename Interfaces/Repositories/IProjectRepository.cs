@@ -10,6 +10,8 @@
 
         public Task DeleteProject(int idProject);
 
+        public Task UpdateProjectName(int idProject, string name);
+
         public Task<bool> VerifTeamUser(int idUser, int idTeam);
     }
 }

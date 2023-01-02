@@ -68,6 +68,21 @@
             await connec.ExecuteAsync(sql, userOnTeamModel);
         }
 
+        public async Task UpdateTeamName(string name, int idTeam)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idTeam", idTeam },
+                { "@name", name },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = "UPDATE project SET nom = @name WHERE idTeam = @idTeam";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, param);
+        }
+
         public async Task<bool> VerifUserBossTeam(UserOnTeamModel userOnTeamModel)
         {
             string sql = "SELECT * FROM team WHERE byUser = @IdUser and idTeam = @IdTeam";

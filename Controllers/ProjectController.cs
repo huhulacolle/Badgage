@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Badgage.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -32,6 +33,22 @@ namespace Badgage.Controllers
 
             var result = await projectRepository.GetProjectByUser(idUser);
             return Ok(result);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
+        public async Task<IActionResult> UpdateProjectName(int idProject, string name)
+        {
+            try
+            {
+                await projectRepository.UpdateProjectName(idProject, name);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]

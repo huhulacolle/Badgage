@@ -103,5 +103,20 @@
             }
             return false;
         }
+
+        public async Task UpdateTaskName(string name, int idTask)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idTask", idTask },
+                { "@name", name },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = "UPDATE project SET nomdetache = @name WHERE idTask = @idTask";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, param);
+        }
     }
 }

@@ -3,15 +3,17 @@
     public interface ITeamRepository
     {
 
-        Task<IEnumerable<TeamModel>> GetTeamByUser(int idUser);
+        public Task<IEnumerable<TeamModel>> GetTeamByUser(int idUser);
 
-        Task SetTeam(TeamModel teamModel);
+        public Task SetTeam(TeamModel teamModel);
 
-        Task SetUserOnTeam(UserOnTeamModel userOnTeamModel);
+        public Task SetUserOnTeam(UserOnTeamModel userOnTeamModel);
 
-        Task<bool> VerifUserBossTeam(UserOnTeamModel userOnTeamModel);
+        public Task<bool> VerifUserBossTeam(UserOnTeamModel userOnTeamModel);
 
-        Task DeleteTeam(int idTeam);
+        public Task DeleteTeam(int idTeam);
+
+        public Task UpdateTeamName(string name, int idTeam);
 
     }
 }
