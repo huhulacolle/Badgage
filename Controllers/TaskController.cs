@@ -41,8 +41,16 @@ namespace Badgage.Controllers
         [HttpDelete("{IdTask}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> DeleteTask(int idTask)
         {
-            await taskRepository.DeleteTask(idTask);
-            return StatusCode(201);
+            try
+            {
+                await taskRepository.DeleteTask(idTask);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
 
 
@@ -80,20 +88,6 @@ namespace Badgage.Controllers
             {
                 int IdUser = int.Parse(jwt.FindFirstValue("id"));
                 await taskRepository.SetUserOnTask(new UserOnTaskModel() { IdUser = IdUser, IdTask = idTask });
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        [HttpDelete("{idTask}")]
-        public async Task<IActionResult> DeleteTask(int idTask)
-        {
-            try
-            {
-                await taskRepository.DeleteTask(idTask);
                 return Ok();
             }
             catch (Exception e)

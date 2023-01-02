@@ -73,5 +73,19 @@ namespace Badgage.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpDelete("{idTeam}")]
+        public async Task<IActionResult> DeleteTeam(int idTeam)
+        {
+            try
+            {
+                await teamRepository.DeleteTeam(idTeam);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        } 
     }
 }

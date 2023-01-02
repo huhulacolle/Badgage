@@ -11,7 +11,7 @@ namespace Badgage.Repositories
             this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
         }
 
-        public Task DeleteTeam(int idTeam)
+        public async Task DeleteTeam(int idTeam)
         {
             var dictionary = new Dictionary<string, object>()
             {
@@ -19,8 +19,20 @@ namespace Badgage.Repositories
             };
             var param = new DynamicParameters(dictionary);
 
-            string sql = "";
-            throw new NotImplementedException();
+            string sql = @"DELETE sessions FROM sessions LEFT JOIN task ON task.idTask = sessions.idTask 
+                                LEFT JOIN project ON project.idProject = task.idprojet WHERE project.idTeam = @idTeam;
+
+                            DELETE taskuser FROM taskuser LEFT JOIN task ON task.idTask = taskuser.idTask 
+                                LEFT JOIN team on team.idTeam = task.idTask WHERE team.idTeam = @idTeam;
+
+                            DELETE task FROM task LEFT JOIN team on team.idTeam = task.idTask WHERE team.idTeam = @idTeam;
+
+                            DELETE teamuser FROM teamuser WHERE idTeam = @idTeam;
+
+                            DELETE FROM team WHERE idTeam = @idTeam;";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, param);
         }
 
         public async Task<IEnumerable<TeamModel>> GetTeamByUser(int idUser)
