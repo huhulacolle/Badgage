@@ -39,7 +39,7 @@ export class TicketsUserComponent {
   @ViewChild('modalContent')
   modalContent!: TemplateRef<any>;
   numberOfTicks = 0;
-  constructor(private modal: NgbModal, private ticketService: TicketService, 
+  constructor(private modal: NgbModal, private ticketService: TicketService,
     private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
     private projectService: ProjectService, private sessionService: SessionService) {
       ref.detach();
@@ -58,23 +58,23 @@ export class TicketsUserComponent {
   showTasks: boolean = false;
 
 
-  getTasks(): void {
-    console.log(this.projects);
-    for(let i = 0; this.projects.length > i;i++){
-      console.log(this.projects[i].idProject as number);
-      this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
+  getTasks(projects: ProjectModel[]): void {
+    console.log(projects);
+    for(let i = 0; projects.length > i;i++){
+      console.log(projects[i].idProject as number);
+      this.ticketService.getTaskByProject(projects[i].idProject as number).then((result) => {
         this.tasks = result;
         console.log(this.tasks);
         this.showTasks= true;
       }).catch();
-    } 
+    }
   }
 
   getProjects(): void {
     this.projectService.getProjectByUser().then((result)=> {
       console.log("je suis là")
       this.projects = result;
-      this.getTasks();
+      this.getTasks(result);
     });
   }
 
