@@ -65,10 +65,10 @@ export class TicketsUserComponent {
 
   deleteTask(idTask: number): void {
     this.ticketService.deleteTask(idTask).then(() => {
-      this._snackBar.open("Tâche supprimée avec succès");
+      this._snackBar.open("Tâche supprimée avec succès", '', {duration: 3000});
       this.getTasks();
     }).catch((error) => {
-      this._snackBar.open(error);
+      this._snackBar.open(error, '', {duration: 3000});
     })
   }
 
@@ -79,10 +79,10 @@ export class TicketsUserComponent {
         result.dateFin = null;
         this.ticketService.setTask(result)
           .then(() => {
-            this._snackBar.open("Tâche créée avec succès");
+            this._snackBar.open("Tâche créée avec succès", '', {duration: 3000});
             this.getTasks();
           }).catch((error) => {
-            this._snackBar.open(error);
+            this._snackBar.open(error, '', {duration: 3000});
           })
     })
   }
@@ -98,10 +98,10 @@ export class TicketsUserComponent {
         if(result){
           this.ticketService.joinTask(result)
           .then(() => {
-            this._snackBar.open("Tâche attribuée avec succès");
+            this._snackBar.open("Tâche attribuée avec succès", '', {duration: 3000});
             this.getTasks();
           }).catch((error) => {
-            this._snackBar.open(error);
+            this._snackBar.open(error, '', {duration: 3000});
           })
         }
     })
