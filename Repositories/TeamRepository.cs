@@ -11,6 +11,18 @@ namespace Badgage.Repositories
             this.defaultSqlConnectionFactory = defaultSqlConnectionFactory;
         }
 
+        public Task DeleteTeam(int idTeam)
+        {
+            var dictionary = new Dictionary<string, object>()
+            {
+                { "@idTeam", idTeam },
+            };
+            var param = new DynamicParameters(dictionary);
+
+            string sql = "";
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<TeamModel>> GetTeamByUser(int idUser)
         {
             var dictionary = new Dictionary<string, object>()

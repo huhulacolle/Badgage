@@ -27,7 +27,12 @@ namespace Badgage.Repositories
                 { "@idProject", idProject },
             };
             var paramDic = new DynamicParameters(projectDic);
-            string sql = "DELETE FROM project WHERE idProject = @idProject";
+
+            string sql = @"DELETE sessions from sessions LEFT JOIN task on task.idTask = sessions.idTask WHERE task.idprojet = @idProject;
+                            DELETE taskuser FROM taskuser LEFT JOIN task ON task.idTask = taskuser.idTask WHERE task.idprojet = @idProject;
+                            DELETE task FROM task WHERE idprojet = @idProject;
+                            DELETE FROM project WHERE idProject = @idProject;";
+
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, paramDic);
         }

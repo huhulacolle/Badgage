@@ -31,7 +31,7 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{IdUser}")]
+        [HttpGet("User/{IdUser}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByIdUser(int idUser)
         {
             var result = await taskRepository.GetTasksByUser(idUser);
@@ -52,7 +52,7 @@ namespace Badgage.Controllers
 
                 if (verif)
                 {
-                    await taskRepository.SetTask(taskModel, idUser);
+                    await taskRepository.SetTask(taskModel);
                     return StatusCode(201);
                 }
                 return Unauthorized();
@@ -72,6 +72,20 @@ namespace Badgage.Controllers
             {
                 int IdUser = int.Parse(jwt.FindFirstValue("id"));
                 await taskRepository.SetUserOnTask(new UserOnTaskModel() { IdUser = IdUser, IdTask = idTask });
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{idTask}")]
+        public async Task<IActionResult> DeleteTask(int idTask)
+        {
+            try
+            {
+                await taskRepository.DeleteTask(idTask);
                 return Ok();
             }
             catch (Exception e)

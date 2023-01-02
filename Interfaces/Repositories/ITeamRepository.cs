@@ -11,5 +11,7 @@
 
         Task<bool> VerifUserBossTeam(UserOnTeamModel userOnTeamModel);
 
+        Task DeleteTeam(int idTeam);
+
     }
 }

@@ -53,14 +53,15 @@ namespace Badgage.Controllers
         }
 
         [HttpDelete("{idProject}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
         public async Task<IActionResult> DeleteProject(int idProject)
         {
             try
             {
                 await projectRepository.DeleteProject(idProject);
-                return Ok("Projet supprimé");
+                return Ok();
+
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
