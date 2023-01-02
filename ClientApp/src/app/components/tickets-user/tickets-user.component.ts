@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef,} from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef,} from '@angular/core';
 import {startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,} from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -36,22 +36,30 @@ const colors: Record<string, EventColor> = {
 export class TicketsUserComponent {
   @ViewChild('modalContent')
   modalContent!: TemplateRef<any>;
-  
+  numberOfTicks = 0;
   constructor(private modal: NgbModal, private ticketService: TicketService, 
-    private _snackBar: MatSnackBar, private dialog: MatDialog) {
+    private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,) {
+      ref.detach();
+      setInterval(() => {
+        this.numberOfTicks++;
+        this.ref.detectChanges();
+      }, 10);
     }
 
   ngOnInit(): void {
     this.getTasks();
     //this.getProjects();
   }
+
   tasks!: TaskModel[];
+  showTasks: boolean = false;
 
 
   getTasks(): void {
     this.ticketService.getTaskByUser().then((result) => {
       this.tasks = result;
       console.log(this.tasks);
+      this.showTasks= true;
     }).catch();
   }
 
