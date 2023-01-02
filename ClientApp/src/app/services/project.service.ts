@@ -16,4 +16,8 @@ export class ProjectService {
   getProjectByTeam(idTeam: number): Promise<ProjectModel[]> {
     return lastValueFrom(this.projectClient.getProjectByTeam(idTeam));
   }
+
+  getProjectByUser(): Promise<ProjectModel[]> {
+    return lastValueFrom(this.projectClient.getProjectByUser());
+  }
 }

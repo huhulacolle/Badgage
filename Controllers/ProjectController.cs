@@ -27,11 +27,11 @@ namespace Badgage.Controllers
         }
 
         [HttpGet("User")]
-        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectByTeam()
+        public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectByUser()
         {
             int idUser = int.Parse(jwt.FindFirstValue("id"));
 
-            var result = await projectRepository.GetProjectByTeam(idUser);
+            var result = await projectRepository.GetProjectByUser(idUser);
             return Ok(result);
         }
 

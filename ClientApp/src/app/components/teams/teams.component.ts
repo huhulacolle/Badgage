@@ -18,14 +18,15 @@ export class TeamsComponent {
   constructor(public dialog: MatDialog, private teamService: TeamService, private _snackBar: MatSnackBar, private storageService: StorageService,
   ) { }
 
-  ngOnInit(): void {
+  ngAfterContentInit(): void {
     this.getTeamByUser();
+    console.log("test");
   }
 
   teams!: TeamModel[];
 
   getTeamByUser() : void {
-    this.teamService.getTeamsByUser().then((result) => { this.teams = result });
+    this.teamService.getTeamsByUser().then((result) => { this.teams = result; console.log(this.teams) });
   }
 
   createTeamModal(): void {
@@ -46,7 +47,6 @@ export class TeamsComponent {
 
   addMembersModal(idTeam: number| undefined): void {
     const userOnTeam = new UserOnTeamModel();
-    console.log("SA RACE");
     userOnTeam.idTeam = idTeam as number;
     const dialogRef = this.dialog.open(ModalModifyTeamComponent, { data: { userOnTeam } });
     dialogRef.afterClosed().subscribe((result) => {

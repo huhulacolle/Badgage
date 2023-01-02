@@ -18,27 +18,14 @@ export class ProjetsComponent {
   constructor(public dialog: MatDialog, private projectService: ProjectService, private _snackBar: MatSnackBar, private storageService: StorageService, private teamService : TeamService
   ) { }
 
-  ngOnInt() : void {
+  ngAfterContentInit() : void {
     this.getProjetsByUser();
   }
 
   getProjetsByUser(): void {
-    this.teamService.getTeamsByUser().then((result) => {
-      this.teams = result;
-      console.log(this.teams);
-    }).catch((error) => {
-      console.log(error);
-    })
-    if(this.teams != null)
-    {
-      this.teams.map(t => this.projectService.getProjectByTeam(t.idTeam as number).then((result) => {
-        this.projects.push.apply(result);
-        console.log(this.projects);
-      }).catch((error) => {
-        this._snackBar.open(error);
-      }))
-      console.log(this.projects);
-    }
+      this.projectService.getProjectByUser().then((result) => {
+        this.projects = result;
+      })
   }
 
   projects!: ProjectModel[];

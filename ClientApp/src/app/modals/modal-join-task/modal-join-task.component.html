@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Attribuer {{data.nomDeTache}}</h1>
+<div mat-dialog-content>
+    <h3>Description de la tâche</h3><br>
+    <p>{{data.description}}</p><br>
+    <h3>Attribuer la tâche à : </h3><br>
+    <mat-form-field>
+        <mat-select mat-input [(ngModel)]="idUser" required>
+            <mat-option *ngFor="let userOnTeam of usersOnTeam" [value]="userOnTeam.idUtil">{{userOnTeam.adresseMail}}</mat-option>
+        </mat-select>
+    </mat-form-field><br>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Annuler</button>
+    <button mat-button [disabled]="!idUser" [mat-dialog-close]="idUser" cdkFocusInitial>Confirmer</button>
+</div>

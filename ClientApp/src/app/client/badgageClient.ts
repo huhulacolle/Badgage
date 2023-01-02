@@ -264,7 +264,7 @@ export class ProjectBadgageClient {
     }
 
     getProjectByTeam(idTeam: number): Observable<ProjectModel[]> {
-        let url_ = this.baseUrl + "/api/Project/{idTeam}";
+        let url_ = this.baseUrl + "/api/Project/Team/{idTeam}";
         if (idTeam === undefined || idTeam === null)
             throw new Error("The parameter 'idTeam' must be defined.");
         url_ = url_.replace("{idTeam}", encodeURIComponent("" + idTeam));
@@ -293,6 +293,61 @@ export class ProjectBadgageClient {
     }
 
     protected processGetProjectByTeam(response: HttpResponseBase): Observable<ProjectModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ProjectModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getProjectByUser(): Observable<ProjectModel[]> {
+        let url_ = this.baseUrl + "/api/Project/User";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetProjectByUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetProjectByUser(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ProjectModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ProjectModel[]>;
+        }));
+    }
+
+    protected processGetProjectByUser(response: HttpResponseBase): Observable<ProjectModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -459,6 +514,64 @@ export class TaskBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
+    deleteTask(idTask: number): Observable<TaskModel[]> {
+        let url_ = this.baseUrl + "/api/Task/{IdTask}";
+        if (idTask === undefined || idTask === null)
+            throw new Error("The parameter 'idTask' must be defined.");
+        url_ = url_.replace("{idTask}", encodeURIComponent("" + idTask));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteTask(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteTask(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TaskModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TaskModel[]>;
+        }));
+    }
+
+    protected processDeleteTask(response: HttpResponseBase): Observable<TaskModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(TaskModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     getTasksByUser(): Observable<TaskModel[]> {
         let url_ = this.baseUrl + "/api/Task";
         url_ = url_.replace(/[?&]$/, "");
@@ -567,6 +680,64 @@ export class TaskBadgageClient {
             let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result400 = Exception.fromJS(resultData400);
             return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getTasksByIdUser(idUser: number): Observable<TaskModel[]> {
+        let url_ = this.baseUrl + "/api/Task/{IdUser}";
+        if (idUser === undefined || idUser === null)
+            throw new Error("The parameter 'idUser' must be defined.");
+        url_ = url_.replace("{idUser}", encodeURIComponent("" + idUser));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTasksByIdUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTasksByIdUser(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TaskModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TaskModel[]>;
+        }));
+    }
+
+    protected processGetTasksByIdUser(response: HttpResponseBase): Observable<TaskModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(TaskModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -882,8 +1053,66 @@ export class UserBadgageClient {
         return _observableOf(null as any);
     }
 
+    getUsersOnTeam(idTeam: number): Observable<UserModel[]> {
+        let url_ = this.baseUrl + "/api/User/Team/{idTeam}";
+        if (idTeam === undefined || idTeam === null)
+            throw new Error("The parameter 'idTeam' must be defined.");
+        url_ = url_.replace("{idTeam}", encodeURIComponent("" + idTeam));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetUsersOnTeam(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetUsersOnTeam(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<UserModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<UserModel[]>;
+        }));
+    }
+
+    protected processGetUsersOnTeam(response: HttpResponseBase): Observable<UserModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UserModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     getUser(email: string | null): Observable<UserModel> {
-        let url_ = this.baseUrl + "/api/User/{Email}";
+        let url_ = this.baseUrl + "/api/User/Email/{Email}";
         if (email === undefined || email === null)
             throw new Error("The parameter 'email' must be defined.");
         url_ = url_.replace("{Email}", encodeURIComponent("" + email));
@@ -1290,6 +1519,7 @@ export class TeamModel implements ITeamModel {
     idTeam?: number | undefined;
     nom!: string;
     byUser!: number;
+    nbTeam!: number;
 
     constructor(data?: ITeamModel) {
         if (data) {
@@ -1305,6 +1535,7 @@ export class TeamModel implements ITeamModel {
             this.idTeam = _data["idTeam"];
             this.nom = _data["nom"];
             this.byUser = _data["byUser"];
+            this.nbTeam = _data["nbTeam"];
         }
     }
 
@@ -1320,6 +1551,7 @@ export class TeamModel implements ITeamModel {
         data["idTeam"] = this.idTeam;
         data["nom"] = this.nom;
         data["byUser"] = this.byUser;
+        data["nbTeam"] = this.nbTeam;
         return data;
     }
 }
@@ -1328,6 +1560,7 @@ export interface ITeamModel {
     idTeam?: number | undefined;
     nom: string;
     byUser: number;
+    nbTeam: number;
 }
 
 export class UserOnTeamModel implements IUserOnTeamModel {
