@@ -1,4 +1,4 @@
-﻿namespace Badgage.Models.Models
+﻿namespace Badgage.Models.Inputs
 {
     public class UserLogin
     {
