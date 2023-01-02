@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProjectModel, SessionInput, TaskModel } from 'src/app/client/badgageClient';
 import { ProjectService } from 'src/app/services/project.service';
@@ -9,6 +9,8 @@ import { ProjectService } from 'src/app/services/project.service';
   styleUrls: ['./modal-add-session.component.css']
 })
 export class ModalAddSessionComponent {
+  @ViewChild('picker') picker: any;
+
   constructor(public dialogRef: MatDialogRef<ModalAddSessionComponent>, private projetService: ProjectService,
      @Inject(MAT_DIALOG_DATA) public data: TaskModel
   ) { }
@@ -27,18 +29,25 @@ export class ModalAddSessionComponent {
     })
   }
 
-  task!: TaskModel;
   nomProjetSeeing!: string;
   projets!: ProjectModel[];
   error!: boolean;
+  hoursDateDebut!: Date;
+  hoursDateFin!: Date;
   session!: SessionInput;
 
   onCancelClick(): void {
     this.dialogRef.close();
   }
 
-  checkDate(date: Date | undefined): boolean {
-    date = date as Date;
-    return (date.getTime() < new Date().getTime());
+  checkDate(): boolean {
+    this.session.dateDebut.setHours(this.hoursDateDebut.getHours());
+    this.session.dateDebut.setMinutes(this.hoursDateDebut.getMinutes());
+    if(this.session.dateFin != undefined){
+      this.session.dateFin.setMinutes(this.hoursDateFin.getMinutes());
+      this.session.dateFin.setHours(this.hoursDateFin.getHours());
+      return (this.session.dateDebut.getTime() < this.session.dateFin.getTime());
+    }
+    return false;
   }
 }

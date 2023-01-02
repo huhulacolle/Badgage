@@ -981,6 +981,64 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
+    getTaskFromProject(idProject: number): Observable<TaskModel[]> {
+        let url_ = this.baseUrl + "/api/Task/Project/{idProject}";
+        if (idProject === undefined || idProject === null)
+            throw new Error("The parameter 'idProject' must be defined.");
+        url_ = url_.replace("{idProject}", encodeURIComponent("" + idProject));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTaskFromProject(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTaskFromProject(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TaskModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TaskModel[]>;
+        }));
+    }
+
+    protected processGetTaskFromProject(response: HttpResponseBase): Observable<TaskModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(TaskModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     deleteTask(idTask: number): Observable<TaskModel[]> {
         let url_ = this.baseUrl + "/api/Task/{IdTask}";
         if (idTask === undefined || idTask === null)
@@ -1866,6 +1924,8 @@ export interface IProjectModel {
 export class SessionInput implements ISessionInput {
     idTask!: number;
     idUser!: number;
+    dateDebut!: Date;
+    dateFin?: Date | undefined;
 
     constructor(data?: ISessionInput) {
         if (data) {
@@ -1880,6 +1940,8 @@ export class SessionInput implements ISessionInput {
         if (_data) {
             this.idTask = _data["idTask"];
             this.idUser = _data["idUser"];
+            this.dateDebut = _data["dateDebut"] ? new Date(_data["dateDebut"].toString()) : <any>undefined;
+            this.dateFin = _data["dateFin"] ? new Date(_data["dateFin"].toString()) : <any>undefined;
         }
     }
 
@@ -1894,6 +1956,8 @@ export class SessionInput implements ISessionInput {
         data = typeof data === 'object' ? data : {};
         data["idTask"] = this.idTask;
         data["idUser"] = this.idUser;
+        data["dateDebut"] = this.dateDebut ? this.dateDebut.toISOString() : <any>undefined;
+        data["dateFin"] = this.dateFin ? this.dateFin.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -1901,6 +1965,8 @@ export class SessionInput implements ISessionInput {
 export interface ISessionInput {
     idTask: number;
     idUser: number;
+    dateDebut: Date;
+    dateFin?: Date | undefined;
 }
 
 export class SessionModel implements ISessionModel {

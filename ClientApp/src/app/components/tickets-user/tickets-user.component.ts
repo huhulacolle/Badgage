@@ -11,6 +11,8 @@ import { ProjectService } from 'src/app/services/project.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalCreateTaskComponent } from 'src/app/modals/modal-create-task/modal-create-task.component';
 import { ModalJoinTaskComponent } from 'src/app/modals/modal-join-task/modal-join-task.component';
+import { ModalAddSessionComponent } from 'src/app/modals/modal-add-session/modal-add-session.component';
+import { SessionService } from 'src/app/services/session.service';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -39,16 +41,15 @@ export class TicketsUserComponent {
   numberOfTicks = 0;
   constructor(private modal: NgbModal, private ticketService: TicketService, 
     private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
-    private projectService: ProjectService) {
+    private projectService: ProjectService, private sessionService: SessionService) {
       ref.detach();
       setInterval(() => {
         this.numberOfTicks++;
         this.ref.detectChanges();
-      }, 10);
+      }, 100);
     }
 
   ngOnInit(): void {
-    this.getTasks();
     this.getProjects();
   }
 
@@ -58,23 +59,29 @@ export class TicketsUserComponent {
 
 
   getTasks(): void {
-    this.ticketService.getTaskByUser().then((result) => {
-      this.tasks = result;
-      console.log(this.tasks);
-      this.showTasks= true;
-    }).catch();
+    console.log(this.projects);
+    for(let i = 0; this.projects.length > i;i++){
+      console.log(this.projects[i].idProject as number);
+      this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
+        this.tasks = result;
+        console.log(this.tasks);
+        this.showTasks= true;
+      }).catch();
+    } 
   }
 
   getProjects(): void {
     this.projectService.getProjectByUser().then((result)=> {
+      console.log("je suis là")
       this.projects = result;
+      this.getTasks();
     });
   }
 
   deleteTask(idTask: number): void {
     this.ticketService.deleteTask(idTask).then(() => {
       this._snackBar.open("Tâche supprimée avec succès");
-      this.getTasks();
+      this.getProjects();
     }).catch((error) => {
       this._snackBar.open(error);
     })
@@ -82,13 +89,15 @@ export class TicketsUserComponent {
 
   createTask(): void {
     const dialogRef = this.dialog.open(ModalCreateTaskComponent);
+    dialogRef.updateSize('lg','lg');
     dialogRef.afterClosed().subscribe(result => {
         result.dateCreation = new Date();
+        result.idTache = undefined;
         result.dateFin = null;
         this.ticketService.setTask(result)
           .then(() => {
             this._snackBar.open("Tâche créée avec succès");
-            this.getTasks();
+            this.getProjects();
           }).catch((error) => {
             this._snackBar.open(error);
           })
@@ -107,7 +116,22 @@ export class TicketsUserComponent {
           this.ticketService.joinTask(result)
           .then(() => {
             this._snackBar.open("Tâche attribuée avec succès");
-            this.getTasks();
+            this.getProjects();
+          }).catch((error) => {
+            this._snackBar.open(error);
+          })
+        }
+    })
+  }
+
+  addSession(task: TaskModel): void {
+    const dialogRef = this.dialog.open(ModalAddSessionComponent, {data : task});
+    dialogRef.afterClosed().subscribe(result => {
+        if(result){
+          this.sessionService.setSession(result)
+          .then(() => {
+            this._snackBar.open("Tâche attribuée avec succès");
+            this.getProjects();
           }).catch((error) => {
             this._snackBar.open(error);
           })

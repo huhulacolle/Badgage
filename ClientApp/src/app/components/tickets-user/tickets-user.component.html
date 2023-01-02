@@ -37,9 +37,7 @@
   <div class="row">
     <div class="col-3 text-center">
       <p *ngIf="!projects">Pour avoir des tâches il faut faire parti d'un projet !</p>
-      <div *ngIf="projects.length > 0">
         <button class="btn btn-primary" (click)="createTask()">+ Ajouter un ticket</button>
-        <div *ngIf="this.tasks.length > 0">
           <mat-card *ngFor="let task of this.tasks">
             <mat-card-header>
               <div mat-card-avatar *ngIf="task.dateFin" class="taskComplete"></div>
@@ -50,16 +48,11 @@
             <mat-card-actions>
               <button mat-button color="primary" (click)="seeTask(task)">Voir</button>
               <button mat-button (click)="joinTask(task)">Attribuer tâche</button>
-              <button mat-button>Ajouter session Travail</button>
+              <button mat-button (click)="addSession(task)">Ajouter session Travail</button>
               <button mat-button color="warn">Supprimer</button>
             </mat-card-actions>
           </mat-card>
           <br>
-        </div>
-        <div *ngIf="this.tasks.length == 0">
-          <h1 mat-dialog-title>Aucunes tâches présentes</h1>
-        </div>
-      </div>
     </div>
     <div class="col-9">
       <div [ngSwitch]="view">

@@ -1,6 +1,6 @@
 import { IsSignedInGuard } from './guards/is-signed-in.guard';
 import { RegisterComponent } from './components/register/register.component';
-import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient, TaskBadgageClient, TeamBadgageClient, UserBadgageClient } from './client/badgageClient';
+import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient, SessionBadgageClient, TaskBadgageClient, TeamBadgageClient, UserBadgageClient } from './client/badgageClient';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -26,7 +26,10 @@ import { ModalCreateTaskComponent } from './modals/modal-create-task/modal-creat
 import { ModalJoinTaskComponent } from './modals/modal-join-task/modal-join-task.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ModalAddSessionComponent } from './modals/modal-add-session/modal-add-session.component';
-import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { OverlayRef } from '@angular/cdk/overlay';
 
 @NgModule({
   declarations: [
@@ -48,8 +51,10 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-mat
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialsModule,
+    NgxMaterialTimepickerModule,
     FormsModule,
-    NgxMatDatetimePickerModule,
+    NgxMatDatetimePickerModule, 
+    NgxMatNativeDateModule, 
     NgxMatTimepickerModule,
     RouterModule.forRoot([
       { path: '',   redirectTo: '/register', pathMatch: 'full' },
@@ -68,6 +73,8 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-mat
     TeamBadgageClient,
     UserBadgageClient,
     TaskBadgageClient,
+    SessionBadgageClient,
+    MatDialogConfig,
     {
 			provide: APP_INITIALIZER,
 			useFactory: apiUrlServiceFactory,
