@@ -14,9 +14,9 @@ namespace Badgage.Controllers
             this.sessionRepository = sessionRepository;
         }
 
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
-        [HttpPost]
         public async Task<IActionResult> SetSession(SessionInput sessionInput)
         {
             try
