@@ -1,4 +1,6 @@
-﻿namespace Badgage.Repositories
+﻿using System.Xml.Linq;
+
+namespace Badgage.Repositories
 {
     public class TaskRepository : ITaskRepository
     {
@@ -113,7 +115,22 @@
             };
             var param = new DynamicParameters(dictionnary);
 
-            string sql = "UPDATE project SET nomdetache = @name WHERE idTask = @idTask";
+            string sql = "UPDATE Task SET nomdetache = @name WHERE idTask = @idTask";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, param);
+        }
+
+        public async Task UpdateTimeEndTask(int idTask, DateTime DateFin)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idTask", idTask },
+                { "@DateFin", DateFin },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = "UPDATE Task SET DateFin = @DateFin WHERE idTask = @idTask";
 
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, param);

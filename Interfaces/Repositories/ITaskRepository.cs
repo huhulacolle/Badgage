@@ -10,6 +10,8 @@
 
         public Task DeleteTask(int idTask);
 
+        public Task UpdateTimeEndTask(int idTask, DateTime DateFin);
+
         public Task UpdateTaskName(string name, int idTask);
 
         public Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject);

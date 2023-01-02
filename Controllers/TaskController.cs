@@ -43,6 +43,22 @@ namespace Badgage.Controllers
             }
         }
 
+        [HttpPut("DateFin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
+        public async Task<IActionResult> UpdateTimeEndTask(int idTask, DateTime DateFin)
+        {
+            try
+            {
+                await taskRepository.UpdateTimeEndTask(idTask, DateFin);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("User/{IdUser}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByIdUser(int idUser)
         {
