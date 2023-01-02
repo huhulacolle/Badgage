@@ -68,6 +68,7 @@ export class TicketsUserComponent {
     const dialogRef = this.dialog.open(ModalCreateTaskComponent);
     dialogRef.afterClosed().subscribe(result => {
         result.dateCreation = new Date();
+        result.dateFin = null;
         this.ticketService.setTask(result)
           .then(() => {
             this._snackBar.open("Tâche créée avec succès");
@@ -76,6 +77,11 @@ export class TicketsUserComponent {
             this._snackBar.open(error);
           })
     })
+  }
+
+  seeTask(task: TaskModel): void {
+    const dialogRef = this.dialog.open(ModalCreateTaskComponent, {data: task});
+    dialogRef.afterClosed();
   }
 
   joinTask(task: TaskModel): void {

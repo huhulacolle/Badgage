@@ -10,25 +10,33 @@ import { ProjectService } from 'src/app/services/project.service';
 })
 export class ModalCreateTaskComponent {
   constructor(
-    public dialogRef : MatDialogRef<ModalCreateTaskComponent>, private projetService: ProjectService, @Inject(MAT_DIALOG_DATA) public data: TaskModel
+    public dialogRef: MatDialogRef<ModalCreateTaskComponent>, private projetService: ProjectService, @Inject(MAT_DIALOG_DATA) public data: TaskModel
   ) { }
 
   ngOnInit(): void {
-      if(this.data != undefined)
-        this.task = this.data;
-      else
-        this.task = new TaskModel();
-      this.projetService.getProjectByUser().then((result) => {
-        this.projets = result;
-        console.log(this.projets);
-      }).catch((error) => {
-        console.log(error);
-      })
+    this.projetService.getProjectByUser().then((result) => {
+      this.projets = result;
+      if (this.data != null) {
+        this.projets.map(p => {
+          if (this.data.idProjet == p.idProject)
+            this.nomProjetSeeing = p.projectName;
+        })
+      }
+    }).catch((error) => {
+      console.log(error);
+    })
+    if (this.data != null) {
+      this.seeing = true;
     }
+    else
+      this.task = new TaskModel();
+  }
 
-    task!: TaskModel;
-    projets!: ProjectModel[];
-    error!: string | undefined;
+  task!: TaskModel;
+  nomProjetSeeing!: string;
+  seeing: boolean = false;
+  projets!: ProjectModel[];
+  error!: string | undefined;
 
   onCancelClick(): void {
     this.dialogRef.close();
@@ -36,7 +44,7 @@ export class ModalCreateTaskComponent {
 
   checkDate(date: Date | undefined): void {
     date = date as Date;
-    if(date.getTime()  < new Date().getTime())
+    if (date.getTime() < new Date().getTime())
       this.error = "La date de fin ne peut être avant celle d'aujourd'hui";
     else
       this.error = undefined;
