@@ -42,7 +42,7 @@ namespace Badgage.Repositories
 
         public async Task SetSession(SessionInput sessionInput)
         {
-            string sql = "INSERT INTO sessions (idTask, idUser, DateDebut) VALUES (@idTask, @idUser, @DateDebut);";
+            string sql = "INSERT INTO sessions (idTask, idUser, DateDebut, @DateFin) VALUES (@idTask, @idUser, @DateDebut, @DateFin);";
 
             var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, sessionInput); 
