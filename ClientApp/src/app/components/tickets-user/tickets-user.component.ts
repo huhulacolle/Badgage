@@ -38,17 +38,14 @@ export class TicketsUserComponent {
   modalContent!: TemplateRef<any>;
   
   constructor(private modal: NgbModal, private ticketService: TicketService, 
-    private _snackBar: MatSnackBar, private projectService: ProjectService,
-    private dialog: MatDialog) {
-      this.getTasks();
+    private _snackBar: MatSnackBar, private dialog: MatDialog) {
     }
 
   ngOnInit(): void {
     this.getTasks();
     //this.getProjects();
-    console.log("Alors enculé ?");
   }
-  tasks: TaskModel[] = [];
+  tasks!: TaskModel[];
 
 
   getTasks(): void {
