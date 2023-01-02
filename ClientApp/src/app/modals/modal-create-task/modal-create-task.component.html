@@ -1,8 +1,9 @@
 <h1 mat-dialog-title>Création d'une tâche</h1>
 <div mat-dialog-content>
+    <div *ngIf="!seeing">
     <mat-form-field appearance="fill">
         <mat-label>Nom de la tâche</mat-label>
-        <input type="text" matInput [(ngModel)]="task.nomDeTache" required>
+        <input *ngIf="seeing" type="text" matInput [(ngModel)]="task.nomDeTache" required>
     </mat-form-field><br>
     <mat-form-field appearance="fill">
         <mat-label>Description de la tâche</mat-label>
@@ -21,8 +22,18 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
+    </div>
+    <div *ngIf="seeing">
+    <h3>{{data.nomDeTache}}</h3><br>
+    <h2>Description</h2><br>
+    <p>{{data.description}}</p><br>
+    <h3>Projet : {{nomProjetSeeing}}</h3><br>
+    <p *ngIf="data.dateFin">Tâche terminé le : {{data.dateFin.toDateString()}}</p>
+    <p *ngIf="!data!.dateFin">Tâche en cours</p>
+    </div>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="onCancelClick()">Annuler</button>
-    <button mat-button [disabled]="!task.nomDeTache || !task.idProjet || !task.dateFin" [mat-dialog-close]="task" cdkFocusInitial>Confirmer</button>
+    <button *ngIf="!seeing" mat-button (click)="onCancelClick()">Annuler</button>
+    <button *ngIf="seeing" mat-button (click)="onCancelClick()">Fermer</button>
+    <button *ngIf="!seeing" mat-button [disabled]="!task.nomDeTache || !task.idProjet" [mat-dialog-close]="task" cdkFocusInitial>Confirmer</button>
 </div>

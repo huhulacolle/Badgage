@@ -1,13 +1,25 @@
 h3 {
-    margin: 0 0 10px;
-  }
+  margin: 0 0 10px;
+}
 
-  pre {
-    background-color: #f5f5f5;
-    padding: 15px;
-  }
+pre {
+  background-color: #f5f5f5;
+  padding: 15px;
+}
 
-  .scrollColumn {
-    height: 70%;
-    overflow-y: scroll;
-  }
+.scrollColumn {
+  height: 70%;
+  overflow-y: scroll;
+}
+
+.taskComplete{
+  background-image: url('../../../assets/task-complete.svg');
+  background-size: cover;
+  fill: green;
+}
+
+.taskInProgress{
+  background-image: url('../../../assets/task-in-progress.svg');
+  background-size: cover;
+  fill: orange;
+}
