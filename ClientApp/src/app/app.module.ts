@@ -26,6 +26,7 @@ import { ModalCreateTaskComponent } from './modals/modal-create-task/modal-creat
 import { ModalJoinTaskComponent } from './modals/modal-join-task/modal-join-task.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ModalAddSessionComponent } from './modals/modal-add-session/modal-add-session.component';
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,8 @@ import { ModalAddSessionComponent } from './modals/modal-add-session/modal-add-s
     HttpClientModule,
     MaterialsModule,
     FormsModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
     RouterModule.forRoot([
       { path: '',   redirectTo: '/register', pathMatch: 'full' },
       { path: 'register', component: RegisterComponent },
