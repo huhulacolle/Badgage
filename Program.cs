@@ -2,8 +2,8 @@ using Badgage.Services;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using NSwag.Generation.Processors.Security;
 using NSwag;
+using NSwag.Generation.Processors.Security;
 using System.Reflection;
 using System.Text;
 
@@ -36,6 +36,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 builder.Services.AddScoped(provider =>

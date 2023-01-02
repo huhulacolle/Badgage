@@ -1,8 +1,4 @@
-﻿using Badgage.Interfaces.Repositories;
-using Badgage.Models;
-using Badgage.Repositories;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -31,7 +27,23 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{IdUser}")]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
+        public async Task<IActionResult> UpdateTaskName(int idTask, string name)
+        {
+            try
+            {
+                await taskRepository.UpdateTaskName(name, idTask);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("User/{IdUser}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByIdUser(int idUser)
         {
             var result = await taskRepository.GetTasksByUser(idUser);
@@ -41,8 +53,16 @@ namespace Badgage.Controllers
         [HttpDelete("{IdTask}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> DeleteTask(int idTask)
         {
-            await taskRepository.DeleteTask(idTask);
-            return StatusCode(201);
+            try
+            {
+                await taskRepository.DeleteTask(idTask);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
 
 
@@ -60,7 +80,7 @@ namespace Badgage.Controllers
 
                 if (verif)
                 {
-                    await taskRepository.SetTask(taskModel, idUser);
+                    await taskRepository.SetTask(taskModel);
                     return StatusCode(201);
                 }
                 return Unauthorized();

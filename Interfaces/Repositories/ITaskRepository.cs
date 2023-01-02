@@ -6,9 +6,11 @@
 
         public Task<TaskModel> GetTaskById(int idTask);
 
-        public Task SetTask(TaskModel taskModel, int idUser);
+        public Task SetTask(TaskModel taskModel);
 
         public Task DeleteTask(int idTask);
+
+        public Task UpdateTaskName(string name, int idTask);
 
         public Task<IEnumerable<TaskModel>> GetTaskFromProject(int idProject);
 

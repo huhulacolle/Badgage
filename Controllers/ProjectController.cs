@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Badgage.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -35,6 +35,22 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
+        public async Task<IActionResult> UpdateProjectName(int idProject, string name)
+        {
+            try
+            {
+                await projectRepository.UpdateProjectName(idProject, name);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -55,22 +71,24 @@ namespace Badgage.Controllers
                 return Unauthorized();
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{idProject}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
         public async Task<IActionResult> DeleteProject(int idProject)
         {
             try
             {
                 await projectRepository.DeleteProject(idProject);
-                return Ok("Projet supprimé");
-            }catch(Exception ex)
+                return Ok();
+
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

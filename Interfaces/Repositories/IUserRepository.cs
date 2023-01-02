@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace Badgage.Interfaces.Repositories
+﻿namespace Badgage.Interfaces.Repositories
 {
     public interface IUserRepository
     {

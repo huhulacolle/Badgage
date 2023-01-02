@@ -1,7 +1,4 @@
-﻿using Badgage.Models;
-using Microsoft.AspNetCore.Rewrite;
-
-namespace Badgage.Repositories
+﻿namespace Badgage.Repositories
 {
     public class ProjectRepository : IProjectRepository
     {
@@ -27,7 +24,12 @@ namespace Badgage.Repositories
                 { "@idProject", idProject },
             };
             var paramDic = new DynamicParameters(projectDic);
-            string sql = "DELETE FROM project WHERE idProject = @idProject";
+
+            string sql = @"DELETE sessions from sessions LEFT JOIN task on task.idTask = sessions.idTask WHERE task.idprojet = @idProject;
+                            DELETE taskuser FROM taskuser LEFT JOIN task ON task.idTask = taskuser.idTask WHERE task.idprojet = @idProject;
+                            DELETE task FROM task WHERE idprojet = @idProject;
+                            DELETE FROM project WHERE idProject = @idProject;";
+
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, paramDic);
         }
@@ -60,6 +62,21 @@ namespace Badgage.Repositories
             return await connec.QueryAsync<ProjectModel>(sql, param);
         }
 
+        public async Task UpdateProjectName(int idProject, string name)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idProject", idProject },
+                { "@name", name },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = "UPDATE project SET projectName = @name WHERE idProject = @idProject";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            await connec.ExecuteAsync(sql, param);
+        }
+
         public async Task<bool> VerifTeamUser(int idUser, int idTeam)
         {
             var dictionary = new Dictionary<string, object>()
@@ -71,7 +88,7 @@ namespace Badgage.Repositories
 
             string sqlVerif = "SELECT * FROM TeamUser WHERE idUser = @idUser AND idTeam = @idTeam";
             using var connec = defaultSqlConnectionFactory.Create();
-            
+
             var verif = await connec.QueryFirstOrDefaultAsync(sqlVerif, param);
 
             if (verif != null)
