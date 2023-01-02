@@ -16,10 +16,17 @@ export class UserService {
     return lastValueFrom(this.userClient.getUser(mail));
   }
 
-  getUsers(): Promise<UserModel[]> {
+  getUser(email: string): Promise<UserModel> {
+    return lastValueFrom(this.userClient.getUser(email));
+  }
+
+  getUsers(): Promise<any> {
     return lastValueFrom(this.userClient.getUsers());
   }
 
+  getTeamUser(idTeam: number): Promise<UserModel[]> {
+    return lastValueFrom(this.userClient.getUsersOnTeam(idTeam));
+  }
   // j'ai crée se service juste en exemple mais normalement ici il faut faire les fonction qui feront le lien avec le ClientSwagger,
   // et après vous utilisez ces fonction dans vos composents
 }

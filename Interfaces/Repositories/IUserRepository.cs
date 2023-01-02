@@ -8,5 +8,6 @@ namespace Badgage.Interfaces.Repositories
 
         public Task<IEnumerable<UserModel>> GetUsersOnTeam(int idTeam);
 
+        public Task<IEnumerable<UserModel>> GetUsers();
     }
 }

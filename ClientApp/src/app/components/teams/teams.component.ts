@@ -18,12 +18,16 @@ export class TeamsComponent {
   constructor(public dialog: MatDialog, private teamService: TeamService, private _snackBar: MatSnackBar, private storageService: StorageService,
   ) { }
 
-  ngOnInit(): void {
-    this.teamService.getTeamsByUser().then((result) => { this.teams = result });
-    console.log(this.teams);
+  ngAfterContentInit(): void {
+    this.getTeamByUser();
+    console.log("test");
   }
 
   teams!: TeamModel[];
+
+  getTeamByUser() : void {
+    this.teamService.getTeamsByUser().then((result) => { this.teams = result; console.log(this.teams) });
+  }
 
   createTeamModal(): void {
     const dialogRef = this.dialog.open(ModalCreateTeamComponent, { data: { TeamModel } });
@@ -33,24 +37,25 @@ export class TeamsComponent {
       team.byUser = new JwtHelperService().decodeToken(this.storageService.getUser().toString()).id;
       this.teamService.createTeam(team)
         .then(() => {
-          this._snackBar.open('Equipe créée', '', {duration: 3000});
+          this._snackBar.open('Equipe créée');
+          this.getTeamByUser();
         }).catch(() => {
-          this._snackBar.open('Erreur lors de la création de l\'équipe', '', {duration: 3000});
+          this._snackBar.open('Erreur lors de la création de l\'équipe');
         });
     })
   }
 
   addMembersModal(idTeam: number| undefined): void {
     const userOnTeam = new UserOnTeamModel();
-    console.log("SA RACE");
     userOnTeam.idTeam = idTeam as number;
     const dialogRef = this.dialog.open(ModalModifyTeamComponent, { data: { userOnTeam } });
     dialogRef.afterClosed().subscribe((result) => {
       userOnTeam.idUser = result;
       this.teamService.joinTeam(userOnTeam).then(() => {
-        this._snackBar.open("Utilisateur ajouté avec succès dans l'équipe", '', {duration: 3000});
+        this._snackBar.open("Utilisateur ajouté avec succès dans l'équipe");
+        this.getTeamByUser();
       }).catch(() => {
-        this._snackBar.open("Erreur lors de l'ajout de l'utilisateur dans l'équipe", '', {duration: 3000});
+        this._snackBar.open("Erreur lors de l'ajout de l'utilisateur dans l'équipe")
       })
     })
   }

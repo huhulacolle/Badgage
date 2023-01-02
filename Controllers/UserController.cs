@@ -10,9 +10,16 @@ namespace Badgage.Controllers
     {
 
         private readonly IUserRepository userRepository;
-        
-        public UserController(IUserRepository userRepository) { 
+
+        public UserController(IUserRepository userRepository) {
             this.userRepository = userRepository;
+        }
+
+        [HttpGet("")]
+        public async Task<ActionResult<IEnumerable<UserModel>>> GetUsers()
+        {
+            var result = await userRepository.GetUsers();
+            return Ok(result);
         }
 
         [HttpGet("Team/{idTeam}")]

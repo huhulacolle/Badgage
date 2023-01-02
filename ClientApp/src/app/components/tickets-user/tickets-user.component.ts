@@ -1,29 +1,16 @@
-
-import {
-  Component,
-  ChangeDetectionStrategy,
-  ViewChild,
-  TemplateRef,
-} from '@angular/core';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours,
-} from 'date-fns';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef,} from '@angular/core';
+import {startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,} from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  CalendarEvent,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
-  CalendarView,
-} from 'angular-calendar';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
+import { TicketService } from 'src/app/services/ticket.service';
+import { ProjectModel, TaskModel } from 'src/app/client/badgageClient';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProjectService } from 'src/app/services/project.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalCreateTaskComponent } from 'src/app/modals/modal-create-task/modal-create-task.component';
+import { ModalJoinTaskComponent } from 'src/app/modals/modal-join-task/modal-join-task.component';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -47,8 +34,64 @@ const colors: Record<string, EventColor> = {
   templateUrl: './tickets-user.component.html',
 })
 export class TicketsUserComponent {
-  @ViewChild('modalContent', { static: true })
+  @ViewChild('modalContent')
   modalContent!: TemplateRef<any>;
+  
+  constructor(private modal: NgbModal, private ticketService: TicketService, 
+    private _snackBar: MatSnackBar, private dialog: MatDialog) {
+    }
+
+  ngOnInit(): void {
+    this.getTasks();
+    //this.getProjects();
+  }
+  tasks!: TaskModel[];
+
+
+  getTasks(): void {
+    this.ticketService.getTaskByUser().then((result) => {
+      this.tasks = result;
+      console.log(this.tasks);
+    }).catch();
+  }
+
+  deleteTask(idTask: number): void {
+    this.ticketService.deleteTask(idTask).then(() => {
+      this._snackBar.open("Tâche supprimée avec succès");
+      this.getTasks();
+    }).catch((error) => {
+      this._snackBar.open(error);
+    })
+  }
+
+  createTask(): void {
+    const dialogRef = this.dialog.open(ModalCreateTaskComponent);
+    dialogRef.afterClosed().subscribe(result => {
+        result.dateCreation = new Date();
+        this.ticketService.setTask(result)
+          .then(() => {
+            this._snackBar.open("Tâche créée avec succès");
+            this.getTasks();
+          }).catch((error) => {
+            this._snackBar.open(error);
+          })
+    })
+  }
+
+  joinTask(task: TaskModel): void {
+    const dialogRef = this.dialog.open(ModalJoinTaskComponent, {data : task});
+    dialogRef.afterClosed().subscribe(result => {
+        if(result){
+          this.ticketService.joinTask(result)
+          .then(() => {
+            this._snackBar.open("Tâche attribuée avec succès");
+            this.getTasks();
+          }).catch((error) => {
+            this._snackBar.open(error);
+          })
+        }
+    })
+  }
 
   view: CalendarView = CalendarView.Month;
 
@@ -123,8 +166,6 @@ export class TicketsUserComponent {
   ];
 
   activeDayIsOpen: boolean = true;
-
-  constructor(private modal: NgbModal) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {

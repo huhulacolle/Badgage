@@ -13,7 +13,11 @@ export class ProjectService {
     return lastValueFrom(this.projectClient.createProject(project));
   }
 
-  getProjectByUser(idUser: number): Promise<any> {
-    return lastValueFrom(this.projectClient.getProjectsByUser());
+  getProjectByTeam(idTeam: number): Promise<ProjectModel[]> {
+    return lastValueFrom(this.projectClient.getProjectByTeam(idTeam));
+  }
+
+  getProjectByUser(): Promise<ProjectModel[]> {
+    return lastValueFrom(this.projectClient.getProjectByUser());
   }
 }
