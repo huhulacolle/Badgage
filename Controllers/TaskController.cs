@@ -50,6 +50,13 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Project/{idProject}")]
+        public async Task<ActionResult<IEnumerable<TaskModel>>> GetTaskFromProject(int idProject)
+        {
+            var result = await taskRepository.GetTaskFromProject(idProject);
+            return Ok(result);
+        }
+
         [HttpDelete("{IdTask}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> DeleteTask(int idTask)
         {

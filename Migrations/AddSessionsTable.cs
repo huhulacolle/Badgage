@@ -12,7 +12,7 @@ namespace Badgage.Migrations
                 .WithColumn("idTask").AsInt32().ForeignKey("Task", "idTask")
                 .WithColumn("idUser").AsInt32().ForeignKey("User", "idUtil")
                 .WithColumn("DateDebut").AsDateTime()
-                .WithColumn("DateFin").AsDateTime();
+                .WithColumn("DateFin").AsDateTime().Nullable();
         }
     }
 }
