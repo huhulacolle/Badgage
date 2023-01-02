@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Ajout d'une session de travail manuelle</h1>
+<div mat-dialog-content>
+        <mat-form-field appearance="fill">
+            <mat-label>Nom de la tâche</mat-label>
+            <input type="text" matInput [(ngModel)]="task.nomDeTache" required>
+        </mat-form-field><br>
+        <mat-form-field appearance="fill">
+            <mat-label>Description de la tâche</mat-label>
+            <input type="text" matInput [(ngModel)]="task.description" required>
+        </mat-form-field><br>
+        <mat-form-field>
+            <mat-label>Projet concerné</mat-label>
+            <mat-select mat-input [(ngModel)]="task.idProjet" required>
+                <mat-option *ngFor="let projet of projets"
+                    [value]="projet.idProject">{{projet.projectName}}</mat-option>
+            </mat-select>
+        </mat-form-field><br>
+    </div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Annuler</button>
+    <button mat-button (click)="onCancelClick()">Fermer</button>
+    <button mat-button [disabled]="!task.nomDeTache || !task.idProjet" [mat-dialog-close]="task"
+        cdkFocusInitial>Confirmer</button>
+</div>

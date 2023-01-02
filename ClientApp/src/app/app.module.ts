@@ -25,6 +25,7 @@ import { ModalModifyTeamComponent } from './modals/modal-modify-team/modal-modif
 import { ModalCreateTaskComponent } from './modals/modal-create-task/modal-create-task.component';
 import { ModalJoinTaskComponent } from './modals/modal-join-task/modal-join-task.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ModalAddSessionComponent } from './modals/modal-add-session/modal-add-session.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     ModalModifyTeamComponent,
     ModalCreateTaskComponent,
     ModalJoinTaskComponent,
+    ModalAddSessionComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

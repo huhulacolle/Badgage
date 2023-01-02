@@ -38,7 +38,8 @@ export class TicketsUserComponent {
   modalContent!: TemplateRef<any>;
   numberOfTicks = 0;
   constructor(private modal: NgbModal, private ticketService: TicketService, 
-    private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,) {
+    private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
+    private projectService: ProjectService) {
       ref.detach();
       setInterval(() => {
         this.numberOfTicks++;
@@ -48,10 +49,11 @@ export class TicketsUserComponent {
 
   ngOnInit(): void {
     this.getTasks();
-    //this.getProjects();
+    this.getProjects();
   }
 
   tasks!: TaskModel[];
+  projects!: ProjectModel[];
   showTasks: boolean = false;
 
 
@@ -61,6 +63,12 @@ export class TicketsUserComponent {
       console.log(this.tasks);
       this.showTasks= true;
     }).catch();
+  }
+
+  getProjects(): void {
+    this.projectService.getProjectByUser().then((result)=> {
+      this.projects = result;
+    });
   }
 
   deleteTask(idTask: number): void {
