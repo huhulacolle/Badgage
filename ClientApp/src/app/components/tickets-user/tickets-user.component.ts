@@ -1,3 +1,4 @@
+import { TimeInterface } from './../../../../node_modules/angular-cd-timer/lib/angular-cd-timer.interface.d';
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef,} from '@angular/core';
 import {startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,} from 'date-fns';
 import { Subject } from 'rxjs';
@@ -35,10 +36,15 @@ const colors: Record<string, EventColor> = {
   styleUrls: ['./tickets-user.component.css'],
   templateUrl: './tickets-user.component.html',
 })
+
+
 export class TicketsUserComponent {
   @ViewChild('modalContent')
   modalContent!: TemplateRef<any>;
+  @ViewChild('basicTimer')
+  basicTimer!: any;
   numberOfTicks = 0;
+
   constructor(private modal: NgbModal, private ticketService: TicketService,
     private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
     private projectService: ProjectService, private sessionService: SessionService) {
@@ -57,6 +63,11 @@ export class TicketsUserComponent {
   projects!: ProjectModel[];
   showTasks: boolean = false;
 
+  testButton() {
+    const time = this.basicTimer.get() as TimeInterface
+    console.log(time);
+
+  }
 
   getTasks(projects: ProjectModel[]): void {
     console.log(projects);

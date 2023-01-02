@@ -30,6 +30,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { OverlayRef } from '@angular/cdk/overlay';
+import { CdTimerModule } from 'angular-cd-timer';
 
 @NgModule({
   declarations: [
@@ -53,8 +54,9 @@ import { OverlayRef } from '@angular/cdk/overlay';
     MaterialsModule,
     NgxMaterialTimepickerModule,
     FormsModule,
-    NgxMatDatetimePickerModule, 
-    NgxMatNativeDateModule, 
+    CdTimerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule,
     NgxMatTimepickerModule,
     RouterModule.forRoot([
       { path: '',   redirectTo: '/register', pathMatch: 'full' },
