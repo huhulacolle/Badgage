@@ -15,5 +15,7 @@
 
         public Task UpdateTeamName(string name, int idTeam);
 
+        public Task<IEnumerable<TeamModel>> GetTeamByIdProject(int idProject);
+
     }
 }

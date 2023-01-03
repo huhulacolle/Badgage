@@ -33,6 +33,21 @@
             await connec.ExecuteAsync(sql, param);
         }
 
+        public async Task<IEnumerable<TeamModel>> GetTeamByIdProject(int idProject)
+        {
+            var dictionary = new Dictionary<string, object>()
+            {
+                { "@idProject", idProject },
+            };
+            var param = new DynamicParameters(dictionary);
+
+            string sql = @"SELECT team.* FROM knsdk91nuxce6p90.team LEFT JOIN 
+                            project ON project.idTeam = team.idTeam WHERE project.idTeam = @idProject";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            return await connec.QueryAsync<TeamModel>(sql, param);
+        }
+
         public async Task<IEnumerable<TeamModel>> GetTeamByUser(int idUser)
         {
             var dictionary = new Dictionary<string, object>()
