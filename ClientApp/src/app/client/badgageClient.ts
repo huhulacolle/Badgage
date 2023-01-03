@@ -1156,6 +1156,64 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
+    getListTaskByIdTask(idTask: number): Observable<UserOnTaskModelWithName[]> {
+        let url_ = this.baseUrl + "/api/Task/ListTask/{idTask}";
+        if (idTask === undefined || idTask === null)
+            throw new Error("The parameter 'idTask' must be defined.");
+        url_ = url_.replace("{idTask}", encodeURIComponent("" + idTask));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetListTaskByIdTask(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetListTaskByIdTask(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<UserOnTaskModelWithName[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<UserOnTaskModelWithName[]>;
+        }));
+    }
+
+    protected processGetListTaskByIdTask(response: HttpResponseBase): Observable<UserOnTaskModelWithName[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UserOnTaskModelWithName.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
     joinTask(idTask: number | undefined, idUser: number | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/Task/Join?";
         if (idTask === null)
@@ -2134,6 +2192,50 @@ export interface ITaskModel {
     description?: string | undefined;
     dateFin?: Date | undefined;
     dateCreation: Date;
+}
+
+export class UserOnTaskModelWithName implements IUserOnTaskModelWithName {
+    idUser!: number;
+    email!: string;
+    idTask!: number;
+
+    constructor(data?: IUserOnTaskModelWithName) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.idUser = _data["idUser"];
+            this.email = _data["email"];
+            this.idTask = _data["idTask"];
+        }
+    }
+
+    static fromJS(data: any): UserOnTaskModelWithName {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserOnTaskModelWithName();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["idUser"] = this.idUser;
+        data["email"] = this.email;
+        data["idTask"] = this.idTask;
+        return data;
+    }
+}
+
+export interface IUserOnTaskModelWithName {
+    idUser: number;
+    email: string;
+    idTask: number;
 }
 
 export class TeamModel implements ITeamModel {
