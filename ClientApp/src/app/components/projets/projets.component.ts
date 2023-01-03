@@ -13,18 +13,22 @@ import { StorageService } from 'src/app/services/storage.service';
 import { TeamService } from 'src/app/services/team.service';
 import { ModalCreateTaskComponent } from 'src/app/modals/modal-create-task/modal-create-task.component';
 import { ModalModifyProjectComponent } from 'src/app/modals/modal-modify-project/modal-modify-project.component';
+import { bounceInRightOnEnterAnimation, bounceOutRightOnLeaveAnimation } from 'angular-animations';
 
 @Component({
   selector: 'app-projets',
   templateUrl: './projets.component.html',
-  styleUrls: ['./projets.component.css']
+  styleUrls: ['./projets.component.css'],
+  animations: [
+    bounceInRightOnEnterAnimation({ anchor: 'enterR', animateChildren: 'together' }),
+    bounceOutRightOnLeaveAnimation({ anchor: 'leaveR', delay: 100, animateChildren: 'together' }),]
 })
 export class ProjetsComponent {
 
-  constructor(public dialog: MatDialog, private projectService: ProjectService, private _snackBar: MatSnackBar, private storageService: StorageService, private teamService : TeamService
+  constructor(public dialog: MatDialog, private projectService: ProjectService, private _snackBar: MatSnackBar, private storageService: StorageService, private teamService: TeamService
   ) { }
 
-  ngAfterContentInit() : void {
+  ngAfterContentInit(): void {
     this.getProjetsByUser();
   }
 
@@ -33,17 +37,16 @@ export class ProjetsComponent {
 
 
   getProjetsByUser(): void {
-      this.projectService.getProjectByUser().then((result) => {
-        this.projects = result;
-        console.log(this.projects);
-      })
+    this.projectService.getProjectByUser().then((result) => {
+      this.projects = result;
+    })
   }
 
   projects!: ProjectModel[];
   teams!: TeamModel[];
 
   seeTask(task: TaskModel): void {
-    const dialogRef = this.dialog.open(ModalCreateTaskComponent, {data: task});
+    const dialogRef = this.dialog.open(ModalCreateTaskComponent, { data: task });
     dialogRef.afterClosed();
   }
 
@@ -54,14 +57,13 @@ export class ProjetsComponent {
     projet.byUser = new JwtHelperService().decodeToken(this.storageService.getUser()).id;
     const dialogRef = this.dialog.open(ModalCreateProjectComponent, { data: { projet } });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result != null)
         this.projectService.createProject(result)
           .then(() => {
-            this._snackBar.open('Projet créé', '', {duration: 3000});
+            this._snackBar.open('Projet créé', '', { duration: 3000 });
             this.getProjetsByUser();
           }).catch(() => {
-            this._snackBar.open('Erreur lors de la création du projet', '', {duration: 3000});
+            this._snackBar.open('Erreur lors de la création du projet', '', { duration: 3000 });
           })
     })
   }
@@ -69,15 +71,14 @@ export class ProjetsComponent {
   deleteProjectModal(project: ProjectModel): void {
     const dialogRef = this.dialog.open(ModalDeleteProjectComponent, { data: project });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
-      if(result != undefined) {
-      this.projectService.deleteProject(project.idProject as number)
-        .then(() => {
-          this._snackBar.open('Projet suprimmée', '', {duration: 3000});
-          this.getProjetsByUser();
-        }).catch(() => {
-          this._snackBar.open('Erreur lors de la suppression de le projet', '', {duration: 3000});
-        });
+      if (result != undefined) {
+        this.projectService.deleteProject(project.idProject as number)
+          .then(() => {
+            this._snackBar.open('Projet suprimmée', '', { duration: 3000 });
+            this.getProjetsByUser();
+          }).catch(() => {
+            this._snackBar.open('Erreur lors de la suppression de le projet', '', { duration: 3000 });
+          });
       }
     })
   }
@@ -87,17 +88,17 @@ export class ProjetsComponent {
     dialogRef.afterClosed().subscribe((result) => {
       this.projectService.UpdateProject(result.idProject as number, result.projectName)
         .then(() => {
-          this._snackBar.open('Projet renommée', '', {duration: 3000});
+          this._snackBar.open('Projet renommée', '', { duration: 3000 });
           this.getProjetsByUser();
         }).catch(() => {
-          this._snackBar.open('Erreur lors du renommage du projet', '', {duration: 3000});
+          this._snackBar.open('Erreur lors du renommage du projet', '', { duration: 3000 });
         });
     })
   }
   openProject(project: ProjectModel): void {
-    const dialogRef = this.dialog.open(ModalViewProjectComponent, { data:  project  });
+    const dialogRef = this.dialog.open(ModalViewProjectComponent, { data: project });
 
- 
+
   }
 
 

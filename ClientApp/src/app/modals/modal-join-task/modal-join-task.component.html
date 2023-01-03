@@ -5,7 +5,8 @@
     <h3>Attribuer la tâche à : </h3><br>
     <mat-form-field>
         <mat-select mat-input [(ngModel)]="idUser" required>
-            <mat-option *ngFor="let userOnTeam of usersOnTeam" [value]="userOnTeam.idUtil">{{userOnTeam.adresseMail}}</mat-option>
+            <mat-option *ngFor="let userOnTeam of usersOnTeam"
+                [value]="userOnTeam.idUtil">{{userOnTeam.adresseMail}}</mat-option>
         </mat-select>
     </mat-form-field><br>
 </div>

@@ -9,7 +9,7 @@ import { TeamModel } from 'src/app/client/badgageClient';
 })
 export class ModalModifyNameTeamComponent {
   constructor(
-    public dialogRef : MatDialogRef<ModalModifyNameTeamComponent>, @Inject(MAT_DIALOG_DATA) public data : TeamModel
+    public dialogRef: MatDialogRef<ModalModifyNameTeamComponent>, @Inject(MAT_DIALOG_DATA) public data: TeamModel
   ) { }
 
   onCancelClick(): void {

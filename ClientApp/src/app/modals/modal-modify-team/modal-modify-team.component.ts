@@ -10,12 +10,11 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ModalModifyTeamComponent {
   constructor(
-    public dialogRef : MatDialogRef<ModalModifyTeamComponent>, @Inject(MAT_DIALOG_DATA) public data : UserOnTeamModel, private userService : UserService,
+    public dialogRef: MatDialogRef<ModalModifyTeamComponent>, @Inject(MAT_DIALOG_DATA) public data: UserOnTeamModel, private userService: UserService,
   ) { }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.userService.getUsers().then((result) => { this.users = result });
-    console.log(this.data);
   }
 
   users!: UserModel[];

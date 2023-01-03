@@ -10,11 +10,16 @@ import { ModalSeeTeamComponent } from 'src/app/modals/modal-see-team/modal-see-t
 import { StorageService } from 'src/app/services/storage.service';
 import { TeamService } from 'src/app/services/team.service';
 import { TeamModel, UserOnTeamModel } from '../../client/badgageClient';
+import { bounceInLeftOnEnterAnimation, bounceOutLeftOnLeaveAnimation } from 'angular-animations';
 
 @Component({
   selector: 'app-teams',
   templateUrl: './teams.component.html',
-  styleUrls: ['./teams.component.css']
+  styleUrls: ['./teams.component.css'],
+  animations: [
+    bounceInLeftOnEnterAnimation({ anchor: 'enterL', delay: 100, animateChildren: 'together' }),
+    bounceOutLeftOnLeaveAnimation({ anchor: 'leaveL', animateChildren: 'together' }),
+  ]
 })
 export class TeamsComponent {
 
@@ -23,13 +28,12 @@ export class TeamsComponent {
 
   ngAfterContentInit(): void {
     this.getTeamByUser();
-    console.log("test");
   }
 
   teams!: TeamModel[];
 
-  getTeamByUser() : void {
-    this.teamService.getTeamsByUser().then((result) => { this.teams = result; console.log(this.teams) });
+  getTeamByUser(): void {
+    this.teamService.getTeamsByUser().then((result) => { this.teams = result; });
   }
 
   createTeamModal(): void {
@@ -40,25 +44,25 @@ export class TeamsComponent {
       team.byUser = new JwtHelperService().decodeToken(this.storageService.getUser().toString()).id;
       this.teamService.createTeam(team)
         .then(() => {
-          this._snackBar.open('Equipe créée', '', {duration: 3000});
+          this._snackBar.open('Equipe créée', '', { duration: 3000 });
           this.getTeamByUser();
         }).catch(() => {
-          this._snackBar.open('Erreur lors de la création de l\'équipe', '', {duration: 3000});
+          this._snackBar.open('Erreur lors de la création de l\'équipe', '', { duration: 3000 });
         });
     })
   }
 
-  addMembersModal(idTeam: number| undefined): void {
+  addMembersModal(idTeam: number | undefined): void {
     const userOnTeam = new UserOnTeamModel();
     userOnTeam.idTeam = idTeam as number;
     const dialogRef = this.dialog.open(ModalModifyTeamComponent, { data: { userOnTeam } });
     dialogRef.afterClosed().subscribe((result) => {
       userOnTeam.idUser = result;
       this.teamService.joinTeam(userOnTeam).then(() => {
-        this._snackBar.open("Utilisateur ajouté avec succès dans l'équipe", '', {duration: 3000});
+        this._snackBar.open("Utilisateur ajouté avec succès dans l'équipe", '', { duration: 3000 });
         this.getTeamByUser();
       }).catch(() => {
-        this._snackBar.open("Erreur lors de l'ajout de l'utilisateur dans l'équipe", '', {duration: 3000});
+        this._snackBar.open("Erreur lors de l'ajout de l'utilisateur dans l'équipe", '', { duration: 3000 });
       })
     })
   }
@@ -74,10 +78,10 @@ export class TeamsComponent {
     dialogRef.afterClosed().subscribe((result) => {
       this.teamService.UpdateTeamName(result.idTeam as number, result.nom)
         .then(() => {
-          this._snackBar.open('Equipe renommée', '', {duration: 3000});
+          this._snackBar.open('Equipe renommée', '', { duration: 3000 });
           this.getTeamByUser();
         }).catch(() => {
-          this._snackBar.open('Erreur lors du renommage de l\'équipe', '', {duration: 3000});
+          this._snackBar.open('Erreur lors du renommage de l\'équipe', '', { duration: 3000 });
         });
     })
   }
@@ -85,12 +89,12 @@ export class TeamsComponent {
   deleteTeamModal(Team: TeamModel): void {
     const dialogRef = this.dialog.open(ModalDeleteTeamComponent, { data: Team });
     dialogRef.afterClosed().subscribe((result) => {
-        this.teamService.deleteTeam(result.idTeam as number)
+      this.teamService.deleteTeam(result.idTeam as number)
         .then(() => {
-          this._snackBar.open('Equipe suprimmée', '', {duration: 3000});
+          this._snackBar.open('Equipe suprimmée', '', { duration: 3000 });
           this.getTeamByUser();
         }).catch(() => {
-          this._snackBar.open('Erreur lors de la suppression de l\'équipe', '', {duration: 3000});
+          this._snackBar.open('Erreur lors de la suppression de l\'équipe', '', { duration: 3000 });
         });
     })
   }

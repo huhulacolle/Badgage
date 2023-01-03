@@ -13,25 +13,24 @@ import { ProjectService } from 'src/app/services/project.service';
 export class ModalCreateTaskComponent {
   constructor(
     public dialogRef: MatDialogRef<ModalCreateTaskComponent>, private projetService: ProjectService, private ticketService: TicketService, @Inject(MAT_DIALOG_DATA) public data: TaskModel
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.projetService.getProjectByUser().then((result) => {
       this.projets = result;
       if (this.data != null) {
-        for(let i = 0; i < this.projets.length; i++)
+        for (let i = 0; i < this.projets.length; i++)
           if (this.data.idProjet = this.projets[i].idProject as number)
-              this.nomProjetSeeing = this.projets[i].projectName;
-        }
+            this.nomProjetSeeing = this.projets[i].projectName;
+      }
     }).catch((error) => {
-      console.log(error);
     })
     if (this.data != null) {
       this.seeing = true;
     }
     else
       this.task = new TaskModel();
-      this.ListTask();
+    this.ListTask();
   }
 
   task!: TaskModel;
@@ -47,11 +46,11 @@ export class ModalCreateTaskComponent {
 
   ListTask(): void {
     this.ticketService.getListUserByIdTask(this.data.idTask as number)
-    .then(
-      data => {
-        this.listTasks = data;
-      }
-    )
+      .then(
+        data => {
+          this.listTasks = data;
+        }
+      )
   }
 
   checkDate(date: Date | undefined): void {

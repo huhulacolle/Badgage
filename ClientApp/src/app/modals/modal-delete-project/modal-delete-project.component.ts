@@ -9,14 +9,14 @@ import { ProjectModel } from 'src/app/client/badgageClient';
 })
 export class ModalDeleteProjectComponent {
   constructor(
-     public dialogRef : MatDialogRef<ModalDeleteProjectComponent>, @Inject(MAT_DIALOG_DATA) public data : ProjectModel
+    public dialogRef: MatDialogRef<ModalDeleteProjectComponent>, @Inject(MAT_DIALOG_DATA) public data: ProjectModel
   ) {
-   }
+  }
 
 
-onCancelClick(): undefined {
-  this.dialogRef.close();
-  return undefined;
-}
+  onCancelClick(): undefined {
+    this.dialogRef.close();
+    return undefined;
+  }
 
 }

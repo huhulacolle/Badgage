@@ -14,8 +14,8 @@ import { bounceInLeftOnEnterAnimation, bounceOutLeftOnLeaveAnimation, bounceInRi
   animations: [
     bounceInLeftOnEnterAnimation({ anchor: 'enterL', delay: 100, animateChildren: 'together' }),
     bounceOutRightOnLeaveAnimation({ anchor: 'leaveR', delay: 100, animateChildren: 'together' }),
-    bounceOutLeftOnLeaveAnimation({anchor: 'leaveL', animateChildren:'together'}),
-    bounceInRightOnEnterAnimation({anchor: 'enterR', animateChildren: 'before'}),
+    bounceOutLeftOnLeaveAnimation({ anchor: 'leaveL', animateChildren: 'together' }),
+    bounceInRightOnEnterAnimation({ anchor: 'enterR', animateChildren: 'before' }),
   ]
 })
 export class RegisterComponent {
@@ -24,7 +24,7 @@ export class RegisterComponent {
     private authService: AuthService,
     private storageService: StorageService,
     private router: Router,
-  ){}
+  ) { }
   email!: string;
   mdp!: string;
   nom!: string;
@@ -40,16 +40,15 @@ export class RegisterComponent {
     user.prenom = this.prenom;
 
     this.authService.register(user)
-    .then(
-      () => {
-        this.login();
-      }
-    )
-    .catch(
-      err => {
-        console.error(err);
-      }
-    )
+      .then(
+        () => {
+          this.login();
+        }
+      )
+      .catch(
+        err => {
+        }
+      )
   }
 
   toLogin(): void {
@@ -65,17 +64,16 @@ export class RegisterComponent {
     user.adresseMail = this.email;
     user.mdp = this.mdp;
     this.authService.login(user)
-    .then(
-      data => {
-        this.storageService.saveUser(data);
-        this.router.navigateByUrl("/home");
-      }
-    )
-    .catch(
-      err => {
-        console.error(err);
-      }
-    )
+      .then(
+        data => {
+          this.storageService.saveUser(data);
+          this.router.navigateByUrl("/home");
+        }
+      )
+      .catch(
+        err => {
+        }
+      )
   }
 
 }

@@ -15,12 +15,11 @@ export class ModalViewProjectComponent {
   constructor(
     public dialogRef: MatDialogRef<ModalViewProjectComponent>, private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: ProjectModel, private teamService: TeamService
-    , private projectService: ProjectService) {console.log(data) }
+    , private projectService: ProjectService) { }
 
   ngOnInit(): void {
     this.userService.getTeamUser(this.data.idTeam as number).then((result) => { this.usersOnTeam = result });
     this.teamService.getTeamsByUser().then((result) => { this.teamModel = result });
-    console.log(this.data);
     // this.getUserTeamNumber();
 
   }
@@ -33,23 +32,19 @@ export class ModalViewProjectComponent {
 
 
 
-getTeamOnProject(): void{
-  this.userService.getTeamUser(this.team).then((result) => {
-    console.log(this.team, "result", result);
-    this.usersOnTeam = result;
-  }).catch((error) => {
-    console.log(error);
-  });
+  getTeamOnProject(): void {
+    this.userService.getTeamUser(this.team).then((result) => {
+      this.usersOnTeam = result;
+    }).catch((error) => {
+    });
 
-}
+  }
 
   getUserOnProject(): void {
     this.projectService.getProjectByTeam(this.team).then((result) => {
-      console.log(this.team, "result", result);
       this.projectModel = result;
       this.getUserOnProject();
     }).catch((error) => {
-      console.log(error);
     });
   }
 

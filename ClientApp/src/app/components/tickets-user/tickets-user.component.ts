@@ -1,12 +1,12 @@
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef,} from '@angular/core';
-import {startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,} from 'date-fns';
-import { Subject } from 'rxjs';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef, } from '@angular/core';
+import { startOfDay, endOfDay, isSameDay, isSameMonth, addHours, } from 'date-fns';
+import { concat, Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
+import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
 import { TicketService } from 'src/app/services/ticket.service';
-import { ProjectModel, SessionInput, SessionModel, TaskModel, UserOnTaskModelWithName, UserOnTeamModel } from 'src/app/client/badgageClient';
+import { ProjectModel, SessionInput, SessionModel, TaskModel, UserOnTaskModelWithName, } from 'src/app/client/badgageClient';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from 'src/app/services/project.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,6 +16,7 @@ import { ModalAddSessionComponent } from 'src/app/modals/modal-add-session/modal
 import { SessionService } from 'src/app/services/session.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { ModalDeleteTaskComponent } from 'src/app/modals/modal-delete-task/modal-delete-task.component';
+import { bounceInLeftOnEnterAnimation, bounceOutRightOnLeaveAnimation } from 'angular-animations';
 
 const colors: Record<string, EventColor> = {
   blue: {
@@ -33,6 +34,10 @@ const colors: Record<string, EventColor> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./tickets-user.component.css'],
   templateUrl: './tickets-user.component.html',
+  animations: [
+    bounceInLeftOnEnterAnimation({ anchor: 'enterL', delay: 100, animateChildren: 'together' }),
+    bounceOutRightOnLeaveAnimation({ anchor: 'leaveR', delay: 100, animateChildren: 'together' }),
+  ]
 })
 
 
@@ -44,14 +49,14 @@ export class TicketsUserComponent {
   numberOfTicks = 0;
 
   constructor(private modal: NgbModal, private ticketService: TicketService,
-    private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
+    private _snackBar: MatSnackBar, private dialog: MatDialog, private ref: ChangeDetectorRef,
     private projectService: ProjectService, private sessionService: SessionService, private storageService: StorageService) {
-      ref.detach();
-      setInterval(() => {
-        this.numberOfTicks++;
-        this.ref.detectChanges();
-      }, 500);
-    }
+    ref.detach();
+    setInterval(() => {
+      this.numberOfTicks++;
+      this.ref.detectChanges();
+    }, 400);
+  }
   ngOnInit(): void {
     this.getProjects();
   }
@@ -64,19 +69,17 @@ export class TicketsUserComponent {
   sessions: SessionModel[] = [];
 
   getSessionsByTasks(): void {
-    this.events= [];
-    console.log(this.events);
-    for(let i = 0; this.tasks.length > i; i++){
+    this.events = [];
+    for (let i = 0; this.tasks.length > i; i++) {
       this.sessionService.getSessionsByIdTask(this.tasks[i].idTask as number).then((result) => {
-        for(let j = 0; result.length > j;j++)
-        {
+        for (let j = 0; result.length > j; j++) {
           this.sessions.push(result[j]);
-          const color = this.tasks[i].dateFin == undefined?colors.yellow:colors.blue;
-          this.events.push({ start : result[j].dateDebut, end: result[j].dateFin, title: this.tasks[i].nomDeTache, color: color });
+          const color = this.tasks[i].dateFin == undefined ? colors.yellow : colors.blue;
+          const title: string = this.tasks[i].nomDeTache + " - " + result[j].dateDebut.toLocaleString('fr-FR', { timeZone: 'UTC' }) + " - " + ((result[j].dateDebut.getDate == result[j].dateFin?.getDate) ? result[j].dateFin?.toLocaleTimeString('fr-FR', { timeZone: 'UTC' }) : result[j].dateFin?.toLocaleString('fr-FR', { timeZone: 'UTC' }));
+          this.events.push({ start: result[j].dateDebut, end: result[j].dateFin, title: title, color: color });
         }
       })
     }
-    console.log(this.sessions);
     this.refresh;
   }
   // variable pour chrono
@@ -89,7 +92,7 @@ export class TicketsUserComponent {
 
   NewSession(): void {
     if (this.idTaskTimer.dateFin != undefined) {
-      this._snackBar.open('Cette tâche est déjà terminé', '', {duration: 3000});
+      this._snackBar.open('Cette tâche est déjà terminé', '', { duration: 3000 });
     }
     else {
       this.EtatSession = false;
@@ -105,34 +108,31 @@ export class TicketsUserComponent {
     sessionInput.dateDebut = this.dateDebut;
     sessionInput.dateFin = this.dateFin;
     this.sessionService.setSession(sessionInput)
-    .then(
-      () => {
-        if (this.checkTimer) {
-          this.UpdateTimeEndTask(this.idTaskTimer.idTask as number, this.dateFin)
+      .then(
+        () => {
+          if (this.checkTimer) {
+            this.UpdateTimeEndTask(this.idTaskTimer.idTask as number, this.dateFin)
+          }
         }
-      }
-    )
+      )
     this.basicTimer.stop();
     this.EtatSession = true;
   }
 
   UpdateTimeEndTask(idTask: number, DateFin: Date): void {
     this.ticketService.endTask(idTask, DateFin)
-    .then(() => {
-      this.getTasks();
-    })
+      .then(() => {
+        this.getTasks();
+      })
   }
 
   getTasks(): void {
-    for(let i = 0; this.projects.length > i;i++){
-      console.log(this.projects[i].idProject as number);
+    for (let i = 0; this.projects.length > i; i++) {
       this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
-          this.tasks = result;
-          console.log(this.tasks);
-          for(let j=0;this.tasks.length > j; j++){
+        this.tasks = result;
+        for (let j = 0; this.tasks.length > j; j++) {
           this.ticketService.getListUserByIdTask(this.tasks[j].idTask as number).then((result) => {
             this.userOnTask = result;
-            console.log(this.tasks[j].idTask);
           });
         }
         this.nbTickets = this.tasks.length;
@@ -143,9 +143,8 @@ export class TicketsUserComponent {
   }
 
   checkNotJoined(idTask: number | undefined): boolean {
-    for(let i = 0; this.userOnTask.length > i;i++){
-      if(this.userOnTask[i].idTask as number == idTask as number)
-      {
+    for (let i = 0; this.userOnTask.length > i; i++) {
+      if (this.userOnTask[i].idTask as number == idTask as number) {
         return true;
       }
     }
@@ -153,9 +152,8 @@ export class TicketsUserComponent {
   }
 
   checkJoinedByUSer(idTask: number | undefined): boolean {
-    for(let i = 0; this.userOnTask.length > i;i++){
-      if(this.userOnTask[i].idTask as number == idTask as number && this.userOnTask[i].idUser == new JwtHelperService().decodeToken(this.storageService.getUser()).id)
-      {
+    for (let i = 0; this.userOnTask.length > i; i++) {
+      if (this.userOnTask[i].idTask as number == idTask as number && this.userOnTask[i].idUser == new JwtHelperService().decodeToken(this.storageService.getUser()).id) {
         return true;
       }
     }
@@ -171,8 +169,7 @@ export class TicketsUserComponent {
   }
 
   getProjects(): void {
-    this.projectService.getProjectByUser().then((result)=> {
-      console.log("je suis là")
+    this.projectService.getProjectByUser().then((result) => {
       this.projects = result;
       this.getTasks();
     });
@@ -181,13 +178,12 @@ export class TicketsUserComponent {
   deleteTask(task: TaskModel): void {
     const dialogRef = this.dialog.open(ModalDeleteTaskComponent, { data: task });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("idtask:", result.idTask as number)
       const idTache = result.idTask as number;
       this.ticketService.deleteTask(idTache).then(() => {
-        this._snackBar.open("Tâche supprimée avec succès", '', {duration: 3000});
+        this._snackBar.open("Tâche supprimée avec succès", '', { duration: 3000 });
         this.getTasks();
       }).catch((error) => {
-        this._snackBar.open(error, '', {duration: 3000});
+        this._snackBar.open(error, '', { duration: 3000 });
       });
     })
   }
@@ -195,68 +191,64 @@ export class TicketsUserComponent {
   createTask(): void {
     const dialogRef = this.dialog.open(ModalCreateTaskComponent);
     dialogRef.afterClosed().subscribe(result => {
-        result.dateCreation = new Date();
-        result.idTache = undefined;
-        result.dateFin = null;
-        this.ticketService.setTask(result)
-          .then(() => {
-            this._snackBar.open("Tâche créée avec succès", '', {duration: 3000});
-            this.getTasks();
-            console.log(this.tasks);
-          }).catch((error) => {
-            this._snackBar.open(error, '', {duration: 3000});
-          })
+      result.dateCreation = new Date();
+      result.idTache = undefined;
+      result.dateFin = null;
+      this.ticketService.setTask(result)
+        .then(() => {
+          this._snackBar.open("Tâche créée avec succès", '', { duration: 3000 });
+          this.getTasks();
+        }).catch((error) => {
+          this._snackBar.open(error, '', { duration: 3000 });
+        })
     })
   }
 
   seeTask(task: TaskModel): void {
-    const dialogRef = this.dialog.open(ModalCreateTaskComponent, {data: task});
+    const dialogRef = this.dialog.open(ModalCreateTaskComponent, { data: task });
     dialogRef.afterClosed();
   }
 
   joinTask(task: TaskModel): void {
-    const dialogRef = this.dialog.open(ModalJoinTaskComponent, {data : task});
+    const dialogRef = this.dialog.open(ModalJoinTaskComponent, { data: task });
     dialogRef.afterClosed().subscribe(result => {
-        if(result){
-          this.ticketService.joinTask(task.idTask as number, result)
+      if (result) {
+        this.ticketService.joinTask(task.idTask as number, result)
           .then(() => {
-            this._snackBar.open("Tâche attribuée avec succès", '', {duration: 3000});
+            this._snackBar.open("Tâche attribuée avec succès", '', { duration: 3000 });
             this.getProjects();
             this.getTasks();
           }).catch((error) => {
             this._snackBar.open(error);
           })
-        }
+      }
     })
   }
 
   addSession(task: TaskModel): void {
-    console.log(task);
-    const dialogRef = this.dialog.open(ModalAddSessionComponent, {data : task});
+    const dialogRef = this.dialog.open(ModalAddSessionComponent, { data: task });
     dialogRef.afterClosed().subscribe(result => {
-        if(result){
-          console.log(result);
-          const session = new SessionInput();
-          session.dateDebut = result.session.dateDebut;
-          session.dateFin = result.session.dateFin;
-          session.idTask = result.session.idTask;
-          console.log(session);
-          this.sessionService.setSession(session)
+      if (result) {
+        const session = new SessionInput();
+        session.dateDebut = result.session.dateDebut;
+        session.dateFin = result.session.dateFin;
+        session.idTask = result.session.idTask;
+        this.getSessionsByTasks();
+        this.sessionService.setSession(session)
           .then(() => {
             this._snackBar.open("Tâche attribuée avec succès");
-            if(result.complete){
-              this.ticketService.endTask(task.idTask as number,result.session.dateFin as Date).then(() => {
+            if (result.complete) {
+              this.ticketService.endTask(task.idTask as number, result.session.dateFin as Date).then(() => {
                 this._snackBar.open("Tâche finie avec succès");
-                this.getSessionsByTasks();
               }).catch((error) => {
                 this._snackBar.open(error);
               });
             }
             this.getProjects();
           }).catch((error) => {
-            this._snackBar.open(error, '', {duration: 3000});
+            this._snackBar.open(error, '', { duration: 3000 });
           })
-        }
+      }
     })
   }
 
@@ -265,11 +257,6 @@ export class TicketsUserComponent {
   CalendarView = CalendarView;
 
   viewDate: Date = new Date();
-
-  modalData!: {
-    action: string;
-    event: CalendarEvent;
-  };
 
   refresh = new Subject<void>();
 
@@ -290,50 +277,6 @@ export class TicketsUserComponent {
       }
       this.viewDate = date;
     }
-  }
-
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd,
-  }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map((iEvent) => {
-      if (iEvent === event) {
-        return {
-          ...event,
-          start: newStart,
-          end: newEnd,
-        };
-      }
-      return iEvent;
-    });
-    this.handleEvent('Dropped or resized', event);
-  }
-
-  handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
-  }
-
-  addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-      },
-    ];
-  }
-
-  deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter((event) => event !== eventToDelete);
   }
 
   setView(view: CalendarView) {

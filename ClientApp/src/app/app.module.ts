@@ -4,13 +4,13 @@ import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient, SessionBadgageCl
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule, CanActivate } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { ApiUrlService, apiUrlServiceFactory } from './services/api-url.service'
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialsModule } from 'src/material.module';
-import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ProjetsComponent } from './components/projets/projets.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -20,7 +20,6 @@ import { TicketsUserComponent } from './components/tickets-user/tickets-user.com
 import { ModalCreateProjectComponent } from './modals/modal-create-project/modal-create-project.component';
 import { TeamsComponent } from './components/teams/teams.component';
 import { ModalCreateTeamComponent } from './modals/modal-create-team/modal-create-team.component';
-import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { ModalModifyTeamComponent } from './modals/modal-modify-team/modal-modify-team.component';
 import { ModalCreateTaskComponent } from './modals/modal-create-task/modal-create-task.component';
 import { ModalJoinTaskComponent } from './modals/modal-join-task/modal-join-task.component';
@@ -32,7 +31,6 @@ import { ModalAddSessionComponent } from './modals/modal-add-session/modal-add-s
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { OverlayRef } from '@angular/cdk/overlay';
 import { CdTimerModule } from 'angular-cd-timer';
 import { ModalSeeTeamComponent } from './modals/modal-see-team/modal-see-team.component';
 import { ModalModifyNameTeamComponent } from './modals/modal-modify-name-team/modal-modify-name-team.component';
@@ -73,7 +71,7 @@ import { ModalDeleteTaskComponent } from './modals/modal-delete-task/modal-delet
     NgxMatNativeDateModule,
     NgxMatTimepickerModule,
     RouterModule.forRoot([
-      { path: '',   redirectTo: '/register', pathMatch: 'full' },
+      { path: '', redirectTo: '/register', pathMatch: 'full' },
       { path: 'register', component: RegisterComponent },
       { path: 'home', component: TeamsComponent, canActivate: [IsSignedInGuard] },
       { path: 'tickets', component: TicketsUserComponent, canActivate: [IsSignedInGuard] },
@@ -92,12 +90,13 @@ import { ModalDeleteTaskComponent } from './modals/modal-delete-task/modal-delet
     SessionBadgageClient,
     MatDialogConfig,
     {
-			provide: APP_INITIALIZER,
-			useFactory: apiUrlServiceFactory,
-			deps: [ApiUrlService],
-			multi: true,
+      provide: APP_INITIALIZER,
+      useFactory: apiUrlServiceFactory,
+      deps: [ApiUrlService],
+      multi: true,
     },
-    { provide: API_BASE_URL,
+    {
+      provide: API_BASE_URL,
       useFactory: (service: ApiUrlService) => service.apiUrl,
       deps: [ApiUrlService]
     },

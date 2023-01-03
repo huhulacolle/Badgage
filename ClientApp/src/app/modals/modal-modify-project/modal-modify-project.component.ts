@@ -11,7 +11,7 @@ import { ProjectService } from 'src/app/services/project.service';
 })
 export class ModalModifyProjectComponent {
   constructor(
-    public dialogRef : MatDialogRef<ModalModifyProjectComponent>, @Inject(MAT_DIALOG_DATA) public data : ProjectModel, private projectService : ProjectService,
+    public dialogRef: MatDialogRef<ModalModifyProjectComponent>, @Inject(MAT_DIALOG_DATA) public data: ProjectModel, private projectService: ProjectService,
   ) { }
 
   projects!: ProjectModel[];

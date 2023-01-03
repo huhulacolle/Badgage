@@ -26,10 +26,8 @@ export class ModalJoinTaskComponent {
 
   getUsersOnTeam(): void {
     this.userService.getTeamUser(this.team).then((result) => {
-      console.log(this.team, "result", result);
       this.usersOnTeam = result;
     }).catch((error) => {
-      console.log(error);
     });
   }
 
@@ -41,7 +39,6 @@ export class ModalJoinTaskComponent {
       }
       this.getUsersOnTeam();
     }).catch((error) => {
-      console.log(error);
     });
   }
 
