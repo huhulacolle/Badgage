@@ -13,8 +13,8 @@ export class SessionService {
     return lastValueFrom(this.sessionService.getSessionByIdUser(idUser));
   }
 
-  getSessionsByTeam(idTeam: number): Promise<SessionModel[]> {
-    return lastValueFrom(this.sessionService.getSessionByIdTeam(idTeam));
+  getSessionsByIdTask(idTask: number): Promise<SessionModel[]> {
+    return lastValueFrom(this.sessionService.getSessionByIdTask(idTask));
   }
 
   setSession(session: SessionInput): Promise<any> {

@@ -89,6 +89,14 @@ namespace Badgage.Controllers
             }
         }
 
+        [HttpGet("Project/{idProject}")]
+        public async Task<ActionResult<IEnumerable<TeamModel>>> GetTeamByIdProject(int idProject)
+        {
+            var result = await teamRepository.GetTeamByIdProject(idProject);
+            return Ok(result);
+        }
+
+
         [HttpDelete("{idTeam}")]
         public async Task<IActionResult> DeleteTeam(int idTeam)
         {

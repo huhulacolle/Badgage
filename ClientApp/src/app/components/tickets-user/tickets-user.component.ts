@@ -1,3 +1,4 @@
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef,} from '@angular/core';
 import {startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,} from 'date-fns';
 import { Subject } from 'rxjs';
@@ -5,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
 import { TicketService } from 'src/app/services/ticket.service';
-import { ProjectModel, TaskModel, SessionInput } from 'src/app/client/badgageClient';
+import { ProjectModel, SessionInput, SessionModel, TaskModel } from 'src/app/client/badgageClient';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from 'src/app/services/project.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,13 +14,10 @@ import { ModalCreateTaskComponent } from 'src/app/modals/modal-create-task/modal
 import { ModalJoinTaskComponent } from 'src/app/modals/modal-join-task/modal-join-task.component';
 import { ModalAddSessionComponent } from 'src/app/modals/modal-add-session/modal-add-session.component';
 import { SessionService } from 'src/app/services/session.service';
+import { StorageService } from 'src/app/services/storage.service';
 import { ModalDeleteTaskComponent } from 'src/app/modals/modal-delete-task/modal-delete-task.component';
 
 const colors: Record<string, EventColor> = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
   blue: {
     primary: '#1e90ff',
     secondary: '#D1E8FF',
@@ -47,7 +45,7 @@ export class TicketsUserComponent {
 
   constructor(private modal: NgbModal, private ticketService: TicketService,
     private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
-    private projectService: ProjectService, private sessionService: SessionService) {
+    private projectService: ProjectService, private sessionService: SessionService, private storageService: StorageService) {
       ref.detach();
       setInterval(() => {
         this.numberOfTicks++;
@@ -62,8 +60,23 @@ export class TicketsUserComponent {
   idTask!: number;
   tasks!: TaskModel[];
   projects!: ProjectModel[];
-  showTasks: boolean = false;
+  nbTickets!: number;
+  sessions: SessionModel[] = [];
 
+  getSessionsByTasks(): void {
+    this.events= [];
+    for(let i = 0; this.tasks.length > i; i++){
+      this.sessionService.getSessionsByIdTask(this.tasks[i].idTask as number).then((result) => {
+        for(let j = 0; result.length > j;j++)
+        {
+          this.sessions.push(result[j]);
+          const color = this.tasks[i].dateFin == undefined?colors.yellow:colors.blue;
+          this.events.push({ start : result[j].dateDebut, end: result[j].dateFin, title: this.tasks[i].nomDeTache, color: color });
+        }
+      })
+    }
+    this.refresh;
+  }
   // variable pour chrono
   idTaskTimer!: TaskModel;
   EtatSession = true;
@@ -113,9 +126,10 @@ export class TicketsUserComponent {
       console.log(this.projects[i].idProject as number);
       this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
         this.tasks = result;
+        this.nbTickets = this.tasks.length;
+        this.getSessionsByTasks();
         console.log(this.tasks);
         this.getTaskNotValid(result);
-        this.showTasks= true;
       }).catch();
     }
   }
@@ -203,6 +217,7 @@ export class TicketsUserComponent {
             this._snackBar.open("Tâche attribuée avec succès");
             this.ticketService.endTask(task.idTask as number,result.session.dateFin as Date).then(() => {
               this._snackBar.open("Tâche finie avec succès");
+              this.getSessionsByTasks();
             }).catch((error) => {
               this._snackBar.open(error);
             });
@@ -225,65 +240,9 @@ export class TicketsUserComponent {
     event: CalendarEvent;
   };
 
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-      a11yLabel: 'Edit',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      },
-    },
-    {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      },
-    },
-  ];
-
   refresh = new Subject<void>();
 
   events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: { ...colors.red },
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: { ...colors.yellow },
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: { ...colors.blue },
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: { ...colors.yellow },
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
   ];
 
   activeDayIsOpen: boolean = true;

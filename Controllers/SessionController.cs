@@ -47,10 +47,10 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Team/{idTeam}")]
-        public async Task<ActionResult<IEnumerable<SessionModel>>> GetSessionByIdTeam(int idTeam)
+        [HttpGet("Task/{idTask}")]
+        public async Task<ActionResult<IEnumerable<SessionModel>>> GetSessionByIdTask(int idTask)
         {
-            var result = await sessionRepository.GetSessionsByIdTask(idTeam);
+            var result = await sessionRepository.GetSessionsByIdTask(idTask);
             return Ok(result);
         }
     }
