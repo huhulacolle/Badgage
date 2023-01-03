@@ -1,6 +1,5 @@
 <app-navbar></app-navbar>
 <div class="container-start" style="overflow: hidden;">
-  <cd-timer #basicTimer [autoStart]="true" format="hms"></cd-timer>
   <button (click)="testButton()">test</button>
   <div class="row text-center">
     <div class="col-md-3">
@@ -72,5 +71,8 @@
         </mwl-calendar-day-view>
       </div>
     </div>
+  </div>
+  <div>
+    <cd-timer #basicTimer [autoStart]="true" format="hms"></cd-timer>
   </div>
 </div>
