@@ -23,3 +23,7 @@ pre {
   background-size: cover;
   fill: orange;
 }
+
+.taskCard {
+  margin: 5px 0px 10px 10px;
+}

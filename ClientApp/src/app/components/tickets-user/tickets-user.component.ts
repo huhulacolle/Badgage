@@ -15,6 +15,7 @@ import { ModalJoinTaskComponent } from 'src/app/modals/modal-join-task/modal-joi
 import { ModalAddSessionComponent } from 'src/app/modals/modal-add-session/modal-add-session.component';
 import { SessionService } from 'src/app/services/session.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { ModalDeleteTaskComponent } from 'src/app/modals/modal-delete-task/modal-delete-task.component';
 
 const colors: Record<string, EventColor> = {
   blue: {
@@ -33,10 +34,15 @@ const colors: Record<string, EventColor> = {
   styleUrls: ['./tickets-user.component.css'],
   templateUrl: './tickets-user.component.html',
 })
+
+
 export class TicketsUserComponent {
   @ViewChild('modalContent')
   modalContent!: TemplateRef<any>;
+  @ViewChild('basicTimer')
+  basicTimer!: any;
   numberOfTicks = 0;
+
   constructor(private modal: NgbModal, private ticketService: TicketService,
     private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
     private projectService: ProjectService, private sessionService: SessionService, private storageService: StorageService) {
@@ -71,17 +77,69 @@ export class TicketsUserComponent {
     }
     this.refresh;
   }
+  // variable pour chrono
+  idTaskTimer!: TaskModel;
+  EtatSession = true;
+  dateDebut!: Date;
+  dateFin!: Date;
+  checkTimer = false;
+  notValidTask: TaskModel[] = [];
+
+  NewSession(): void {
+    if (this.idTaskTimer.dateFin != undefined) {
+      this._snackBar.open('Cette tâche est déjà terminé', '', {duration: 3000});
+    }
+    else {
+      this.EtatSession = false;
+      this.dateDebut = new Date;
+      this.basicTimer.start(0);
+    }
+  }
+
+  StopSession(): void {
+    this.dateFin = new Date;
+    const sessionInput = new SessionInput();
+    sessionInput.idTask = this.idTaskTimer.idTask as number;
+    sessionInput.dateDebut = this.dateDebut;
+    sessionInput.dateFin = this.dateFin;
+    this.sessionService.setSession(sessionInput)
+    .then(
+      () => {
+        if (this.checkTimer) {
+          this.UpdateTimeEndTask(this.idTaskTimer.idTask as number, this.dateFin)
+        }
+      }
+    )
+    this.basicTimer.stop();
+    this.EtatSession = true;
+  }
+
+  UpdateTimeEndTask(idTask: number, DateFin: Date): void {
+    this.ticketService.endTask(idTask, DateFin)
+    .then(() => {
+      this.getTasks();
+    })
+  }
 
   getTasks(): void {
-    console.log(this.projects);
     for(let i = 0; this.projects.length > i;i++){
       console.log(this.projects[i].idProject as number);
       this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
         this.tasks = result;
         this.nbTickets = this.tasks.length;
         this.getSessionsByTasks();
+        console.log(this.tasks);
+        this.getTaskNotValid(result);
       }).catch();
     }
+  }
+
+  getTaskNotValid(result: TaskModel[]): void {
+    result.forEach(r => {
+      if (r.dateFin == undefined) {
+        this.notValidTask.push(r);
+      }
+    });
   }
 
   getProjects(): void {
@@ -92,12 +150,17 @@ export class TicketsUserComponent {
     });
   }
 
-  deleteTask(idTask: number): void {
-    this.ticketService.deleteTask(idTask).then(() => {
-      this._snackBar.open("Tâche supprimée avec succès", '', {duration: 3000});
-      this.getTasks();
-    }).catch((error) => {
-      this._snackBar.open(error, '', {duration: 3000});
+  deleteTask(task: TaskModel): void {
+    const dialogRef = this.dialog.open(ModalDeleteTaskComponent, { data: task });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log("idtask:", result.idTask as number)
+      const idTache = result.idTask as number;
+      this.ticketService.deleteTask(idTache).then(() => {
+        this._snackBar.open("Tâche supprimée avec succès", '', {duration: 3000});
+        this.getTasks();
+      }).catch((error) => {
+        this._snackBar.open(error, '', {duration: 3000});
+      });
     })
   }
 
@@ -111,6 +174,7 @@ export class TicketsUserComponent {
           .then(() => {
             this._snackBar.open("Tâche créée avec succès", '', {duration: 3000});
             this.getTasks();
+            console.log(this.tasks);
           }).catch((error) => {
             this._snackBar.open(error, '', {duration: 3000});
           })
@@ -126,7 +190,7 @@ export class TicketsUserComponent {
     const dialogRef = this.dialog.open(ModalJoinTaskComponent, {data : task});
     dialogRef.afterClosed().subscribe(result => {
         if(result){
-          this.ticketService.joinTask(result)
+          this.ticketService.joinTask(task.idTask as number, result)
           .then(() => {
             this._snackBar.open("Tâche attribuée avec succès", '', {duration: 3000});
             this.getProjects();

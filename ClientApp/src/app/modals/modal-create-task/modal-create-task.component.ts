@@ -1,3 +1,5 @@
+import { UserOnTaskModelWithName } from './../../client/badgageClient';
+import { TicketService } from 'src/app/services/ticket.service';
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProjectModel, TaskModel } from 'src/app/client/badgageClient';
@@ -10,7 +12,7 @@ import { ProjectService } from 'src/app/services/project.service';
 })
 export class ModalCreateTaskComponent {
   constructor(
-    public dialogRef: MatDialogRef<ModalCreateTaskComponent>, private projetService: ProjectService, @Inject(MAT_DIALOG_DATA) public data: TaskModel
+    public dialogRef: MatDialogRef<ModalCreateTaskComponent>, private projetService: ProjectService, private ticketService: TicketService, @Inject(MAT_DIALOG_DATA) public data: TaskModel
   ) {}
 
   ngOnInit(): void {
@@ -29,9 +31,11 @@ export class ModalCreateTaskComponent {
     }
     else
       this.task = new TaskModel();
+      this.ListTask();
   }
 
   task!: TaskModel;
+  listTasks!: UserOnTaskModelWithName[];
   nomProjetSeeing!: string;
   seeing: boolean = false;
   projets!: ProjectModel[];
@@ -39,6 +43,15 @@ export class ModalCreateTaskComponent {
 
   onCancelClick(): void {
     this.dialogRef.close();
+  }
+
+  ListTask(): void {
+    this.ticketService.listTask(this.data.idTask as number)
+    .then(
+      data => {
+        this.listTasks = data;
+      }
+    )
   }
 
   checkDate(date: Date | undefined): void {
