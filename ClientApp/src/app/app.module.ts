@@ -25,6 +25,9 @@ import { ModalModifyTeamComponent } from './modals/modal-modify-team/modal-modif
 import { ModalCreateTaskComponent } from './modals/modal-create-task/modal-create-task.component';
 import { ModalJoinTaskComponent } from './modals/modal-join-task/modal-join-task.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ModalViewProjectComponent } from './modals/modal-view-project/modal-view-project.component';
+import { ModalDeleteProjectComponent } from './modals/modal-delete-project/modal-delete-project.component';
+import { ModalModifyProjectComponent } from './modals/modal-modify-project/modal-modify-project.component';
 import { ModalAddSessionComponent } from './modals/modal-add-session/modal-add-session.component';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -34,6 +37,7 @@ import { CdTimerModule } from 'angular-cd-timer';
 import { ModalSeeTeamComponent } from './modals/modal-see-team/modal-see-team.component';
 import { ModalModifyNameTeamComponent } from './modals/modal-modify-name-team/modal-modify-name-team.component';
 import { ModalDeleteTeamComponent } from './modals/modal-delete-team/modal-delete-team.component';
+import { ModalDeleteTaskComponent } from './modals/modal-delete-task/modal-delete-task.component';
 
 @NgModule({
   declarations: [
@@ -48,10 +52,14 @@ import { ModalDeleteTeamComponent } from './modals/modal-delete-team/modal-delet
     ModalModifyTeamComponent,
     ModalCreateTaskComponent,
     ModalJoinTaskComponent,
+    ModalViewProjectComponent,
+    ModalDeleteProjectComponent,
+    ModalModifyProjectComponent,
     ModalAddSessionComponent,
     ModalSeeTeamComponent,
     ModalModifyNameTeamComponent,
     ModalDeleteTeamComponent,
+    ModalDeleteTaskComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

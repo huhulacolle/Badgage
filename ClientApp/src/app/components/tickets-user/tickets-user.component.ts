@@ -13,6 +13,7 @@ import { ModalCreateTaskComponent } from 'src/app/modals/modal-create-task/modal
 import { ModalJoinTaskComponent } from 'src/app/modals/modal-join-task/modal-join-task.component';
 import { ModalAddSessionComponent } from 'src/app/modals/modal-add-session/modal-add-session.component';
 import { SessionService } from 'src/app/services/session.service';
+import { ModalDeleteTaskComponent } from 'src/app/modals/modal-delete-task/modal-delete-task.component';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -135,12 +136,17 @@ export class TicketsUserComponent {
     });
   }
 
-  deleteTask(idTask: number): void {
-    this.ticketService.deleteTask(idTask).then(() => {
-      this._snackBar.open("Tâche supprimée avec succès", '', {duration: 3000});
-      this.getTasks();
-    }).catch((error) => {
-      this._snackBar.open(error, '', {duration: 3000});
+  deleteTask(task: TaskModel): void {
+    const dialogRef = this.dialog.open(ModalDeleteTaskComponent, { data: task });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log("idtask:", result.idTask as number)
+      const idTache = result.idTask as number;
+      this.ticketService.deleteTask(idTache).then(() => {
+        this._snackBar.open("Tâche supprimée avec succès", '', {duration: 3000});
+        this.getTasks();
+      }).catch((error) => {
+        this._snackBar.open(error, '', {duration: 3000});
+      });
     })
   }
 
@@ -154,6 +160,7 @@ export class TicketsUserComponent {
           .then(() => {
             this._snackBar.open("Tâche créée avec succès", '', {duration: 3000});
             this.getTasks();
+            console.log(this.tasks);
           }).catch((error) => {
             this._snackBar.open(error, '', {duration: 3000});
           })

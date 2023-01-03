@@ -1099,7 +1099,7 @@ export class TaskBadgageClient {
     }
 
     deleteTask(idTask: number): Observable<TaskModel[]> {
-        let url_ = this.baseUrl + "/api/Task/{IdTask}";
+        let url_ = this.baseUrl + "/api/Task/{idTask}";
         if (idTask === undefined || idTask === null)
             throw new Error("The parameter 'idTask' must be defined.");
         url_ = url_.replace("{idTask}", encodeURIComponent("" + idTask));

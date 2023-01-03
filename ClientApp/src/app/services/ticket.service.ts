@@ -13,6 +13,7 @@ export class TicketService {
     return lastValueFrom(this.ticketService.getTasksByUser());
   }
 
+
   getTasksByIdUser(idUser: number): Promise<TaskModel[]> {
     return lastValueFrom(this.ticketService.getTasksByIdUser(idUser));
   }
