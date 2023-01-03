@@ -30,6 +30,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { OverlayRef } from '@angular/cdk/overlay';
+import { CdTimerModule } from 'angular-cd-timer';
 import { ModalSeeTeamComponent } from './modals/modal-see-team/modal-see-team.component';
 import { ModalModifyNameTeamComponent } from './modals/modal-modify-name-team/modal-modify-name-team.component';
 import { ModalDeleteTeamComponent } from './modals/modal-delete-team/modal-delete-team.component';
@@ -61,8 +62,9 @@ import { ModalDeleteTaskComponent } from './modals/modal-delete-task/modal-delet
     MaterialsModule,
     NgxMaterialTimepickerModule,
     FormsModule,
-    NgxMatDatetimePickerModule, 
-    NgxMatNativeDateModule, 
+    CdTimerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule,
     NgxMatTimepickerModule,
     RouterModule.forRoot([
       { path: '',   redirectTo: '/register', pathMatch: 'full' },

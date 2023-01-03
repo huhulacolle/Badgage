@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
 import { TicketService } from 'src/app/services/ticket.service';
-import { ProjectModel, SessionInput, TaskModel } from 'src/app/client/badgageClient';
+import { ProjectModel, TaskModel, SessionInput } from 'src/app/client/badgageClient';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from 'src/app/services/project.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -36,10 +36,15 @@ const colors: Record<string, EventColor> = {
   styleUrls: ['./tickets-user.component.css'],
   templateUrl: './tickets-user.component.html',
 })
+
+
 export class TicketsUserComponent {
   @ViewChild('modalContent')
   modalContent!: TemplateRef<any>;
+  @ViewChild('basicTimer')
+  basicTimer!: any;
   numberOfTicks = 0;
+
   constructor(private modal: NgbModal, private ticketService: TicketService,
     private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
     private projectService: ProjectService, private sessionService: SessionService) {
@@ -59,17 +64,68 @@ export class TicketsUserComponent {
   projects!: ProjectModel[];
   showTasks: boolean = false;
 
+  // variable pour chrono
+  idTaskTimer!: TaskModel;
+  EtatSession = true;
+  dateDebut!: Date;
+  dateFin!: Date;
+  checkTimer = false;
+  notValidTask: TaskModel[] = [];
+
+  NewSession(): void {
+    if (this.idTaskTimer.dateFin != undefined) {
+      this._snackBar.open('Cette tâche est déjà terminé', '', {duration: 3000});
+    }
+    else {
+      this.EtatSession = false;
+      this.dateDebut = new Date;
+      this.basicTimer.start(0);
+    }
+  }
+
+  StopSession(): void {
+    this.dateFin = new Date;
+    const sessionInput = new SessionInput();
+    sessionInput.idTask = this.idTaskTimer.idTask as number;
+    sessionInput.dateDebut = this.dateDebut;
+    sessionInput.dateFin = this.dateFin;
+    this.sessionService.setSession(sessionInput)
+    .then(
+      () => {
+        if (this.checkTimer) {
+          this.UpdateTimeEndTask(this.idTaskTimer.idTask as number, this.dateFin)
+        }
+      }
+    )
+    this.basicTimer.stop();
+    this.EtatSession = true;
+  }
+
+  UpdateTimeEndTask(idTask: number, DateFin: Date): void {
+    this.ticketService.endTask(idTask, DateFin)
+    .then(() => {
+      this.getTasks();
+    })
+  }
 
   getTasks(): void {
-    console.log(this.projects);
     for(let i = 0; this.projects.length > i;i++){
       console.log(this.projects[i].idProject as number);
       this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
         this.tasks = result;
         console.log(this.tasks);
+        this.getTaskNotValid(result);
         this.showTasks= true;
       }).catch();
     }
+  }
+
+  getTaskNotValid(result: TaskModel[]): void {
+    result.forEach(r => {
+      if (r.dateFin == undefined) {
+        this.notValidTask.push(r);
+      }
+    });
   }
 
   getProjects(): void {
