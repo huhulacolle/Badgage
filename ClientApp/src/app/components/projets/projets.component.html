@@ -18,7 +18,7 @@
                   <div class="btn-group">
                     <button mat-button color="primary" (click)="openProject(project)">Voir</button>
                     <button mat-button color="primary">Ajouter équipe</button>
-                    <button mat-button color="secondary">Modifier</button>
+                    <button mat-button color="secondary" (click)="modifyProjectNameModal(project)">Modifier</button>
                     <button mat-button color="warn" (click)="deleteProjectModal(project)">Supprimer</button>
                   </div>
                 </div>
@@ -33,21 +33,3 @@
 
 
 
-  <!-- <div *ngIf="this.tasks.length > 0">
-    <mat-card *ngFor="let task of this.tasks">
-      <mat-card-header>
-       <div mat-card-avatar *ngIf="task.dateFin" class="taskComplete"></div>
-        <div mat-card-avatar *ngIf="!task!.dateFin" class="taskInProgress"></div>
-        <mat-card-title>{{project.projectName}}</mat-card-title>
-        <mat-card-subtitle>{{task.description}}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-actions>
-        <button mat-button color="primary" (click)="seeTask(task)">Voir</button>
-       <button mat-button (click)="joinTask(task)">Attribuer tâche</button>
-        <button mat-button color="primary">Ajouter</button>
-        <button mat-button color="secondary">Modifier</button>
-        <button mat-button color="warn" (click)="seeTask(task)">Supprimer</button>
-      </mat-card-actions>
-    </mat-card>
-    <br>
-  </div> -->
