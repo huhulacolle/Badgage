@@ -39,7 +39,7 @@ export class TicketsUserComponent {
   @ViewChild('modalContent')
   modalContent!: TemplateRef<any>;
   numberOfTicks = 0;
-  constructor(private modal: NgbModal, private ticketService: TicketService, 
+  constructor(private modal: NgbModal, private ticketService: TicketService,
     private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
     private projectService: ProjectService, private sessionService: SessionService) {
       ref.detach();
@@ -68,7 +68,7 @@ export class TicketsUserComponent {
         console.log(this.tasks);
         this.showTasks= true;
       }).catch();
-    } 
+    }
   }
 
   getProjects(): void {
@@ -81,10 +81,10 @@ export class TicketsUserComponent {
 
   deleteTask(idTask: number): void {
     this.ticketService.deleteTask(idTask).then(() => {
-      this._snackBar.open("Tâche supprimée avec succès");
-      this.getProjects();
+      this._snackBar.open("Tâche supprimée avec succès", '', {duration: 3000});
+      this.getTasks();
     }).catch((error) => {
-      this._snackBar.open(error);
+      this._snackBar.open(error, '', {duration: 3000});
     })
   }
 
@@ -96,10 +96,10 @@ export class TicketsUserComponent {
         result.dateFin = null;
         this.ticketService.setTask(result)
           .then(() => {
-            this._snackBar.open("Tâche créée avec succès");
-            this.getProjects();
+            this._snackBar.open("Tâche créée avec succès", '', {duration: 3000});
+            this.getTasks();
           }).catch((error) => {
-            this._snackBar.open(error);
+            this._snackBar.open(error, '', {duration: 3000});
           })
     })
   }
@@ -115,7 +115,7 @@ export class TicketsUserComponent {
         if(result){
           this.ticketService.joinTask(result)
           .then(() => {
-            this._snackBar.open("Tâche attribuée avec succès");
+            this._snackBar.open("Tâche attribuée avec succès", '', {duration: 3000});
             this.getProjects();
           }).catch((error) => {
             this._snackBar.open(error);
@@ -145,7 +145,7 @@ export class TicketsUserComponent {
             });
             this.getProjects();
           }).catch((error) => {
-            this._snackBar.open(error);
+            this._snackBar.open(error, '', {duration: 3000});
           })
         }
     })

@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Renommer l'équipe</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Nouveau nom de l'équipe</mat-label>
+    <input matInput [(ngModel)]="data.nom">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()">Annuler</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmer</button>
+</div>
