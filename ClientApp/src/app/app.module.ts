@@ -30,6 +30,9 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { OverlayRef } from '@angular/cdk/overlay';
+import { ModalSeeTeamComponent } from './modals/modal-see-team/modal-see-team.component';
+import { ModalModifyNameTeamComponent } from './modals/modal-modify-name-team/modal-modify-name-team.component';
+import { ModalDeleteTeamComponent } from './modals/modal-delete-team/modal-delete-team.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +48,9 @@ import { OverlayRef } from '@angular/cdk/overlay';
     ModalCreateTaskComponent,
     ModalJoinTaskComponent,
     ModalAddSessionComponent,
+    ModalSeeTeamComponent,
+    ModalModifyNameTeamComponent,
+    ModalDeleteTeamComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
