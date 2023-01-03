@@ -85,7 +85,7 @@ export class TeamsComponent {
   deleteTeamModal(Team: TeamModel): void {
     const dialogRef = this.dialog.open(ModalDeleteTeamComponent, { data: Team });
     dialogRef.afterClosed().subscribe((result) => {
-      this.teamService.deleteTeam(result.idTeam as number)
+        this.teamService.deleteTeam(result.idTeam as number)
         .then(() => {
           this._snackBar.open('Equipe suprimmée', '', {duration: 3000});
           this.getTeamByUser();
@@ -94,5 +94,5 @@ export class TeamsComponent {
         });
     })
   }
-
 }
+
