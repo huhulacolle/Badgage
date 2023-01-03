@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
-import { TaskBadgageClient, TaskModel } from '../client/badgageClient';
+import { TaskBadgageClient, TaskModel, UserOnTaskModelWithName } from '../client/badgageClient';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +22,8 @@ export class TicketService {
     return lastValueFrom(this.ticketService.getTaskFromProject(idProject));
   }
 
-  joinTask(idUser: number): Promise<any> {
-    return lastValueFrom(this.ticketService.joinTask(idUser));
+  joinTask(idTask: number, idUser: number): Promise<any> {
+    return lastValueFrom(this.ticketService.joinTask(idTask, idUser));
   }
 
   setTask(taskModel: TaskModel): Promise<any> {
@@ -36,6 +36,10 @@ export class TicketService {
 
   endTask(idTask: number, dateFin: Date): Promise<void> {
     return lastValueFrom(this.ticketService.updateTimeEndTask(idTask, dateFin));
+  }
+
+  listTask(idTask: number): Promise<UserOnTaskModelWithName[]> {
+    return lastValueFrom(this.ticketService.getListTaskByIdTask(idTask));
   }
 
 }

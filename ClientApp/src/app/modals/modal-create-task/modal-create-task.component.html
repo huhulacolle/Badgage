@@ -1,5 +1,6 @@
 <mat-dialog-content>
-    <h1 mat-dialog-title>Création d'une tâche</h1>
+    <h1 *ngIf="seeing" mat-dialog-title>Voir une tâche</h1>
+    <h1 *ngIf="!seeing" mat-dialog-title>Création d'une tâche</h1>
     <div mat-dialog-content>
         <div *ngIf="!seeing">
             <mat-form-field appearance="fill">
@@ -24,6 +25,10 @@
             <p><strong>Projet :</strong> {{nomProjetSeeing}}</p><br>
             <p *ngIf="data.dateFin"><strong>Tâche terminé le :</strong> {{data.dateFin.toDateString()}}</p>
             <p *ngIf="!data!.dateFin">Tâche en cours</p>
+            <p><strong>Utilisateur liers : </strong></p>
+            <div *ngFor="let listTask of listTasks">
+              {{listTask.email}}
+            </div>
         </div>
     </div>
 </mat-dialog-content>
