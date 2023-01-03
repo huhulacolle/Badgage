@@ -57,7 +57,7 @@ export class TicketsUserComponent {
   tasks!: TaskModel[];
   projects!: ProjectModel[];
   showTasks: boolean = false;
-
+  nbTickets!: number;
 
   getTasks(): void {
     console.log(this.projects);
@@ -65,6 +65,7 @@ export class TicketsUserComponent {
       console.log(this.projects[i].idProject as number);
       this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
         this.tasks = result;
+        this.nbTickets = this.tasks.length;
         console.log(this.tasks);
         this.showTasks= true;
       }).catch();
