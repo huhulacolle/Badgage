@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { lastValueFrom, retry } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { TeamBadgageClient, TeamModel, UserOnTeamModel } from '../client/badgageClient';
 
 @Injectable({

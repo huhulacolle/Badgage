@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
 import { TicketService } from 'src/app/services/ticket.service';
-import { ProjectModel, TaskModel } from 'src/app/client/badgageClient';
+import { ProjectModel, SessionInput, TaskModel } from 'src/app/client/badgageClient';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from 'src/app/services/project.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -53,6 +53,7 @@ export class TicketsUserComponent {
     this.getProjects();
   }
 
+  idTask!: number;
   tasks!: TaskModel[];
   projects!: ProjectModel[];
   showTasks: boolean = false;
@@ -89,7 +90,6 @@ export class TicketsUserComponent {
 
   createTask(): void {
     const dialogRef = this.dialog.open(ModalCreateTaskComponent);
-    dialogRef.updateSize('lg','lg');
     dialogRef.afterClosed().subscribe(result => {
         result.dateCreation = new Date();
         result.idTache = undefined;
@@ -125,12 +125,24 @@ export class TicketsUserComponent {
   }
 
   addSession(task: TaskModel): void {
+    console.log(task);
     const dialogRef = this.dialog.open(ModalAddSessionComponent, {data : task});
     dialogRef.afterClosed().subscribe(result => {
         if(result){
-          this.sessionService.setSession(result)
+          console.log(result);
+          const session = new SessionInput();
+          session.dateDebut = result.session.dateDebut;
+          session.dateFin = result.session.dateFin;
+          session.idTask = result.session.idTask;
+          console.log(session);
+          this.sessionService.setSession(session)
           .then(() => {
             this._snackBar.open("Tâche attribuée avec succès");
+            this.ticketService.endTask(task.idTask as number,result.session.dateFin as Date).then(() => {
+              this._snackBar.open("Tâche finie avec succès");
+            }).catch((error) => {
+              this._snackBar.open(error);
+            });
             this.getProjects();
           }).catch((error) => {
             this._snackBar.open(error, '', {duration: 3000});
