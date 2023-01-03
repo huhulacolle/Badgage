@@ -20,4 +20,8 @@ export class ProjectService {
   getProjectByUser(): Promise<ProjectModel[]> {
     return lastValueFrom(this.projectClient.getProjectByUser());
   }
+
+  deleteProject(idPoject : number) : Promise<any> {
+    return lastValueFrom(this.projectClient.deleteProject(idPoject));
+  }
 }

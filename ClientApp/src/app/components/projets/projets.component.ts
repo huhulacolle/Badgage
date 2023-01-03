@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectModel, TaskModel, TeamModel } from 'src/app/client/badgageClient';
 import { ModalCreateProjectComponent } from 'src/app/modals/modal-create-project/modal-create-project.component';
 import { ModalViewProjectComponent } from 'src/app/modals/modal-view-project/modal-view-project.component';
+import { ModalDeleteProjectComponent } from 'src/app/modals/modal-delete-project/modal-delete-project.component';
 
 
 import { ProjectService } from 'src/app/services/project.service';
@@ -64,7 +65,18 @@ export class ProjetsComponent {
     })
   }
 
-
+  deleteTeamModal(project: ProjectModel): void {
+    const dialogRef = this.dialog.open(ModalDeleteProjectComponent, { data: project });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.projectService.deleteProject(project.idProject as number)
+        .then(() => {
+          this._snackBar.open('Projet suprimmée', '', {duration: 3000});
+          this.getProjetsByUser();
+        }).catch(() => {
+          this._snackBar.open('Erreur lors de la suppression de le projet', '', {duration: 3000});
+        });
+    })
+  }
 
   openProject(project: ProjectModel): void {
     const dialogRef = this.dialog.open(ModalViewProjectComponent, { data:  project  });

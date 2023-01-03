@@ -26,6 +26,7 @@ import { ModalCreateTaskComponent } from './modals/modal-create-task/modal-creat
 import { ModalJoinTaskComponent } from './modals/modal-join-task/modal-join-task.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ModalViewProjectComponent } from './modals/modal-view-project/modal-view-project.component';
+import { ModalDeleteProjectComponent } from './modals/modal-delete-project/modal-delete-project.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ModalViewProjectComponent } from './modals/modal-view-project/modal-vie
     ModalModifyTeamComponent,
     ModalCreateTaskComponent,
     ModalJoinTaskComponent,
-    ModalViewProjectComponent
+    ModalViewProjectComponent,
+    ModalDeleteProjectComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
