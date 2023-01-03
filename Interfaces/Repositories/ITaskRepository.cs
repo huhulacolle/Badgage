@@ -19,5 +19,7 @@
         public Task<bool> VerifUserOnProject(int idProject, int idUser);
 
         public Task SetUserOnTask(UserOnTaskModel userOnTaskModel);
+
+        public Task<IEnumerable<UserOnTaskModel>> GetListTaskByIdTask(int idTask);
     }
 }

@@ -135,5 +135,19 @@ namespace Badgage.Repositories
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, param);
         }
+
+        public async Task<IEnumerable<UserOnTaskModel>> GetListTaskByIdTask(int idTask)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idTask", idTask },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = "UPDATE Task SET DateFin = @DateFin WHERE idTask = @idTask";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            return await connec.QueryAsync<UserOnTaskModel>(sql, param);
+        }
     }
 }
