@@ -1,0 +1,5 @@
+<h1 mat-dialog-title>{{data.nom}}</h1>
+<h3>Liste des membres</h3>
+<mat-list>
+    <mat-list-item *ngFor="let user of users">{{user.adresseMail}}</mat-list-item>
+</mat-list>

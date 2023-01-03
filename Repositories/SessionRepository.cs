@@ -40,12 +40,12 @@ namespace Badgage.Repositories
             return await connec.QueryAsync<SessionModel>(sql, parameters);
         }
 
-        public async Task SetSession(SessionInput sessionInput)
+        public async Task SetSession(SessionModel sessionModel)
         {
-            string sql = "INSERT INTO sessions (idTask, idUser, DateDebut) VALUES (@idTask, @idUser, @DateDebut);";
+            string sql = "INSERT INTO sessions (idTask, idUser, DateDebut, DateFin) VALUES (@idTask, @idUser, @DateDebut, @DateFin);";
 
             var connec = defaultSqlConnectionFactory.Create();
-            await connec.ExecuteAsync(sql, sessionInput); 
+            await connec.ExecuteAsync(sql, sessionModel); 
         }
     }
 }

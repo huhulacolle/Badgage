@@ -11,17 +11,16 @@ import { ProjectService } from 'src/app/services/project.service';
 export class ModalCreateTaskComponent {
   constructor(
     public dialogRef: MatDialogRef<ModalCreateTaskComponent>, private projetService: ProjectService, @Inject(MAT_DIALOG_DATA) public data: TaskModel
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.projetService.getProjectByUser().then((result) => {
       this.projets = result;
       if (this.data != null) {
-        this.projets.map(p => {
-          if (this.data.idProjet == p.idProject)
-            this.nomProjetSeeing = p.projectName;
-        })
-      }
+        for(let i = 0; i < this.projets.length; i++)
+          if (this.data.idProjet = this.projets[i].idProject as number)
+              this.nomProjetSeeing = this.projets[i].projectName;
+        }
     }).catch((error) => {
       console.log(error);
     })

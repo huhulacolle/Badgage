@@ -1,6 +1,6 @@
 import { IsSignedInGuard } from './guards/is-signed-in.guard';
 import { RegisterComponent } from './components/register/register.component';
-import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient, TaskBadgageClient, TeamBadgageClient, UserBadgageClient } from './client/badgageClient';
+import { API_BASE_URL, AuthBadgageClient, ProjectBadgageClient, SessionBadgageClient, TaskBadgageClient, TeamBadgageClient, UserBadgageClient } from './client/badgageClient';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -28,6 +28,15 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { ModalViewProjectComponent } from './modals/modal-view-project/modal-view-project.component';
 import { ModalDeleteProjectComponent } from './modals/modal-delete-project/modal-delete-project.component';
 import { ModalModifyProjectComponent } from './modals/modal-modify-project/modal-modify-project.component';
+import { ModalAddSessionComponent } from './modals/modal-add-session/modal-add-session.component';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { OverlayRef } from '@angular/cdk/overlay';
+import { CdTimerModule } from 'angular-cd-timer';
+import { ModalSeeTeamComponent } from './modals/modal-see-team/modal-see-team.component';
+import { ModalModifyNameTeamComponent } from './modals/modal-modify-name-team/modal-modify-name-team.component';
+import { ModalDeleteTeamComponent } from './modals/modal-delete-team/modal-delete-team.component';
 
 @NgModule({
   declarations: [
@@ -44,14 +53,23 @@ import { ModalModifyProjectComponent } from './modals/modal-modify-project/modal
     ModalJoinTaskComponent,
     ModalViewProjectComponent,
     ModalDeleteProjectComponent,
-    ModalModifyProjectComponent
+    ModalModifyProjectComponent,
+    ModalAddSessionComponent,
+    ModalSeeTeamComponent,
+    ModalModifyNameTeamComponent,
+    ModalDeleteTeamComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialsModule,
+    NgxMaterialTimepickerModule,
     FormsModule,
+    CdTimerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule,
+    NgxMatTimepickerModule,
     RouterModule.forRoot([
       { path: '',   redirectTo: '/register', pathMatch: 'full' },
       { path: 'register', component: RegisterComponent },
@@ -69,6 +87,8 @@ import { ModalModifyProjectComponent } from './modals/modal-modify-project/modal
     TeamBadgageClient,
     UserBadgageClient,
     TaskBadgageClient,
+    SessionBadgageClient,
+    MatDialogConfig,
     {
 			provide: APP_INITIALIZER,
 			useFactory: apiUrlServiceFactory,

@@ -18,6 +18,10 @@ export class TicketService {
     return lastValueFrom(this.ticketService.getTasksByIdUser(idUser));
   }
 
+  getTaskByProject(idProject: number): Promise<TaskModel[]> {
+    return lastValueFrom(this.ticketService.getTaskFromProject(idProject));
+  }
+
   joinTask(idUser: number): Promise<any> {
     return lastValueFrom(this.ticketService.joinTask(idUser));
   }
@@ -29,4 +33,9 @@ export class TicketService {
   deleteTask(idTask: number): Promise<any> {
     return lastValueFrom(this.ticketService.deleteTask(idTask));
   }
+
+  endTask(idTask: number, dateFin: Date): Promise<void> {
+    return lastValueFrom(this.ticketService.updateTimeEndTask(idTask, dateFin));
+  }
+
 }

@@ -57,10 +57,10 @@ export class ProjetsComponent {
       if (result != null)
         this.projectService.createProject(result)
           .then(() => {
-            this._snackBar.open('Projet créé');
+            this._snackBar.open('Projet créé', '', {duration: 3000});
             this.getProjetsByUser();
           }).catch(() => {
-            this._snackBar.open('Erreur lors de la création du projet');
+            this._snackBar.open('Erreur lors de la création du projet', '', {duration: 3000});
           })
     })
   }
