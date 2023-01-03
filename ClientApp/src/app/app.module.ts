@@ -59,7 +59,7 @@ import { CdTimerModule } from 'angular-cd-timer';
     NgxMatNativeDateModule,
     NgxMatTimepickerModule,
     RouterModule.forRoot([
-      { path: '',   redirectTo: '/home', pathMatch: 'full' },
+      { path: '',   redirectTo: '/register', pathMatch: 'full' },
       { path: 'register', component: RegisterComponent },
       { path: 'home', component: TeamsComponent, canActivate: [IsSignedInGuard] },
       { path: 'tickets', component: TicketsUserComponent, canActivate: [IsSignedInGuard] },
