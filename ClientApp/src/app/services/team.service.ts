@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { lastValueFrom, retry } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { TeamBadgageClient, TeamModel, UserOnTeamModel } from '../client/badgageClient';
 
 @Injectable({
@@ -19,6 +19,14 @@ export class TeamService {
 
   joinTeam(newUser: UserOnTeamModel): Promise<void> {
     return lastValueFrom(this.teamClient.joinTeam(newUser));
+  }
+
+  UpdateTeamName(idTeam: number,name: string) : Promise<void> {
+    return lastValueFrom(this.teamClient.updateTeamName(idTeam,name));
+  }
+
+  deleteTeam(idTeam : number) : Promise<any> {
+    return lastValueFrom(this.teamClient.deleteTeam(idTeam));
   }
 
 }

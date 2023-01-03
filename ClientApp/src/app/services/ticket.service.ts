@@ -32,4 +32,9 @@ export class TicketService {
   deleteTask(idTask: number): Promise<any> {
     return lastValueFrom(this.ticketService.deleteTask(idTask));
   }
+
+  endTask(idTask: number, dateFin: Date): Promise<void> {
+    return lastValueFrom(this.ticketService.updateTimeEndTask(idTask, dateFin));
+  }
+
 }
