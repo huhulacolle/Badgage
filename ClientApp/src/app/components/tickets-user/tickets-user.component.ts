@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
 import { TicketService } from 'src/app/services/ticket.service';
-import { ProjectModel, SessionInput, SessionModel, TaskModel } from 'src/app/client/badgageClient';
+import { ProjectModel, SessionInput, SessionModel, TaskModel, UserOnTaskModelWithName, UserOnTeamModel } from 'src/app/client/badgageClient';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from 'src/app/services/project.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -52,19 +52,20 @@ export class TicketsUserComponent {
         this.ref.detectChanges();
       }, 500);
     }
-
   ngOnInit(): void {
     this.getProjects();
   }
 
   idTask!: number;
   tasks!: TaskModel[];
+  userOnTask!: UserOnTaskModelWithName[];
   projects!: ProjectModel[];
   nbTickets!: number;
   sessions: SessionModel[] = [];
 
   getSessionsByTasks(): void {
     this.events= [];
+    console.log(this.events);
     for(let i = 0; this.tasks.length > i; i++){
       this.sessionService.getSessionsByIdTask(this.tasks[i].idTask as number).then((result) => {
         for(let j = 0; result.length > j;j++)
@@ -75,6 +76,7 @@ export class TicketsUserComponent {
         }
       })
     }
+    console.log(this.sessions);
     this.refresh;
   }
   // variable pour chrono
@@ -125,13 +127,39 @@ export class TicketsUserComponent {
     for(let i = 0; this.projects.length > i;i++){
       console.log(this.projects[i].idProject as number);
       this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
-        this.tasks = result;
+          this.tasks = result;
+          console.log(this.tasks);
+          for(let j=0;this.tasks.length > j; j++){
+          this.ticketService.getListUserByIdTask(this.tasks[j].idTask as number).then((result) => {
+            this.userOnTask = result;
+            console.log(this.tasks[j].idTask);
+          });
+        }
         this.nbTickets = this.tasks.length;
         this.getSessionsByTasks();
-        console.log(this.tasks);
         this.getTaskNotValid(result);
       }).catch();
     }
+  }
+
+  checkNotJoined(idTask: number | undefined): boolean {
+    for(let i = 0; this.userOnTask.length > i;i++){
+      if(this.userOnTask[i].idTask as number == idTask as number)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  checkJoinedByUSer(idTask: number | undefined): boolean {
+    for(let i = 0; this.userOnTask.length > i;i++){
+      if(this.userOnTask[i].idTask as number == idTask as number && this.userOnTask[i].idUser == new JwtHelperService().decodeToken(this.storageService.getUser()).id)
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   getTaskNotValid(result: TaskModel[]): void {
@@ -194,6 +222,7 @@ export class TicketsUserComponent {
           .then(() => {
             this._snackBar.open("Tâche attribuée avec succès", '', {duration: 3000});
             this.getProjects();
+            this.getTasks();
           }).catch((error) => {
             this._snackBar.open(error);
           })
@@ -215,12 +244,14 @@ export class TicketsUserComponent {
           this.sessionService.setSession(session)
           .then(() => {
             this._snackBar.open("Tâche attribuée avec succès");
-            this.ticketService.endTask(task.idTask as number,result.session.dateFin as Date).then(() => {
-              this._snackBar.open("Tâche finie avec succès");
-              this.getSessionsByTasks();
-            }).catch((error) => {
-              this._snackBar.open(error);
-            });
+            if(result.complete){
+              this.ticketService.endTask(task.idTask as number,result.session.dateFin as Date).then(() => {
+                this._snackBar.open("Tâche finie avec succès");
+                this.getSessionsByTasks();
+              }).catch((error) => {
+                this._snackBar.open(error);
+              });
+            }
             this.getProjects();
           }).catch((error) => {
             this._snackBar.open(error, '', {duration: 3000});

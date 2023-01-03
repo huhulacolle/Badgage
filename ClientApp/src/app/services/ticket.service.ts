@@ -38,8 +38,8 @@ export class TicketService {
     return lastValueFrom(this.ticketService.updateTimeEndTask(idTask, dateFin));
   }
 
-  listTask(idTask: number): Promise<UserOnTaskModelWithName[]> {
-    return lastValueFrom(this.ticketService.getListTaskByIdTask(idTask));
+  getListUserByIdTask(idTask: number): Promise<UserOnTaskModelWithName[]> {
+    return lastValueFrom(this.ticketService.getListUserByIdTask(idTask));
   }
 
 }
