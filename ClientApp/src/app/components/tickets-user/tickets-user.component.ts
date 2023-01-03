@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
 import { TicketService } from 'src/app/services/ticket.service';
-import { ProjectModel, TaskModel } from 'src/app/client/badgageClient';
+import { ProjectModel, TaskModel, SessionInput } from 'src/app/client/badgageClient';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from 'src/app/services/project.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -63,10 +63,44 @@ export class TicketsUserComponent {
   projects!: ProjectModel[];
   showTasks: boolean = false;
 
-  testButton() {
-    const time = this.basicTimer.get() as TimeInterface
-    console.log(time);
+  // variable pour chrono
+  idTaskTimer!: TaskModel;
+  EtatSession = true;
+  dateDebut!: Date;
+  dateFin!: Date;
+  checkTimer = false;
 
+  NewSession(): void {
+    console.log("idTask", this.idTaskTimer.idTask);
+
+    this.EtatSession = false;
+    this.dateDebut = new Date;
+    this.basicTimer.start(0);
+  }
+
+  StopSession(): void {
+    this.dateFin = new Date;
+    const sessionInput = new SessionInput();
+    sessionInput.idTask = this.idTaskTimer.idTask as number;
+    sessionInput.dateDebut = this.dateDebut;
+    sessionInput.dateFin = this.dateFin;
+    this.sessionService.setSession(sessionInput)
+    .then(
+      () => {
+        if (this.checkTimer) {
+          console.log("c'est fini");
+        }
+        else {
+          console.log("c'est pas fini");
+        }
+      }
+    )
+    this.basicTimer.stop();
+    this.EtatSession = true;
+  }
+
+  check(): void {
+    console.log(this.idTaskTimer);
   }
 
   getTasks(projects: ProjectModel[]): void {

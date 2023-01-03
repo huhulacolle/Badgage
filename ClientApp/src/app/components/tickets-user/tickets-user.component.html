@@ -1,6 +1,28 @@
 <app-navbar></app-navbar>
+<div class="jumbotron text-center">
+  <div class="container text-center" style="padding-top: 1%; padding-left: 300px; padding-right: 300px;">
+    <div class="row">
+      <div class="col">
+        <mat-form-field appearance="fill">
+          <mat-label>Tâche</mat-label>
+          <mat-select mat-input [disabled]="!EtatSession" [(ngModel)]="idTaskTimer">
+              <mat-option *ngFor="let task of tasks" [value]="task">{{task.nomDeTache}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-checkbox class="example-margin" [(ngModel)]="checkTimer">Session Fini</mat-checkbox>
+      </div>
+      <div class="col">
+        <button *ngIf="EtatSession" style="margin-left: 15px;" mat-raised-button [disabled]="!idTaskTimer" (click)="NewSession()">Nouvelle Sessions</button>
+        <button *ngIf="!EtatSession" style="margin-left: 15px;" mat-raised-button [disabled]="!idTaskTimer" (click)="StopSession()">Arrêter Sessions</button>
+        <cd-timer #basicTimer [autoStart]="false" format="intelli"></cd-timer>
+      </div>
+    </div>
+
+  </div>
+</div>
 <div class="container-start" style="overflow: hidden;">
-  <button (click)="testButton()">test</button>
   <div class="row text-center">
     <div class="col-md-3">
       <div class="btn-group">
@@ -71,8 +93,5 @@
         </mwl-calendar-day-view>
       </div>
     </div>
-  </div>
-  <div>
-    <cd-timer #basicTimer [autoStart]="true" format="hms"></cd-timer>
   </div>
 </div>

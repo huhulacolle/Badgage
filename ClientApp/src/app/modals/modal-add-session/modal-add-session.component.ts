@@ -17,7 +17,7 @@ export class ModalAddSessionComponent {
 
   ngOnInit(): void {
     this.session = new SessionInput();
-    this.session.idTask = this.data.idTache as number;
+    this.session.idTask = this.data.idTask as number;
     this.projetService.getProjectByUser().then((result) => {
       this.projets = result;
         this.projets.map(p => {

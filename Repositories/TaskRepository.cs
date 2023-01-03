@@ -77,7 +77,7 @@
             };
             var parameters = new DynamicParameters(dictionnary);
 
-            string sql = "SELECT nomdetache, description, datefin, datecreation FROM task WHERE idProjet = @idProject";
+            string sql = "SELECT * FROM task WHERE idProjet = @idProject";
 
             using var connec = defaultSqlConnectionFactory.Create();
             return await connec.QueryAsync<TaskModel>(sql, parameters);
