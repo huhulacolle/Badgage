@@ -21,4 +21,12 @@ export class TeamService {
     return lastValueFrom(this.teamClient.joinTeam(newUser));
   }
 
+  UpdateTeamName(idTeam: number,name: string) : Promise<void> {
+    return lastValueFrom(this.teamClient.updateTeamName(idTeam,name));
+  }
+
+  deleteTeam(idTeam : number) : Promise<any> {
+    return lastValueFrom(this.teamClient.deleteTeam(idTeam));
+  }
+
 }
