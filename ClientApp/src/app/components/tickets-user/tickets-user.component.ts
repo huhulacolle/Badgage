@@ -58,19 +58,18 @@ export class TicketsUserComponent {
   sessions: SessionModel[] = [];
 
   getSessionsByTasks(): void {
+    this.events= [];
     for(let i = 0; this.tasks.length > i; i++){
       this.sessionService.getSessionsByIdTask(this.tasks[i].idTask as number).then((result) => {
-        this.events= [];
         for(let j = 0; result.length > j;j++)
         {
           this.sessions.push(result[j]);
           const color = this.tasks[i].dateFin == undefined?colors.yellow:colors.blue;
           this.events.push({ start : result[j].dateDebut, end: result[j].dateFin, title: this.tasks[i].nomDeTache, color: color });
-          this.refresh;
         }
-        console.log(this.tasks[i]);
       })
     }
+    this.refresh;
   }
 
   getTasks(): void {
