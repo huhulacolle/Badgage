@@ -1,3 +1,4 @@
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef,} from '@angular/core';
 import {startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,} from 'date-fns';
 import { Subject } from 'rxjs';
@@ -5,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
 import { TicketService } from 'src/app/services/ticket.service';
-import { ProjectModel, SessionInput, TaskModel } from 'src/app/client/badgageClient';
+import { ProjectModel, SessionInput, SessionModel, TaskModel } from 'src/app/client/badgageClient';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProjectService } from 'src/app/services/project.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +14,7 @@ import { ModalCreateTaskComponent } from 'src/app/modals/modal-create-task/modal
 import { ModalJoinTaskComponent } from 'src/app/modals/modal-join-task/modal-join-task.component';
 import { ModalAddSessionComponent } from 'src/app/modals/modal-add-session/modal-add-session.component';
 import { SessionService } from 'src/app/services/session.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -41,7 +43,7 @@ export class TicketsUserComponent {
   numberOfTicks = 0;
   constructor(private modal: NgbModal, private ticketService: TicketService,
     private _snackBar: MatSnackBar, private dialog: MatDialog,private ref: ChangeDetectorRef,
-    private projectService: ProjectService, private sessionService: SessionService) {
+    private projectService: ProjectService, private sessionService: SessionService, private storageService: StorageService) {
       ref.detach();
       setInterval(() => {
         this.numberOfTicks++;
@@ -56,8 +58,26 @@ export class TicketsUserComponent {
   idTask!: number;
   tasks!: TaskModel[];
   projects!: ProjectModel[];
+  sessions!: SessionModel[];
   showTasks: boolean = false;
   nbTickets!: number;
+  sessionsComplete!: {task: TaskModel[], session: SessionModel[]};
+
+  getSessions(): void {
+    this.sessionService.getSessionsByUser(new JwtHelperService().decodeToken(this.storageService.getUser()).id).then((result) => {
+      this.sessions = result;
+    })
+  }
+
+  getSessionsByTasks(): void {
+    for(let i = 0; this.tasks.length > i; i++){
+      // for(let j = 0; this.sessions.length > j; j++){
+      // if(this.tasks[i].idTask === this.sessions[j].idTask){
+      //   if(this.sessionsComplete.
+      // }
+      // }
+    }
+  }
 
   getTasks(): void {
     console.log(this.projects);
