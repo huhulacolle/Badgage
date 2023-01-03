@@ -14,8 +14,9 @@ export class ModalDeleteProjectComponent {
    }
 
 
-onCancelClick(): void {
+onCancelClick(): undefined {
   this.dialogRef.close();
+  return undefined;
 }
 
 }
