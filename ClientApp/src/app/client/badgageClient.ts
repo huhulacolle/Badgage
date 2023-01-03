@@ -679,11 +679,11 @@ export class SessionBadgageClient {
         return _observableOf(null as any);
     }
 
-    getSessionByIdTeam(idTeam: number): Observable<SessionModel[]> {
-        let url_ = this.baseUrl + "/api/Session/Team/{idTeam}";
-        if (idTeam === undefined || idTeam === null)
-            throw new Error("The parameter 'idTeam' must be defined.");
-        url_ = url_.replace("{idTeam}", encodeURIComponent("" + idTeam));
+    getSessionByIdTask(idTask: number): Observable<SessionModel[]> {
+        let url_ = this.baseUrl + "/api/Session/Task/{idTask}";
+        if (idTask === undefined || idTask === null)
+            throw new Error("The parameter 'idTask' must be defined.");
+        url_ = url_.replace("{idTask}", encodeURIComponent("" + idTask));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -695,11 +695,11 @@ export class SessionBadgageClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetSessionByIdTeam(response_);
+            return this.processGetSessionByIdTask(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetSessionByIdTeam(response_ as any);
+                    return this.processGetSessionByIdTask(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<SessionModel[]>;
                 }
@@ -708,7 +708,7 @@ export class SessionBadgageClient {
         }));
     }
 
-    protected processGetSessionByIdTeam(response: HttpResponseBase): Observable<SessionModel[]> {
+    protected processGetSessionByIdTask(response: HttpResponseBase): Observable<SessionModel[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :

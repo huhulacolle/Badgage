@@ -17,10 +17,6 @@ import { SessionService } from 'src/app/services/session.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 const colors: Record<string, EventColor> = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
   blue: {
     primary: '#1e90ff',
     secondary: '#D1E8FF',
@@ -48,7 +44,7 @@ export class TicketsUserComponent {
       setInterval(() => {
         this.numberOfTicks++;
         this.ref.detectChanges();
-      }, 100);
+      }, 500);
     }
 
   ngOnInit(): void {
@@ -58,24 +54,22 @@ export class TicketsUserComponent {
   idTask!: number;
   tasks!: TaskModel[];
   projects!: ProjectModel[];
-  sessions!: SessionModel[];
-  showTasks: boolean = false;
   nbTickets!: number;
-  sessionsComplete!: {task: TaskModel[], session: SessionModel[]};
-
-  getSessions(): void {
-    this.sessionService.getSessionsByUser(new JwtHelperService().decodeToken(this.storageService.getUser()).id).then((result) => {
-      this.sessions = result;
-    })
-  }
+  sessions: SessionModel[] = [];
 
   getSessionsByTasks(): void {
     for(let i = 0; this.tasks.length > i; i++){
-      // for(let j = 0; this.sessions.length > j; j++){
-      // if(this.tasks[i].idTask === this.sessions[j].idTask){
-      //   if(this.sessionsComplete.
-      // }
-      // }
+      this.sessionService.getSessionsByIdTask(this.tasks[i].idTask as number).then((result) => {
+        this.events= [];
+        for(let j = 0; result.length > j;j++)
+        {
+          this.sessions.push(result[j]);
+          const color = this.tasks[i].dateFin == undefined?colors.yellow:colors.blue;
+          this.events.push({ start : result[j].dateDebut, end: result[j].dateFin, title: this.tasks[i].nomDeTache, color: color });
+          this.refresh;
+        }
+        console.log(this.tasks[i]);
+      })
     }
   }
 
@@ -86,8 +80,7 @@ export class TicketsUserComponent {
       this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
         this.tasks = result;
         this.nbTickets = this.tasks.length;
-        console.log(this.tasks);
-        this.showTasks= true;
+        this.getSessionsByTasks();
       }).catch();
     }
   }
@@ -161,6 +154,7 @@ export class TicketsUserComponent {
             this._snackBar.open("Tâche attribuée avec succès");
             this.ticketService.endTask(task.idTask as number,result.session.dateFin as Date).then(() => {
               this._snackBar.open("Tâche finie avec succès");
+              this.getSessionsByTasks();
             }).catch((error) => {
               this._snackBar.open(error);
             });
@@ -183,65 +177,9 @@ export class TicketsUserComponent {
     event: CalendarEvent;
   };
 
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-      a11yLabel: 'Edit',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      },
-    },
-    {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      },
-    },
-  ];
-
   refresh = new Subject<void>();
 
   events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: { ...colors.red },
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: { ...colors.yellow },
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: { ...colors.blue },
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: { ...colors.yellow },
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
   ];
 
   activeDayIsOpen: boolean = true;
