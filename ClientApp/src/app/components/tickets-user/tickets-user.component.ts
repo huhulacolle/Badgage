@@ -160,6 +160,7 @@ export class TicketsUserComponent {
           .then(() => {
             this._snackBar.open("Tâche créée avec succès", '', {duration: 3000});
             this.getTasks();
+            console.log(this.tasks);
           }).catch((error) => {
             this._snackBar.open(error, '', {duration: 3000});
           })
