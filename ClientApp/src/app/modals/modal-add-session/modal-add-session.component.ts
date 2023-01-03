@@ -13,7 +13,8 @@ export class ModalAddSessionComponent {
 
   constructor(public dialogRef: MatDialogRef<ModalAddSessionComponent>, private projetService: ProjectService,
     @Inject(MAT_DIALOG_DATA) public data: TaskModel
-  ) {this.dataToSend = {complete: false,session: new SessionInput()};
+  ) {
+    this.dataToSend = { complete: false, session: new SessionInput() };
   }
 
   ngOnInit(): void {
@@ -34,10 +35,10 @@ export class ModalAddSessionComponent {
     console.log(this.dataToSend.complete);
   }
 
-  dataToSend: {complete: boolean, session: SessionInput};
+  dataToSend: { complete: boolean, session: SessionInput };
   nomProjetSeeing!: string;
   projets!: ProjectModel[];
-  error!: boolean;
+  dateValide: boolean = false;
   hoursDateDebut!: string;
   hoursDateFin!: string;
   session!: SessionInput;
@@ -46,25 +47,22 @@ export class ModalAddSessionComponent {
     this.dialogRef.close();
   }
 
-  sendSession(): any {
-    if (this.session.dateFin != undefined && this.session.dateDebut != undefined) {
+  checkDate(): void {
+    if (this.session.dateFin != undefined && this.session.dateDebut != undefined && this.hoursDateDebut != undefined && this.hoursDateFin != undefined) {
+      const hoursDateDebut = this.hoursDateDebut.split(':');
+      const hoursDateFin = this.hoursDateFin.split(':');
+      this.dateValide = (((this.session.dateDebut.getTime() == this.session.dateFin.getTime()) && (+hoursDateDebut[0] + 1 > +hoursDateFin[0] + 1)) ||
+        ((this.session.dateDebut.getTime() == this.session.dateFin.getTime()) && (+hoursDateDebut[0] + 1 == +hoursDateFin[0] + 1) && (+hoursDateDebut[1] > +hoursDateFin[1]))
+        || (this.session.dateDebut.getTime() > this.session.dateFin.getTime())
+      );
       const timeDebut = this.hoursDateDebut.split(':');
       const timeFin = this.hoursDateFin.split(':');
-      console.log(this.hoursDateFin, this.hoursDateDebut);
-    this.session.dateDebut = new Date(this.session.dateDebut.getFullYear(),
-      this.session.dateDebut.getMonth(), this.session.dateDebut.getDate(),+timeDebut[0] + 1,+timeDebut[1]);
+      this.session.dateDebut = new Date(this.session.dateDebut.getFullYear(),
+        this.session.dateDebut.getMonth(), this.session.dateDebut.getDate(), +timeDebut[0] + 1, +timeDebut[1]);
       this.session.dateFin = new Date(this.session.dateFin.getFullYear(),
-        this.session.dateFin.getMonth(), this.session.dateFin.getDate(),+timeFin[0] + 1,+timeFin[1]);
+        this.session.dateFin.getMonth(), this.session.dateFin.getDate(), +timeFin[0] + 1, +timeFin[1]);
+      this.dataToSend.session = this.session;
+      console.log(this.dataToSend.session);
     }
-    this.dataToSend.session = this.session;
-    console.log(this.dataToSend);
-    return ;
-  }
-
-  checkDate(): boolean {
-    if (this.session.dateFin != undefined) {
-      return ((this.session.dateDebut.getTime() <= this.session.dateFin.getTime()) && (this.session.dateDebut.getTime() <= this.session.dateFin.getTime()));
-    }
-    return false;
   }
 }

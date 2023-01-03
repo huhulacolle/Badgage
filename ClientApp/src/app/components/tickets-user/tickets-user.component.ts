@@ -53,6 +53,7 @@ export class TicketsUserComponent {
     this.getProjects();
   }
 
+  idTask!: number;
   tasks!: TaskModel[];
   projects!: ProjectModel[];
   showTasks: boolean = false;
@@ -128,11 +129,12 @@ export class TicketsUserComponent {
     const dialogRef = this.dialog.open(ModalAddSessionComponent, {data : task});
     dialogRef.afterClosed().subscribe(result => {
         if(result){
+          console.log(result);
           const session = new SessionInput();
-          result.session;
           session.dateDebut = result.session.dateDebut;
           session.dateFin = result.session.dateFin;
           session.idTask = result.session.idTask;
+          console.log(session);
           this.sessionService.setSession(session)
           .then(() => {
             this._snackBar.open("Tâche attribuée avec succès");
