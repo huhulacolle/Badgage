@@ -11,12 +11,11 @@ import { ModalModifyTeamComponent } from '../modal-modify-team/modal-modify-team
 })
 export class ModalSeeTeamComponent {
   constructor(
-    public dialogRef : MatDialogRef<ModalModifyTeamComponent>, @Inject(MAT_DIALOG_DATA) public data : TeamModel, private userService: UserService
+    public dialogRef: MatDialogRef<ModalModifyTeamComponent>, @Inject(MAT_DIALOG_DATA) public data: TeamModel, private userService: UserService
   ) { }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.userService.getTeamUser(this.data.idTeam as number).then((result) => { this.users = result });
-    console.log(this.data);
   }
 
   users!: UserModel[];

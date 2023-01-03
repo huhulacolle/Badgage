@@ -10,19 +10,14 @@ import { TeamService } from 'src/app/services/team.service';
 })
 export class ModalCreateProjectComponent {
   constructor(
-    public dialogRef : MatDialogRef<ModalCreateProjectComponent>, @Inject(MAT_DIALOG_DATA) public data : ProjectModel, private teamService : TeamService,
+    public dialogRef: MatDialogRef<ModalCreateProjectComponent>, @Inject(MAT_DIALOG_DATA) public data: ProjectModel, private teamService: TeamService,
   ) { }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
     this.teamService.getTeamsByUser().then((result) => { this.teams = result });
-    console.log(this.data);
   }
-    
-    teams!: TeamModel[];
 
-  showData(): void {
-    console.log(this.data);
-  }
+  teams!: TeamModel[];
 
   onCancelClick(): void {
     this.dialogRef.close();

@@ -1,12 +1,13 @@
 <app-navbar></app-navbar>
-<section class="jumbotron text-center">
-  <div class="container">
-    <h1>Badgeage</h1>
-    <p>Ce site vous permet de gérer le temps passé sur chaque tâche d'un projet. Commencez par créer un projet !!</p>
-    <button class="btn btn-primary" (click)="createProject()">+ Créer un projet</button>
-  </div>
-</section>
-<div class="album py-5 bg-light">
+<div [@enterR]>
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1>Badgeage</h1>
+      <p>Ce site vous permet de gérer le temps passé sur chaque tâche d'un projet. Commencez par créer un projet !!</p>
+      <button class="btn btn-primary" (click)="createProject()">+ Créer un projet</button>
+    </div>
+  </section>
+  <div class="album py-5 bg-light">
     <div class="container">
       <div class="row">
         <div class="col-md-4">
@@ -28,7 +29,4 @@
       </div>
     </div>
   </div>
-
-
-
-
+</div>

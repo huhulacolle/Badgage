@@ -7,7 +7,7 @@ import { TeamBadgageClient, TeamModel, UserOnTeamModel } from '../client/badgage
 })
 export class TeamService {
 
-  constructor(private teamClient : TeamBadgageClient) { }
+  constructor(private teamClient: TeamBadgageClient) { }
 
   createTeam(team: TeamModel): Promise<void> {
     return lastValueFrom(this.teamClient.setTeam(team));
@@ -21,11 +21,11 @@ export class TeamService {
     return lastValueFrom(this.teamClient.joinTeam(newUser));
   }
 
-  UpdateTeamName(idTeam: number,name: string) : Promise<void> {
-    return lastValueFrom(this.teamClient.updateTeamName(idTeam,name));
+  UpdateTeamName(idTeam: number, name: string): Promise<void> {
+    return lastValueFrom(this.teamClient.updateTeamName(idTeam, name));
   }
 
-  deleteTeam(idTeam : number) : Promise<any> {
+  deleteTeam(idTeam: number): Promise<any> {
     return lastValueFrom(this.teamClient.deleteTeam(idTeam));
   }
 

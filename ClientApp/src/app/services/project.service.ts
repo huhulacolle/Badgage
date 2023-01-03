@@ -7,7 +7,7 @@ import { ProjectModel, ProjectBadgageClient } from '../client/badgageClient';
 })
 export class ProjectService {
 
-  constructor(private projectClient : ProjectBadgageClient) { }
+  constructor(private projectClient: ProjectBadgageClient) { }
 
   createProject(project: ProjectModel): Promise<any> {
     return lastValueFrom(this.projectClient.createProject(project));
@@ -21,10 +21,10 @@ export class ProjectService {
     return lastValueFrom(this.projectClient.getProjectByUser());
   }
 
-  deleteProject(idPoject : number) : Promise<any> {
+  deleteProject(idPoject: number): Promise<any> {
     return lastValueFrom(this.projectClient.deleteProject(idPoject));
   }
-  UpdateProject(idPoject: number,name: string) : Promise<void> {
-    return lastValueFrom(this.projectClient.updateProjectName(idPoject,name));
+  UpdateProject(idPoject: number, name: string): Promise<void> {
+    return lastValueFrom(this.projectClient.updateProjectName(idPoject, name));
   }
 }

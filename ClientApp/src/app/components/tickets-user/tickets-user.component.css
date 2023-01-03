@@ -12,13 +12,13 @@ pre {
   overflow-y: scroll;
 }
 
-.taskComplete{
+.taskComplete {
   background-image: url('../../../assets/task-complete.svg');
   background-size: cover;
   fill: green;
 }
 
-.taskInProgress{
+.taskInProgress {
   background-image: url('../../../assets/task-in-progress.svg');
   background-size: cover;
   fill: orange;

@@ -6,7 +6,7 @@ import { catchError, Observable, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class TokenInterceptorService implements HttpInterceptor {
-  constructor() {}
+  constructor() { }
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler

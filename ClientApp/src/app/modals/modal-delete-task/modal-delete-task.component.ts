@@ -9,7 +9,7 @@ import { TaskModel } from 'src/app/client/badgageClient';
 })
 export class ModalDeleteTaskComponent {
   constructor(
-    public dialogRef : MatDialogRef<ModalDeleteTaskComponent>, @Inject(MAT_DIALOG_DATA) public data : TaskModel
+    public dialogRef: MatDialogRef<ModalDeleteTaskComponent>, @Inject(MAT_DIALOG_DATA) public data: TaskModel
   ) { }
 
   onCancelClick(): void {

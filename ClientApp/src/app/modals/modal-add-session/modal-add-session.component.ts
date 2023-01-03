@@ -27,12 +27,7 @@ export class ModalAddSessionComponent {
           this.nomProjetSeeing = p.projectName;
       })
     }).catch((error) => {
-      console.log(error);
     })
-  }
-
-  ngAfterContentInit(): void {
-    console.log(this.dataToSend.complete);
   }
 
   dataToSend: { complete: boolean, session: SessionInput };
@@ -62,7 +57,6 @@ export class ModalAddSessionComponent {
       this.session.dateFin = new Date(this.session.dateFin.getFullYear(),
         this.session.dateFin.getMonth(), this.session.dateFin.getDate(), +timeFin[0] + 1, +timeFin[1]);
       this.dataToSend.session = this.session;
-      console.log(this.dataToSend.session);
     }
   }
 }

@@ -14,5 +14,5 @@ export class ApiUrlService {
 }
 
 export function apiUrlServiceFactory(apiUrlService: ApiUrlService) {
-	return (): void => apiUrlService.load();
+  return (): void => apiUrlService.load();
 }

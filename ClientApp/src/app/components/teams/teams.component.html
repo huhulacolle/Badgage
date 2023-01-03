@@ -1,27 +1,30 @@
 <app-navbar></app-navbar>
-<section class="jumbotron text-center">
+<div [@enterL]>
+  <section class="jumbotron text-center">
     <div class="container">
       <h1>Badgeage</h1>
-      <p>Ce site vous permet de gérer le temps passé sur chaque tâche d'un projet.<br> Commencez par créer par créer ou rejoindre une équipe pour après rejoindre un projet !!</p>
+      <p>Ce site vous permet de gérer le temps passé sur chaque tâche d'un projet.<br> Commencez par créer par créer ou
+        rejoindre une équipe pour après rejoindre un projet !!</p>
       <button class="btn btn-primary" (click)="createTeamModal()"> Créer une équipe</button>
     </div>
   </section>
   <div class="album py-5 bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4">
-            <mat-card *ngFor="let team of teams">
-              <mat-card-header>
-                <mat-card-title>{{team.nom}}</mat-card-title>
-              </mat-card-header>
-              <mat-card-actions>
-                <button mat-button color="primary" (click)="seeTeamModal(team)">Voir</button>
-                <button mat-button (click)="addMembersModal(team.idTeam)">Ajouter membres</button>
-                <button mat-button (click)="modifyTeamNameModal(team)">Modifier</button>
-                <button mat-button color="warn" (click)="deleteTeamModal(team)">Supprimer</button>
-              </mat-card-actions>
-            </mat-card>
-          </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <mat-card *ngFor="let team of teams">
+            <mat-card-header>
+              <mat-card-title>{{team.nom}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-actions>
+              <button mat-button color="primary" (click)="seeTeamModal(team)">Voir</button>
+              <button mat-button (click)="addMembersModal(team.idTeam)">Ajouter membres</button>
+              <button mat-button (click)="modifyTeamNameModal(team)">Modifier</button>
+              <button mat-button color="warn" (click)="deleteTeamModal(team)">Supprimer</button>
+            </mat-card-actions>
+          </mat-card>
         </div>
       </div>
     </div>
+  </div>
+</div>
