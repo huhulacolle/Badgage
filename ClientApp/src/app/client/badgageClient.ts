@@ -1156,12 +1156,16 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
-    joinTask(idTask: number | undefined): Observable<void> {
+    joinTask(idTask: number | undefined, idUser: number | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/Task/Join?";
         if (idTask === null)
             throw new Error("The parameter 'idTask' cannot be null.");
         else if (idTask !== undefined)
             url_ += "idTask=" + encodeURIComponent("" + idTask) + "&";
+        if (idUser === null)
+            throw new Error("The parameter 'idUser' cannot be null.");
+        else if (idUser !== undefined)
+            url_ += "idUser=" + encodeURIComponent("" + idUser) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {

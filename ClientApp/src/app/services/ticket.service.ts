@@ -21,8 +21,8 @@ export class TicketService {
     return lastValueFrom(this.ticketService.getTaskFromProject(idProject));
   }
 
-  joinTask(idUser: number): Promise<any> {
-    return lastValueFrom(this.ticketService.joinTask(idUser));
+  joinTask(idTask: number, idUser: number): Promise<any> {
+    return lastValueFrom(this.ticketService.joinTask(idTask, idUser));
   }
 
   setTask(taskModel: TaskModel): Promise<any> {

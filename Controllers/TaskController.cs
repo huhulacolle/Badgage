@@ -117,12 +117,11 @@ namespace Badgage.Controllers
         [HttpPost("Join")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
-        public async Task<IActionResult> JoinTask(int idTask)
+        public async Task<IActionResult> JoinTask(int idTask, int idUser)
         {
             try
             {
-                int IdUser = int.Parse(jwt.FindFirstValue("id"));
-                await taskRepository.SetUserOnTask(new UserOnTaskModel() { IdUser = IdUser, IdTask = idTask });
+                await taskRepository.SetUserOnTask(new UserOnTaskModel() { IdUser = idUser, IdTask = idTask });
                 return Ok();
             }
             catch (Exception e)

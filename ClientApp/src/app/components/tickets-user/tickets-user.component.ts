@@ -169,7 +169,7 @@ export class TicketsUserComponent {
     const dialogRef = this.dialog.open(ModalJoinTaskComponent, {data : task});
     dialogRef.afterClosed().subscribe(result => {
         if(result){
-          this.ticketService.joinTask(result)
+          this.ticketService.joinTask(task.idTask as number, result)
           .then(() => {
             this._snackBar.open("Tâche attribuée avec succès", '', {duration: 3000});
             this.getProjects();
