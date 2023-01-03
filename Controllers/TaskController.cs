@@ -88,10 +88,10 @@ namespace Badgage.Controllers
 
         }
 
-        [HttpGet("ListTask/{idTask}")]
-        public async Task<ActionResult<IEnumerable<UserOnTaskModelWithName>>> GetListTaskByIdTask(int idTask)
+        [HttpGet("ListUser/{idTask}")]
+        public async Task<ActionResult<IEnumerable<UserOnTaskModelWithName>>> GetListUserByIdTask(int idTask)
         {
-            var result = await taskRepository.GetListTaskByIdTask(idTask);
+            var result = await taskRepository.GetListUserByIdTask(idTask);
             return Ok(result);
         }
 

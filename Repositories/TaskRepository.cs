@@ -136,7 +136,7 @@ namespace Badgage.Repositories
             await connec.ExecuteAsync(sql, param);
         }
 
-        public async Task<IEnumerable<UserOnTaskModelWithName>> GetListTaskByIdTask(int idTask)
+        public async Task<IEnumerable<UserOnTaskModelWithName>> GetListUserByIdTask(int idTask)
         {
             var dictionnary = new Dictionary<string, object>()
             {

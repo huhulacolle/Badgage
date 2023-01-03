@@ -37,7 +37,7 @@ export class ModalJoinTaskComponent {
     this.projectService.getProjectByUser().then((result) => {
       for (let i = 0; i < result.length; i++) {
         if (result[i].idProject === this.data.idProjet)
-          this.team = result[i].idProject as number;
+          this.team = result[i].idTeam;
       }
       this.getUsersOnTeam();
     }).catch((error) => {
