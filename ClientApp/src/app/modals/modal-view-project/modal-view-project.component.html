@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{data.projectName}}</h1>
+<h3>Liste des equipes du projet</h3>
+<mat-list>
+    <mat-list-item *ngFor="let team of teamModel">{{team.nom}}</mat-list-item>
+</mat-list>
+
+
+<h1 mat-dialog-title>{{projectModel}}  </h1>
+    <h3>Liste des membres du projet</h3>
+    <mat-list>
+        <mat-list-item *ngFor="let user of usersOnTeam">{{user.nom}}</mat-list-item>
+    </mat-list>

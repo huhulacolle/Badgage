@@ -37,6 +37,8 @@
   <div class="row">
     <div class="col-3 text-center">
       <button class="btn btn-primary" (click)="createTask()">+ Ajouter un ticket</button>
+      <button class="btn btn-primary" (click)="getTasks()">+ bit</button>
+
         <div *ngIf="this.tasks.length > 0">
         <mat-card *ngFor="let task of this.tasks">
           <mat-card-header>

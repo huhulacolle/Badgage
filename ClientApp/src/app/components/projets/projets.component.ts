@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ProjectModel, TeamModel } from 'src/app/client/badgageClient';
+import { ProjectModel, TaskModel, TeamModel } from 'src/app/client/badgageClient';
 import { ModalCreateProjectComponent } from 'src/app/modals/modal-create-project/modal-create-project.component';
+import { ModalViewProjectComponent } from 'src/app/modals/modal-view-project/modal-view-project.component';
+
+
 import { ProjectService } from 'src/app/services/project.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { StorageService } from 'src/app/services/storage.service';
 import { TeamService } from 'src/app/services/team.service';
+import { ModalCreateTaskComponent } from 'src/app/modals/modal-create-task/modal-create-task.component';
 
 @Component({
   selector: 'app-projets',
@@ -22,6 +26,10 @@ export class ProjetsComponent {
     this.getProjetsByUser();
   }
 
+  tasks!: TaskModel[];
+  showTasks: boolean = false;
+
+
   getProjetsByUser(): void {
       this.projectService.getProjectByUser().then((result) => {
         this.projects = result;
@@ -31,6 +39,13 @@ export class ProjetsComponent {
 
   projects!: ProjectModel[];
   teams!: TeamModel[];
+
+  seeTask(task: TaskModel): void {
+    const dialogRef = this.dialog.open(ModalCreateTaskComponent, {data: task});
+    dialogRef.afterClosed();
+  }
+
+
 
   createProject(): void {
     const projet = new ProjectModel();
@@ -48,5 +63,14 @@ export class ProjetsComponent {
           })
     })
   }
+
+
+
+  openProject(project: ProjectModel): void {
+    const dialogRef = this.dialog.open(ModalViewProjectComponent, { data:  project  });
+
+ 
+  }
+
 
 }

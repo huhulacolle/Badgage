@@ -81,6 +81,7 @@ export class TicketsUserComponent {
           .then(() => {
             this._snackBar.open("Tâche créée avec succès");
             this.getTasks();
+            console.log(this.tasks);
           }).catch((error) => {
             this._snackBar.open(error);
           })
