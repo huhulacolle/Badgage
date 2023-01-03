@@ -68,16 +68,16 @@
             await connec.ExecuteAsync(sql, userOnTeamModel);
         }
 
-        public async Task UpdateTeamName(string name, int idTeam)
+        public async Task UpdateTeamName(string nom, int idTeam)
         {
             var dictionnary = new Dictionary<string, object>()
             {
                 { "@idTeam", idTeam },
-                { "@name", name },
+                { "@nom", nom },
             };
             var param = new DynamicParameters(dictionnary);
 
-            string sql = "UPDATE project SET nom = @name WHERE idTeam = @idTeam";
+            string sql = "UPDATE project SET nom = @nom WHERE idTeam = @idTeam";
 
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, param);

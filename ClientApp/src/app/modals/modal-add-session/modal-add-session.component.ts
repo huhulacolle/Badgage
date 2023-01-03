@@ -13,12 +13,12 @@ export class ModalAddSessionComponent {
 
   constructor(public dialogRef: MatDialogRef<ModalAddSessionComponent>, private projetService: ProjectService,
     @Inject(MAT_DIALOG_DATA) public data: TaskModel
-  ) { }
+  ) {this.dataToSend = {complete: false,session: new SessionInput()};
+  }
 
   ngOnInit(): void {
     this.session = new SessionInput();
     this.session.idTask = this.data.idTask as number;
-    console.log(this.data);
     this.projetService.getProjectByUser().then((result) => {
       this.projets = result;
       this.projets.map(p => {
@@ -30,6 +30,11 @@ export class ModalAddSessionComponent {
     })
   }
 
+  ngAfterContentInit(): void {
+    console.log(this.dataToSend.complete);
+  }
+
+  dataToSend: {complete: boolean, session: SessionInput};
   nomProjetSeeing!: string;
   projets!: ProjectModel[];
   error!: boolean;
@@ -41,7 +46,7 @@ export class ModalAddSessionComponent {
     this.dialogRef.close();
   }
 
-  sendSession(): SessionInput {
+  sendSession(): any {
     if (this.session.dateFin != undefined && this.session.dateDebut != undefined) {
       const timeDebut = this.hoursDateDebut.split(':');
       const timeFin = this.hoursDateFin.split(':');
@@ -51,7 +56,9 @@ export class ModalAddSessionComponent {
       this.session.dateFin = new Date(this.session.dateFin.getFullYear(),
         this.session.dateFin.getMonth(), this.session.dateFin.getDate(),+timeFin[0] + 1,+timeFin[1]);
     }
-    return this.session;
+    this.dataToSend.session = this.session;
+    console.log(this.dataToSend);
+    return ;
   }
 
   checkDate(): boolean {

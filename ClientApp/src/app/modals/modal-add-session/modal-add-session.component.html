@@ -25,9 +25,10 @@
             <input matInput type="time" [(ngModel)]="hoursDateFin" required>
             <ngx-material-timepicker #timeFin></ngx-material-timepicker>
         </mat-form-field><br>
+            <mat-checkbox mat-input [(ngModel)]="dataToSend.complete">Tâche finie</mat-checkbox>
     </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onCancelClick()">Annuler</button>
-    <button mat-button [disabled]="!session.dateDebut || !session.dateFin || !hoursDateDebut || !hoursDateFin" [mat-dialog-close]="session" (click)="sendSession()"
+    <button mat-button [disabled]="!session.dateDebut || !session.dateFin || !hoursDateDebut || !hoursDateFin" [mat-dialog-close]="dataToSend" (click)="sendSession()"
         cdkFocusInitial>Confirmer</button>
 </div>
