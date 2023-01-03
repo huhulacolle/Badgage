@@ -88,6 +88,12 @@ namespace Badgage.Controllers
 
         }
 
+        [HttpGet("ListTask/{idTask}")]
+        public async Task<ActionResult<IEnumerable<TaskModel>>> GetListTaskByIdTask(int idTask)
+        {
+            var result = await taskRepository.GetListTaskByIdTask(idTask);
+            return Ok(result);
+        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]

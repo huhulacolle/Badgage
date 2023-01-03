@@ -136,7 +136,7 @@ namespace Badgage.Repositories
             await connec.ExecuteAsync(sql, param);
         }
 
-        public async Task<IEnumerable<UserOnTaskModel>> GetListTaskByIdTask(int idTask)
+        public async Task<IEnumerable<UserOnTaskModelWithName>> GetListTaskByIdTask(int idTask)
         {
             var dictionnary = new Dictionary<string, object>()
             {
@@ -144,10 +144,12 @@ namespace Badgage.Repositories
             };
             var param = new DynamicParameters(dictionnary);
 
-            string sql = "UPDATE Task SET DateFin = @DateFin WHERE idTask = @idTask";
+            string sql = @"SELECT taskuser.idUser as idUser, user.adressemail as Email, taskuser.idTask as idTask
+                            FROM taskuser LEFT JOIN user ON user.idUtil = taskuser.idUser
+                            WHERE taskuser.idTask = @idTask";
 
             using var connec = defaultSqlConnectionFactory.Create();
-            return await connec.QueryAsync<UserOnTaskModel>(sql, param);
+            return await connec.QueryAsync<UserOnTaskModelWithName>(sql, param);
         }
     }
 }
