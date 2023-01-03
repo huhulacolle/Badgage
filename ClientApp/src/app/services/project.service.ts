@@ -24,4 +24,7 @@ export class ProjectService {
   deleteProject(idPoject : number) : Promise<any> {
     return lastValueFrom(this.projectClient.deleteProject(idPoject));
   }
+  // UpdateProject(idPoject: number,name: string) : Promise<void> {
+  //   return lastValueFrom(this.projectClient.(idPoject,name));
+  // }
 }

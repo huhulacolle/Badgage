@@ -65,7 +65,7 @@ export class ProjetsComponent {
     })
   }
 
-  deleteTeamModal(project: ProjectModel): void {
+  deleteProjectModal(project: ProjectModel): void {
     const dialogRef = this.dialog.open(ModalDeleteProjectComponent, { data: project });
     dialogRef.afterClosed().subscribe((result) => {
       this.projectService.deleteProject(project.idProject as number)
@@ -78,6 +78,18 @@ export class ProjetsComponent {
     })
   }
 
+  // modifyProjectNameModal(project: ProjectModel): void {
+  //   const dialogRef = this.dialog.open(ModalDeleteProjectComponent, { data: Team });
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     this.projectService.(result.idTeam as number, result.nom)
+  //       .then(() => {
+  //         this._snackBar.open('Equipe renommée', '', {duration: 3000});
+  //         this.getTeamByUser();
+  //       }).catch(() => {
+  //         this._snackBar.open('Erreur lors du renommage de l\'équipe', '', {duration: 3000});
+  //       });
+  //   })
+  // }
   openProject(project: ProjectModel): void {
     const dialogRef = this.dialog.open(ModalViewProjectComponent, { data:  project  });
 
