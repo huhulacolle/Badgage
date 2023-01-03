@@ -77,7 +77,7 @@
             };
             var param = new DynamicParameters(dictionnary);
 
-            string sql = "UPDATE project SET nom = @name WHERE idTeam = @idTeam";
+            string sql = "UPDATE team SET nom = @name WHERE idTeam = @idTeam";
 
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, param);
