@@ -1,4 +1,3 @@
-import { TimeInterface } from './../../../../node_modules/angular-cd-timer/lib/angular-cd-timer.interface.d';
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef,} from '@angular/core';
 import {startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours,} from 'date-fns';
 import { Subject } from 'rxjs';
@@ -70,13 +69,17 @@ export class TicketsUserComponent {
   dateDebut!: Date;
   dateFin!: Date;
   checkTimer = false;
+  notValidTask: TaskModel[] = [];
 
   NewSession(): void {
-    console.log("idTask", this.idTaskTimer.idTask);
-
-    this.EtatSession = false;
-    this.dateDebut = new Date;
-    this.basicTimer.start(0);
+    if (this.idTaskTimer.dateFin != undefined) {
+      this._snackBar.open('Cette tâche est déjà terminé', '', {duration: 3000});
+    }
+    else {
+      this.EtatSession = false;
+      this.dateDebut = new Date;
+      this.basicTimer.start(0);
+    }
   }
 
   StopSession(): void {
@@ -89,10 +92,7 @@ export class TicketsUserComponent {
     .then(
       () => {
         if (this.checkTimer) {
-          console.log("c'est fini");
-        }
-        else {
-          console.log("c'est pas fini");
+          this.UpdateTimeEndTask(this.idTaskTimer.idTask as number, this.dateFin)
         }
       }
     )
@@ -100,8 +100,11 @@ export class TicketsUserComponent {
     this.EtatSession = true;
   }
 
-  check(): void {
-    console.log(this.idTaskTimer);
+  UpdateTimeEndTask(idTask: number, DateFin: Date): void {
+    this.ticketService.endTask(idTask, DateFin)
+    .then(() => {
+      this.getTasks();
+    })
   }
 
   getTasks(): void {
@@ -110,9 +113,18 @@ export class TicketsUserComponent {
       this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
         this.tasks = result;
         console.log(this.tasks);
+        this.getTaskNotValid(result);
         this.showTasks= true;
       }).catch();
     }
+  }
+
+  getTaskNotValid(result: TaskModel[]): void {
+    result.forEach(r => {
+      if (r.dateFin == undefined) {
+        this.notValidTask.push(r);
+      }
+    });
   }
 
   getProjects(): void {
