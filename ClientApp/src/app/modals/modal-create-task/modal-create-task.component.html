@@ -1,5 +1,6 @@
 <mat-dialog-content>
-    <h1 mat-dialog-title>Création d'une tâche</h1>
+    <h1 *ngIf="seeing" mat-dialog-title>Voir une tâche</h1>
+    <h1 *ngIf="!seeing" mat-dialog-title>Création d'une tâche</h1>
     <div mat-dialog-content>
         <div *ngIf="!seeing">
             <mat-form-field appearance="fill">
@@ -8,7 +9,7 @@
             </mat-form-field><br>
             <mat-form-field appearance="fill">
                 <mat-label>Description de la tâche</mat-label>
-                <input type="text" matInput [(ngModel)]="task.description" required>
+                <input type="text" matInput [(ngModel)]="task.description">
             </mat-form-field><br>
             <mat-form-field>
                 <mat-label>Projet concerné</mat-label>
@@ -17,13 +18,6 @@
                         [value]="projet.idProject">{{projet.projectName}}</mat-option>
                 </mat-select>
             </mat-form-field><br>
-            <mat-form-field appearance="fill">
-                <mat-label>Date limite Tâche</mat-label>
-                <input matInput [matDatepicker]="picker" [(ngModel)]="task.dateFin">
-                <mat-hint>MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
         </div>
         <div *ngIf="seeing">
             <h3>{{data.nomDeTache}}</h3><br>
@@ -31,6 +25,10 @@
             <p><strong>Projet :</strong> {{nomProjetSeeing}}</p><br>
             <p *ngIf="data.dateFin"><strong>Tâche terminé le :</strong> {{data.dateFin.toDateString()}}</p>
             <p *ngIf="!data!.dateFin">Tâche en cours</p>
+            <p><strong>Utilisateur liers : </strong></p>
+            <div *ngFor="let listTask of listTasks">
+              {{listTask.email}}
+            </div>
         </div>
     </div>
 </mat-dialog-content>

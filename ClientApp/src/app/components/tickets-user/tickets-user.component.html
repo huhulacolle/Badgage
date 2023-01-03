@@ -61,9 +61,9 @@
   <br />
   <div class="row">
     <div class="col-3 text-center">
-      <p *ngIf="projects.length == undefined">Pour avoir des tâches il faut faire parti d'un projet !</p>
-        <button class="btn btn-primary" (click)="createTask()">+ Ajouter un ticket</button>
-          <mat-card *ngFor="let task of this.tasks">
+      <p *ngIf="nbTickets == undefined">Pour avoir des tâches il faut faire parti d'un projet !</p>
+        <button class="btn btn-primary" (click)="createTask()" *ngIf="nbTickets != undefined">+ Ajouter un ticket</button>
+          <mat-card *ngFor="let task of this.tasks" class="taskCard">
             <mat-card-header>
               <div mat-card-avatar *ngIf="task.dateFin == undefined" class="taskInProgress"></div>
               <div mat-card-avatar *ngIf="task.dateFin != undefined" class="taskComplete"></div>

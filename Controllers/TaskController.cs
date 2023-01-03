@@ -88,6 +88,12 @@ namespace Badgage.Controllers
 
         }
 
+        [HttpGet("ListTask/{idTask}")]
+        public async Task<ActionResult<IEnumerable<UserOnTaskModelWithName>>> GetListTaskByIdTask(int idTask)
+        {
+            var result = await taskRepository.GetListTaskByIdTask(idTask);
+            return Ok(result);
+        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -117,12 +123,11 @@ namespace Badgage.Controllers
         [HttpPost("Join")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
-        public async Task<IActionResult> JoinTask(int idTask)
+        public async Task<IActionResult> JoinTask(int idTask, int idUser)
         {
             try
             {
-                int IdUser = int.Parse(jwt.FindFirstValue("id"));
-                await taskRepository.SetUserOnTask(new UserOnTaskModel() { IdUser = IdUser, IdTask = idTask });
+                await taskRepository.SetUserOnTask(new UserOnTaskModel() { IdUser = idUser, IdTask = idTask });
                 return Ok();
             }
             catch (Exception e)
