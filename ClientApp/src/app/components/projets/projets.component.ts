@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ProjectModel, TeamModel } from 'src/app/client/badgageClient';
+import { ProjectModel, TaskModel, TeamModel } from 'src/app/client/badgageClient';
 import { ModalCreateProjectComponent } from 'src/app/modals/modal-create-project/modal-create-project.component';
+import { ModalViewProjectComponent } from 'src/app/modals/modal-view-project/modal-view-project.component';
+import { ModalDeleteProjectComponent } from 'src/app/modals/modal-delete-project/modal-delete-project.component';
+
+
 import { ProjectService } from 'src/app/services/project.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { StorageService } from 'src/app/services/storage.service';
 import { TeamService } from 'src/app/services/team.service';
+import { ModalCreateTaskComponent } from 'src/app/modals/modal-create-task/modal-create-task.component';
 
 @Component({
   selector: 'app-projets',
@@ -22,6 +27,10 @@ export class ProjetsComponent {
     this.getProjetsByUser();
   }
 
+  tasks!: TaskModel[];
+  showTasks: boolean = false;
+
+
   getProjetsByUser(): void {
       this.projectService.getProjectByUser().then((result) => {
         this.projects = result;
@@ -31,6 +40,13 @@ export class ProjetsComponent {
 
   projects!: ProjectModel[];
   teams!: TeamModel[];
+
+  seeTask(task: TaskModel): void {
+    const dialogRef = this.dialog.open(ModalCreateTaskComponent, {data: task});
+    dialogRef.afterClosed();
+  }
+
+
 
   createProject(): void {
     const projet = new ProjectModel();
@@ -48,5 +64,37 @@ export class ProjetsComponent {
           })
     })
   }
+
+  deleteProjectModal(project: ProjectModel): void {
+    const dialogRef = this.dialog.open(ModalDeleteProjectComponent, { data: project });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.projectService.deleteProject(project.idProject as number)
+        .then(() => {
+          this._snackBar.open('Projet suprimmée', '', {duration: 3000});
+          this.getProjetsByUser();
+        }).catch(() => {
+          this._snackBar.open('Erreur lors de la suppression de le projet', '', {duration: 3000});
+        });
+    })
+  }
+
+  // modifyProjectNameModal(project: ProjectModel): void {
+  //   const dialogRef = this.dialog.open(ModalDeleteProjectComponent, { data: Team });
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     this.projectService.(result.idTeam as number, result.nom)
+  //       .then(() => {
+  //         this._snackBar.open('Equipe renommée', '', {duration: 3000});
+  //         this.getTeamByUser();
+  //       }).catch(() => {
+  //         this._snackBar.open('Erreur lors du renommage de l\'équipe', '', {duration: 3000});
+  //       });
+  //   })
+  // }
+  openProject(project: ProjectModel): void {
+    const dialogRef = this.dialog.open(ModalViewProjectComponent, { data:  project  });
+
+ 
+  }
+
 
 }

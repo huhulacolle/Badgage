@@ -135,5 +135,21 @@ namespace Badgage.Repositories
             using var connec = defaultSqlConnectionFactory.Create();
             await connec.ExecuteAsync(sql, param);
         }
+
+        public async Task<IEnumerable<UserOnTaskModelWithName>> GetListTaskByIdTask(int idTask)
+        {
+            var dictionnary = new Dictionary<string, object>()
+            {
+                { "@idTask", idTask },
+            };
+            var param = new DynamicParameters(dictionnary);
+
+            string sql = @"SELECT taskuser.idUser as idUser, user.adressemail as Email, taskuser.idTask as idTask
+                            FROM taskuser LEFT JOIN user ON user.idUtil = taskuser.idUser
+                            WHERE taskuser.idTask = @idTask";
+
+            using var connec = defaultSqlConnectionFactory.Create();
+            return await connec.QueryAsync<UserOnTaskModelWithName>(sql, param);
+        }
     }
 }
