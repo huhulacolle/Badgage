@@ -1,5 +1,6 @@
 <mat-dialog-content>
-    <h1 mat-dialog-title>Création d'une tâche</h1>
+    <h1 *ngIf="seeing" mat-dialog-title>Voir une tâche</h1>
+    <h1 *ngIf="!seeing" mat-dialog-title>Création d'une tâche</h1>
     <div mat-dialog-content>
         <div *ngIf="!seeing">
             <mat-form-field appearance="fill">
