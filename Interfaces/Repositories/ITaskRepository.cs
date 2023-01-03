@@ -20,6 +20,6 @@
 
         public Task SetUserOnTask(UserOnTaskModel userOnTaskModel);
 
-        public Task<IEnumerable<UserOnTaskModelWithName>> GetListTaskByIdTask(int idTask);
+        public Task<IEnumerable<UserOnTaskModelWithName>> GetListUserByIdTask(int idTask);
     }
 }

@@ -46,7 +46,7 @@ export class ModalCreateTaskComponent {
   }
 
   ListTask(): void {
-    this.ticketService.listTask(this.data.idTask as number)
+    this.ticketService.getListUserByIdTask(this.data.idTask as number)
     .then(
       data => {
         this.listTasks = data;
