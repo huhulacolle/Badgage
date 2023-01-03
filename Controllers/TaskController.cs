@@ -73,7 +73,7 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{IdTask}")]
+        [HttpDelete("{idTask}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> DeleteTask(int idTask)
         {
             try

@@ -34,6 +34,7 @@ import { CdTimerModule } from 'angular-cd-timer';
 import { ModalSeeTeamComponent } from './modals/modal-see-team/modal-see-team.component';
 import { ModalModifyNameTeamComponent } from './modals/modal-modify-name-team/modal-modify-name-team.component';
 import { ModalDeleteTeamComponent } from './modals/modal-delete-team/modal-delete-team.component';
+import { ModalDeleteTaskComponent } from './modals/modal-delete-task/modal-delete-task.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { ModalDeleteTeamComponent } from './modals/modal-delete-team/modal-delet
     ModalSeeTeamComponent,
     ModalModifyNameTeamComponent,
     ModalDeleteTeamComponent,
+    ModalDeleteTaskComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
