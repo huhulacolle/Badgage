@@ -20,7 +20,6 @@ export class ModalModifyProjectComponent {
     this.dialogRef.close();
   }
 
-
 }
 
 

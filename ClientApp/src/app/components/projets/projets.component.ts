@@ -85,7 +85,7 @@ export class ProjetsComponent {
   modifyProjectNameModal(project: ProjectModel): void {
     const dialogRef = this.dialog.open(ModalModifyProjectComponent, { data: project });
     dialogRef.afterClosed().subscribe((result) => {
-      this.projectService.UpdateProject(result.idProject as number, result.nom)
+      this.projectService.UpdateProject(result.idProject as number, result.projectName)
         .then(() => {
           this._snackBar.open('Projet renommée', '', {duration: 3000});
           this.getProjetsByUser();
