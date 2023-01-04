@@ -33,18 +33,18 @@ https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 - Récupérez le code en clonant le projet ou en téléchargeant le zip. <br>
 
 - Installer l'extension C# dans Visual Studio Code.
-<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/Master/Docs/img/extension%20c%23.png">
+<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/master/Docs/img/extension%20c%23.png">
 
 - Ouvrir le dossier Badgage avec Visual Studio Code -> aller dans le menu "Executer et debugger" -> cliquer sur "create a launch.json file" et sélectionner ".NET 5+ and .Net Core".
-<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/Master/Docs/img/create%20launch.json.png">
+<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/master/Docs/img/create%20launch.json.png">
 
     <span style="color:red">Attention</span>
 - Enlever le texte pour désactiver le lancement automatique du navigateur au lancement de l'api + front.
-<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/Master/Docs/img/ne%20pas%20ouvrir%20le%20navigateur.png">
+<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/master/Docs/img/ne%20pas%20ouvrir%20le%20navigateur.png">
 
 <br><br>
 - Executer l'api (+ front) en cliquant sur le bouton "run and debug".
-<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/Master/Docs/img/run.png">
+<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/master/Docs/img/run.png">
 
 
 - URL Local : https://localhost:7106/

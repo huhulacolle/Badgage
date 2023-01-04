@@ -17,7 +17,7 @@ Ou
 ### <ins>Installation du SDK .NET 6</ins>
 
 - Windows et Mac : Sélectionner l'option adaptée au système et à l'architecture du processeur.
-<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/Master/Docs/img/dotnet%20download.png">
+<img src="https://raw.githubusercontent.com/huhulacolle/Badgage/master/Docs/img/dotnet%20download.png">
 https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 
 - (Linux) Ubuntu ou distribution basée sur Ubuntu : ```sudo apt-get update && \ sudo apt-get install -y dotnet-sdk-6.0```
