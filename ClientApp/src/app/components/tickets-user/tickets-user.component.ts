@@ -29,6 +29,40 @@ const colors: Record<string, EventColor> = {
   },
 };
 
+
+class TaskOutput {
+
+  constructor(private task: TaskModel) {
+    this.idTask = this.task.idTask;
+    this.idProjet = this.task.idProjet;
+    this.nomDeTache = this.task.nomDeTache;
+    this.description = this.task.description;
+    this.dateFin = this.task.dateFin;
+    this.dateCreation = this.task.dateCreation;
+    this.etat = 0;
+  }
+
+  etat!: number;
+  idTask?: number | undefined;
+  idProjet!: number;
+  nomDeTache!: string;
+  description?: string | undefined;
+  dateFin?: Date | undefined;
+  dateCreation!: Date;
+
+
+  getTaskModel(): TaskModel {
+    const taskModel = new TaskModel();
+    taskModel.idTask = this.idTask;
+    taskModel.nomDeTache = this.nomDeTache;
+    taskModel.dateCreation = this.dateCreation;
+    taskModel.dateFin = this.dateFin;
+    taskModel.idProjet = this.idProjet;
+    taskModel.description = this.description;
+    return taskModel;
+  }
+}
+
 @Component({
   selector: 'app-tickets-user',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,24 +96,27 @@ export class TicketsUserComponent {
   }
 
   idTask!: number;
-  tasks!: TaskModel[];
-  userOnTask!: UserOnTaskModelWithName[];
+  tasks!: TaskOutput[];
+  userOnTask: UserOnTaskModelWithName[] = [];
   projects!: ProjectModel[];
   nbTickets!: number;
   sessions: SessionModel[] = [];
 
-  getSessionsByTasks(): void {
+  async getSessionsByTasks(): Promise<void> {
     this.events = [];
     for (let i = 0; this.tasks.length > i; i++) {
-      this.sessionService.getSessionsByIdTask(this.tasks[i].idTask as number).then((result) => {
-        for (let j = 0; result.length > j; j++) {
-          this.sessions.push(result[j]);
-          const color = this.tasks[i].dateFin == undefined ? colors.yellow : colors.blue;
-          const title: string = this.tasks[i].nomDeTache + " - " + result[j].dateDebut.toLocaleString('fr-FR', { timeZone: 'UTC' }) + " - " + ((result[j].dateDebut.getDate == result[j].dateFin?.getDate) ? result[j].dateFin?.toLocaleTimeString('fr-FR', { timeZone: 'UTC' }) : result[j].dateFin?.toLocaleString('fr-FR', { timeZone: 'UTC' }));
-          this.events.push({ start: result[j].dateDebut, end: result[j].dateFin, title: title, color: color });
-        }
-      })
+      this.tasks[i] = this.checkNotJoined(this.tasks[i]);
+      this.getTaskNotValid(this.tasks);
+      const result = await this.sessionService.getSessionsByIdTask(this.tasks[i].idTask as number)
+      for (let j = 0; result.length > j; j++) {
+        this.sessions.push(result[j]);
+        const color = this.tasks[i].dateFin == undefined ? colors.yellow : colors.blue;
+        const title: string = this.tasks[i].nomDeTache + " - " + result[j].dateDebut.toLocaleString('fr-FR', { timeZone: 'UTC' }) + " - " + ((result[j].dateDebut.getDate == result[j].dateFin?.getDate) ? result[j].dateFin?.toLocaleTimeString('fr-FR', { timeZone: 'UTC' }) : result[j].dateFin?.toLocaleString('fr-FR', { timeZone: 'UTC' }));
+        this.events.push({ start: result[j].dateDebut, end: result[j].dateFin, title: title, color: color });
+
+      }
     }
+
     this.refresh;
   }
   // variable pour chrono
@@ -109,7 +146,7 @@ export class TicketsUserComponent {
     sessionInput.dateFin = this.dateFin;
     this.sessionService.setSession(sessionInput)
       .then(
-        () => {
+        async() => {
           if (this.checkTimer) {
             this.UpdateTimeEndTask(this.idTaskTimer.idTask as number, this.dateFin)
           }
@@ -121,65 +158,64 @@ export class TicketsUserComponent {
 
   UpdateTimeEndTask(idTask: number, DateFin: Date): void {
     this.ticketService.endTask(idTask, DateFin)
-      .then(() => {
+      .then(async() => {
         this.getTasks();
       })
   }
 
-  getTasks(): void {
+  async getTasks(): Promise<void> {
+    this.tasks = [];
+    this.userOnTask = [];
     for (let i = 0; this.projects.length > i; i++) {
-      this.ticketService.getTaskByProject(this.projects[i].idProject as number).then((result) => {
-        this.tasks = result;
-        for (let j = 0; this.tasks.length > j; j++) {
-          this.ticketService.getListUserByIdTask(this.tasks[j].idTask as number).then((result) => {
-            this.userOnTask = result;
-          });
+      const result = await this.ticketService.getTaskByProject(this.projects[i].idProject as number)
+      for (let a = 0; result.length > a; a++) {
+        this.tasks.push(new TaskOutput(result[a]));
+        const id = this.tasks[a].idTask as number;
+        const result1 = await this.ticketService.getListUserByIdTask(id)
+        for (let j = 0; result.length > j; j++) { this.userOnTask.push(result1[j]); }
+      }
+      this.nbTickets = this.tasks.length;
+      this.getSessionsByTasks();
+    }
+  }
+
+  checkNotJoined(task: TaskOutput): TaskOutput {
+    let id = new JwtHelperService().decodeToken(this.storageService.getUser()).id;
+    console.log(this.userOnTask, id, this.userOnTask.length);
+    for (let i = 0; this.userOnTask.length > i; i++) {
+      console.log("Je passe");
+      if (this.userOnTask[i] != undefined && task.idTask == this.userOnTask[i].idTask) {
+        task.etat = 1;
+        console.log("on passe ici");
+        if (this.userOnTask[i].idUser == +id) {
+          task.etat = 2
+          return task;
         }
-        this.nbTickets = this.tasks.length;
-        this.getSessionsByTasks();
-        this.getTaskNotValid(result);
-      }).catch();
-    }
-  }
-
-  checkNotJoined(idTask: number | undefined): boolean {
-    for (let i = 0; this.userOnTask.length > i; i++) {
-      if (this.userOnTask[i].idTask as number == idTask as number) {
-        return true;
       }
     }
-    return false;
+    return task;
   }
 
-  checkJoinedByUSer(idTask: number | undefined): boolean {
-    for (let i = 0; this.userOnTask.length > i; i++) {
-      if (this.userOnTask[i].idTask as number == idTask as number && this.userOnTask[i].idUser == new JwtHelperService().decodeToken(this.storageService.getUser()).id) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  getTaskNotValid(result: TaskModel[]): void {
+  getTaskNotValid(result: TaskOutput[]): void {
+    this.notValidTask = [];
     result.forEach(r => {
-      if (r.dateFin == undefined) {
-        this.notValidTask.push(r);
+      if (r.dateFin == undefined && r.etat == 2) {
+        this.notValidTask.push(r.getTaskModel());
       }
     });
   }
 
-  getProjects(): void {
-    this.projectService.getProjectByUser().then((result) => {
-      this.projects = result;
-      this.getTasks();
-    });
+  async getProjects(): Promise<void> {
+    const result = await this.projectService.getProjectByUser()
+    this.projects = result;
+    this.getTasks();
   }
 
   deleteTask(task: TaskModel): void {
     const dialogRef = this.dialog.open(ModalDeleteTaskComponent, { data: task });
     dialogRef.afterClosed().subscribe((result) => {
       const idTache = result.idTask as number;
-      this.ticketService.deleteTask(idTache).then(() => {
+      this.ticketService.deleteTask(idTache).then(async () => {
         this._snackBar.open("Tâche supprimée avec succès", '', { duration: 3000 });
         this.getTasks();
       }).catch((error) => {
@@ -195,7 +231,7 @@ export class TicketsUserComponent {
       result.idTache = undefined;
       result.dateFin = null;
       this.ticketService.setTask(result)
-        .then(() => {
+        .then(async () => {
           this._snackBar.open("Tâche créée avec succès", '', { duration: 3000 });
           this.getTasks();
         }).catch((error) => {
@@ -214,10 +250,9 @@ export class TicketsUserComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.ticketService.joinTask(task.idTask as number, result)
-          .then(() => {
+          .then(async() => {
             this._snackBar.open("Tâche attribuée avec succès", '', { duration: 3000 });
             this.getProjects();
-            this.getTasks();
           }).catch((error) => {
             this._snackBar.open(error);
           })
@@ -235,7 +270,7 @@ export class TicketsUserComponent {
         session.idTask = result.session.idTask;
         this.getSessionsByTasks();
         this.sessionService.setSession(session)
-          .then(() => {
+          .then(async() => {
             this._snackBar.open("Tâche attribuée avec succès");
             if (result.complete) {
               this.ticketService.endTask(task.idTask as number, result.session.dateFin as Date).then(() => {
