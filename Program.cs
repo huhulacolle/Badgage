@@ -17,7 +17,6 @@ builder.Services.AddSwaggerDocument(config =>
         document.Info.Version = "v1";
         document.Info.Title = "Web API RESTFULL Badgage";
         document.Info.Description = "Api Web du projet Badgage en C# ASP.NET Core";
-        document.Info.TermsOfService = "None";
         document.Info.Contact = new NSwag.OpenApiContact
         {
             Name = "Github",
