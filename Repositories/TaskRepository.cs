@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Badgage.Repositories
+﻿namespace Badgage.Repositories
 {
     public class TaskRepository : ITaskRepository
     {
