@@ -19,11 +19,12 @@ pre {
 }
 
 .taskInProgress {
-  background-image: url('../../../assets/task-in-progress.svg');
+  background-image: url('../../../assets/inProgress.svg');
   background-size: cover;
   fill: orange;
 }
 
 .taskCard {
   margin: 5px 0px 10px 10px;
+  text-align: center;
 }

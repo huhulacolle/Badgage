@@ -36,6 +36,10 @@ import { ModalSeeTeamComponent } from './modals/modal-see-team/modal-see-team.co
 import { ModalModifyNameTeamComponent } from './modals/modal-modify-name-team/modal-modify-name-team.component';
 import { ModalDeleteTeamComponent } from './modals/modal-delete-team/modal-delete-team.component';
 import { ModalDeleteTaskComponent } from './modals/modal-delete-task/modal-delete-task.component';
+import localeFr from '@angular/common/locales/fr';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [
