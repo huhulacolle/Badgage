@@ -14,13 +14,13 @@ export class ModalSeeTeamComponent {
     public dialogRef: MatDialogRef<ModalModifyTeamComponent>, @Inject(MAT_DIALOG_DATA) public data: TeamModel, private userService: UserService
   ) { }
 
-  ngOnInit(): void {
-    this.userService.getTeamUser(this.data.idTeam as number).then((result) => { this.users = result });
+  async ngOnInit(): Promise<void> {
+    this.getTeamMembers();
   }
 
-  users!: UserModel[];
+  users: UserModel[] = [];
 
-  onCancelClick(): void {
-    this.dialogRef.close();
+  async getTeamMembers(): Promise<void> {
+    this.users = await this.userService.getTeamUser(this.data.idTeam as number);
   }
 }

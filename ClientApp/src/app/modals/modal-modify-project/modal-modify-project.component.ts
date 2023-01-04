@@ -15,11 +15,6 @@ export class ModalModifyProjectComponent {
   ) { }
 
   projects!: ProjectModel[];
-
-  onCancelClick(): void {
-    this.dialogRef.close();
-  }
-
 }
 
 
