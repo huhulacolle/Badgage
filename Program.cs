@@ -12,6 +12,24 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSwaggerDocument(config =>
 {
+    config.PostProcess = document =>
+    {
+        document.Info.Version = "v1";
+        document.Info.Title = "Web API RESTFULL Badgage";
+        document.Info.Description = "Api Web du projet Badgage en C# ASP.NET Core";
+        document.Info.TermsOfService = "None";
+        document.Info.Contact = new NSwag.OpenApiContact
+        {
+            Name = "Github",
+            Email = string.Empty,
+            Url = "https://github.com/huhulacolle/Badgage"
+        };
+        document.Info.License = new NSwag.OpenApiLicense
+        {
+            Name = "MIT",
+            Url = "https://example.com/license"
+        };
+    };
     config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT Token"));
     config.AddSecurity("JWT Token", Enumerable.Empty<string>(),
         new OpenApiSecurityScheme()
@@ -75,11 +93,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-else
-{
-    app.UseOpenApi();
-    app.UseSwaggerUi3();
-}
 
 // Lance la migration
 using var scope = app.Services.CreateScope();
@@ -89,6 +102,9 @@ migrator.MigrateUp();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseOpenApi();
+app.UseSwaggerUi3();
 
 app.UseCors(c =>
 {

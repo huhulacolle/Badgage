@@ -19,6 +19,11 @@ namespace Badgage.Controllers
             this.jwt = jwt;
         }
 
+        /// <summary>
+        /// Récupérer un projet via idTeam
+        /// </summary>
+        /// <param name="idTeam"></param>
+        /// <returns></returns>
         [HttpGet("Team/{idTeam}")]
         public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectByTeam(int idTeam)
         {
@@ -26,6 +31,10 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Récupérer un projet via le Bearer Token de l'utilisateur
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("User")]
         public async Task<ActionResult<IEnumerable<ProjectModel>>> GetProjectByUser()
         {
@@ -35,6 +44,12 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Mettre à jour le nom d'un projet
+        /// </summary>
+        /// <param name="idProject"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]

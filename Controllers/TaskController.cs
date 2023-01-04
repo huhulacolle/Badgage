@@ -18,6 +18,10 @@ namespace Badgage.Controllers
             this.jwt = jwt;
         }
 
+        /// <summary>
+        /// Récupérer un ticket via le Bearer Token de l'utilisateur
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByUser()
         {
@@ -27,6 +31,12 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Met à jour le nom du ticket
+        /// </summary>
+        /// <param name="idTask"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
@@ -43,6 +53,12 @@ namespace Badgage.Controllers
             }
         }
 
+        /// <summary>
+        /// Met à jour de la date d'écheance
+        /// </summary>
+        /// <param name="idTask"></param>
+        /// <param name="DateFin"></param>
+        /// <returns></returns>
         [HttpPut("DateFin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
@@ -59,6 +75,11 @@ namespace Badgage.Controllers
             }
         }
 
+        /// <summary>
+        /// Récupère des ticket via l'id de l'utilisateur
+        /// </summary>
+        /// <param name="idUser"></param>
+        /// <returns></returns>
         [HttpGet("User/{IdUser}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasksByIdUser(int idUser)
         {
@@ -66,6 +87,11 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Récupère des ticket via l'idProject
+        /// </summary>
+        /// <param name="idProject"></param>
+        /// <returns></returns>
         [HttpGet("Project/{idProject}")]
         public async Task<ActionResult<IEnumerable<TaskModel>>> GetTaskFromProject(int idProject)
         {
@@ -88,6 +114,11 @@ namespace Badgage.Controllers
 
         }
 
+        /// <summary>
+        /// Récupère la liste des utilisateurs associer au ticket via idTask
+        /// </summary>
+        /// <param name="idTask"></param>
+        /// <returns></returns>
         [HttpGet("ListUser/{idTask}")]
         public async Task<ActionResult<IEnumerable<UserOnTaskModelWithName>>> GetListUserByIdTask(int idTask)
         {
@@ -120,6 +151,12 @@ namespace Badgage.Controllers
             }
         }
 
+        /// <summary>
+        /// Assigner un utilisateur à une tâche
+        /// </summary>
+        /// <param name="idTask"></param>
+        /// <param name="idUser"></param>
+        /// <returns></returns>
         [HttpPost("Join")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
