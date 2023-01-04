@@ -99,8 +99,11 @@ namespace Badgage.Controllers
             return Ok(result);
         }
 
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
         [HttpDelete("{idTask}")]
-        public async Task<ActionResult<IEnumerable<TaskModel>>> DeleteTask(int idTask)
+        public async Task<IActionResult> DeleteTask(int idTask)
         {
             try
             {
