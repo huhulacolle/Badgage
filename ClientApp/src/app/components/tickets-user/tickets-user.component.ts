@@ -4,7 +4,7 @@ import { startOfDay, endOfDay, isSameDay, isSameMonth, addHours, } from 'date-fn
 import { concat, Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
-import { EventColor } from 'calendar-utils';
+import { DAYS_OF_WEEK, EventColor } from 'calendar-utils';
 import { TicketService } from 'src/app/services/ticket.service';
 import { ProjectModel, SessionInput, SessionModel, TaskModel, UserOnTaskModelWithName, } from 'src/app/client/badgageClient';
 import { MatSnackBar } from '@angular/material/snack-bar';
