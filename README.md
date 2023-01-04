@@ -1,4 +1,4 @@
-Badg(e)age
+Badgage
 =============
 application Web développer en Angular (Typescript) et ASP.NET Core (C#)  
 
