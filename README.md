@@ -1,6 +1,6 @@
 Badgage
 =============
-application Web pour gérer le temps d'une équipe développer en Angular (Typescript) et ASP.NET Core (C#)  
+application Web pour gérer le temps d'une équipe développer avec Angular (Typescript) et ASP.NET Core (C#)  
 
 ---
 ### Installation des framework et execution du projet
