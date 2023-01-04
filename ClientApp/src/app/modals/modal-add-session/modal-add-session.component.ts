@@ -38,10 +38,6 @@ export class ModalAddSessionComponent {
   hoursDateFin!: string;
   session!: SessionInput;
 
-  onCancelClick(): void {
-    this.dialogRef.close();
-  }
-
   checkDate(): void {
     if (this.session.dateFin != undefined && this.session.dateDebut != undefined && this.hoursDateDebut != undefined && this.hoursDateFin != undefined) {
       const hoursDateDebut = this.hoursDateDebut.split(':');

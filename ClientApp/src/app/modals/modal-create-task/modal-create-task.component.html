@@ -34,7 +34,6 @@
 </mat-dialog-content>
 <div mat-dialog-actions>
     <button *ngIf="seeing" mat-button (click)="onCancelClick()">Fermer</button>
-    <button *ngIf="!seeing" mat-button (click)="onCancelClick()">Annuler</button>
     <button *ngIf="!seeing" mat-button [disabled]="!task.nomDeTache || !task.idProjet" [mat-dialog-close]="task"
         cdkFocusInitial>Confirmer</button>
 </div>

@@ -42,7 +42,4 @@ export class ModalJoinTaskComponent {
     });
   }
 
-  onCancelClick(): void {
-    this.dialogRef.close();
-  }
 }
