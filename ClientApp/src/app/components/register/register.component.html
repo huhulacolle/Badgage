@@ -33,7 +33,10 @@
                     placeholder="Date de naissance" required>
                 </div>
               </div>
-              <input class="btn btn-outline-light btn-lg px-5" type="submit" />
+              <button class="btn btn-outline-light btn-lg px-5" type="submit">
+                Envoyer
+                <div *ngIf="loading" class="spinner-border spinner-border-sm float-right text-primary" role="status"></div>
+              </button>
               <br>
               <button class="btn btn-link" style="cursor: pointer;" (click)="toLogin()">Vous avez déjà un compte
                 ?</button>
@@ -62,7 +65,10 @@
                   class="form-control form-control-lg" required>
               </div>
               <br>
-              <input class="btn btn-outline-light btn-lg px-5" type="submit">
+              <button class="btn btn-outline-light btn-lg px-5" type="submit">
+                Envoyer
+                <div *ngIf="loading" class="spinner-border spinner-border-sm float-right text-primary" role="status"></div>
+              </button>
               <br>
               <button class="btn btn-link" style="cursor: pointer;" (click)="toRegister()">Vous n'avez pas de compte ?
               </button>

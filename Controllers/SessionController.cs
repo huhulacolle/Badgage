@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Badgage.Controllers
@@ -15,7 +14,7 @@ namespace Badgage.Controllers
         {
             this.sessionRepository = sessionRepository;
             this.jwt = jwt;
-    }
+        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -30,7 +29,7 @@ namespace Badgage.Controllers
                     IdTask = sessionInput.IdTask,
                     DateDebut = sessionInput.DateDebut,
                     DateFin = sessionInput.DateFin,
-            };
+                };
                 await sessionRepository.SetSession(session);
                 return StatusCode(201);
             }

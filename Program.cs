@@ -59,7 +59,9 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped(provider =>
 {
     var context = provider.GetRequiredService<IHttpContextAccessor>();
+#pragma warning disable CS8602 // Déréférencement d'une éventuelle référence null.
     return context.HttpContext.User;
+#pragma warning restore CS8602 // Déréférencement d'une éventuelle référence null.
 });
 
 // Configure le middleware pour le token JWT

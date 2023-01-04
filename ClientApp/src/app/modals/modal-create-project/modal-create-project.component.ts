@@ -18,8 +18,4 @@ export class ModalCreateProjectComponent {
   }
 
   teams!: TeamModel[];
-
-  onCancelClick(): void {
-    this.dialogRef.close();
-  }
 }

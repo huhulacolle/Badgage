@@ -25,6 +25,9 @@ export class RegisterComponent {
     private storageService: StorageService,
     private router: Router,
   ) { }
+
+  loading = false;
+
   email!: string;
   mdp!: string;
   nom!: string;
@@ -32,6 +35,7 @@ export class RegisterComponent {
   naissance!: string;
   loginPage = true;
   register(): void {
+    this.loading = true;
     const user = new UserModel;
     user.adresseMail = this.email;
     user.dateNaiss = new Date(this.naissance);
@@ -60,6 +64,7 @@ export class RegisterComponent {
   }
 
   login(): void {
+    this.loading = true;
     const user = new UserLogin;
     user.adresseMail = this.email;
     user.mdp = this.mdp;
