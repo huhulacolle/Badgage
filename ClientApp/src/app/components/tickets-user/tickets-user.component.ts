@@ -1,9 +1,9 @@
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, ChangeDetectorRef, } from '@angular/core';
-import { startOfDay, endOfDay, isSameDay, isSameMonth, addHours, } from 'date-fns';
-import { concat, Subject } from 'rxjs';
+import { isSameDay, isSameMonth, } from 'date-fns';
+import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView, } from 'angular-calendar';
+import { CalendarDateFormatter, CalendarEvent, CalendarView, } from 'angular-calendar';
 import { DAYS_OF_WEEK, EventColor } from 'calendar-utils';
 import { TicketService } from 'src/app/services/ticket.service';
 import { ProjectModel, SessionInput, SessionModel, TaskModel, UserOnTaskModelWithName, } from 'src/app/client/badgageClient';
@@ -17,6 +17,7 @@ import { SessionService } from 'src/app/services/session.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { ModalDeleteTaskComponent } from 'src/app/modals/modal-delete-task/modal-delete-task.component';
 import { bounceInLeftOnEnterAnimation, bounceOutRightOnLeaveAnimation } from 'angular-animations';
+import { CustomDateFormatter } from './customized-calendar';
 
 const colors: Record<string, EventColor> = {
   blue: {
@@ -72,7 +73,13 @@ class TaskOutput {
   animations: [
     bounceInLeftOnEnterAnimation({ anchor: 'enterL', delay: 100, animateChildren: 'together' }),
     bounceOutRightOnLeaveAnimation({ anchor: 'leaveR', delay: 100, animateChildren: 'together' }),
-  ]
+  ],
+  providers: [
+    {
+      provide: CalendarDateFormatter,
+      useClass: CustomDateFormatter,
+    },
+  ],
 })
 
 
@@ -295,8 +302,12 @@ export class TicketsUserComponent {
   viewDate: Date = new Date();
 
   refresh = new Subject<void>();
+  
+  locale: string = 'fr';
 
-  locale = 'fr';
+  weekStartsOn: number = DAYS_OF_WEEK.MONDAY;
+
+  weekendDays: number[] = [DAYS_OF_WEEK.FRIDAY, DAYS_OF_WEEK.SATURDAY];
 
   events: CalendarEvent[] = [
   ];
