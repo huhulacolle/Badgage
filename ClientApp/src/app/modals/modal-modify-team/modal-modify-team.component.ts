@@ -18,8 +18,4 @@ export class ModalModifyTeamComponent {
   }
 
   users!: UserModel[];
-
-  onCancelClick(): void {
-    this.dialogRef.close();
-  }
 }

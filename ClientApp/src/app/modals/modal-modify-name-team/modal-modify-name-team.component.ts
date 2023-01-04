@@ -12,7 +12,4 @@ export class ModalModifyNameTeamComponent {
     public dialogRef: MatDialogRef<ModalModifyNameTeamComponent>, @Inject(MAT_DIALOG_DATA) public data: TeamModel
   ) { }
 
-  onCancelClick(): void {
-    this.dialogRef.close();
-  }
 }

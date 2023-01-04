@@ -42,6 +42,7 @@ class TaskOutput {
     this.etat = 0;
   }
 
+  nomUser!: string;
   etat!: number;
   idTask?: number | undefined;
   idProjet!: number;
@@ -138,7 +139,7 @@ export class TicketsUserComponent {
     }
   }
 
-  StopSession(): void {
+  async StopSession(): Promise<void> {
     this.dateFin = new Date;
     const sessionInput = new SessionInput();
     sessionInput.idTask = this.idTaskTimer.idTask as number;
@@ -146,32 +147,33 @@ export class TicketsUserComponent {
     sessionInput.dateFin = this.dateFin;
     this.sessionService.setSession(sessionInput)
       .then(
-        async() => {
+        async () => {
           if (this.checkTimer) {
             this.UpdateTimeEndTask(this.idTaskTimer.idTask as number, this.dateFin)
           }
         }
       )
+    this.getTasks();
     this.basicTimer.stop();
     this.EtatSession = true;
   }
 
-  UpdateTimeEndTask(idTask: number, DateFin: Date): void {
-    this.ticketService.endTask(idTask, DateFin)
-      .then(async() => {
-        this.getTasks();
-      })
+  async UpdateTimeEndTask(idTask: number, DateFin: Date): Promise<void> {
+    await this.ticketService.endTask(idTask, DateFin)
   }
 
   async getTasks(): Promise<void> {
     this.tasks = [];
     this.userOnTask = [];
     for (let i = 0; this.projects.length > i; i++) {
-      const result = await this.ticketService.getTaskByProject(this.projects[i].idProject as number)
+      const result = await this.ticketService.getTaskByProject(this.projects[i].idProject as number);
+      console.log(result);
       for (let a = 0; result.length > a; a++) {
         this.tasks.push(new TaskOutput(result[a]));
         const id = this.tasks[a].idTask as number;
+        console.log(id);
         const result1 = await this.ticketService.getListUserByIdTask(id)
+        console.log(result1);
         for (let j = 0; result.length > j; j++) { this.userOnTask.push(result1[j]); }
       }
       this.nbTickets = this.tasks.length;
@@ -181,13 +183,12 @@ export class TicketsUserComponent {
 
   checkNotJoined(task: TaskOutput): TaskOutput {
     let id = new JwtHelperService().decodeToken(this.storageService.getUser()).id;
-    console.log(this.userOnTask, id, this.userOnTask.length);
+    console.log(task);
     for (let i = 0; this.userOnTask.length > i; i++) {
-      console.log("Je passe");
-      if (this.userOnTask[i] != undefined && task.idTask == this.userOnTask[i].idTask) {
+      if (this.userOnTask[i] != undefined && task.idTask != undefined && task.idTask == this.userOnTask[i].idTask) {
+        task.nomUser = this.userOnTask[i].email;
         task.etat = 1;
-        console.log("on passe ici");
-        if (this.userOnTask[i].idUser == +id) {
+        if (this.userOnTask[i].idUser == id) {
           task.etat = 2
           return task;
         }
@@ -250,7 +251,7 @@ export class TicketsUserComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.ticketService.joinTask(task.idTask as number, result)
-          .then(async() => {
+          .then(async () => {
             this._snackBar.open("Tâche attribuée avec succès", '', { duration: 3000 });
             this.getProjects();
           }).catch((error) => {
@@ -270,7 +271,7 @@ export class TicketsUserComponent {
         session.idTask = result.session.idTask;
         this.getSessionsByTasks();
         this.sessionService.setSession(session)
-          .then(async() => {
+          .then(async () => {
             this._snackBar.open("Tâche attribuée avec succès");
             if (result.complete) {
               this.ticketService.endTask(task.idTask as number, result.session.dateFin as Date).then(() => {
@@ -294,6 +295,8 @@ export class TicketsUserComponent {
   viewDate: Date = new Date();
 
   refresh = new Subject<void>();
+
+  locale = 'fr';
 
   events: CalendarEvent[] = [
   ];
