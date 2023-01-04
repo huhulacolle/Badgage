@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Badgage.Repositories
+﻿namespace Badgage.Repositories
 {
     public class SessionRepository : ISessionRepository
     {
@@ -45,7 +43,7 @@ namespace Badgage.Repositories
             string sql = "INSERT INTO sessions (idTask, idUser, DateDebut, DateFin) VALUES (@idTask, @idUser, @DateDebut, @DateFin);";
 
             var connec = defaultSqlConnectionFactory.Create();
-            await connec.ExecuteAsync(sql, sessionModel); 
+            await connec.ExecuteAsync(sql, sessionModel);
         }
     }
 }
