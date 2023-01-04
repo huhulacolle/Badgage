@@ -27,7 +27,7 @@ builder.Services.AddSwaggerDocument(config =>
         document.Info.License = new NSwag.OpenApiLicense
         {
             Name = "MIT",
-            Url = "https://example.com/license"
+            Url = "https://github.com/huhulacolle/Badgage/blob/master/LICENCE"
         };
     };
     config.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT Token"));
