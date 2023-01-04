@@ -18,6 +18,10 @@ namespace Badgage.Controllers
             this.jwt = jwt;
         }
 
+        /// <summary>
+        /// Récupère toutes les teams de l'utilisateur
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TeamModel>>> GetTeamByUser()
         {
@@ -45,6 +49,12 @@ namespace Badgage.Controllers
             }
         }
 
+        /// <summary>
+        /// Modifie le nom de l'équipe
+        /// </summary>
+        /// <param name="idTeam"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
@@ -61,6 +71,11 @@ namespace Badgage.Controllers
             }
         }
 
+        /// <summary>
+        /// Assigner un utilisateur à une équipe
+        /// </summary>
+        /// <param name="userOnTeamModel"></param>
+        /// <returns></returns>
         [HttpPost("Join")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -88,6 +103,11 @@ namespace Badgage.Controllers
             }
         }
 
+        /// <summary>
+        /// Récupère toutes les équipes via idProject
+        /// </summary>
+        /// <param name="idProject"></param>
+        /// <returns></returns>
         [HttpGet("Project/{idProject}")]
         public async Task<ActionResult<IEnumerable<TeamModel>>> GetTeamByIdProject(int idProject)
         {

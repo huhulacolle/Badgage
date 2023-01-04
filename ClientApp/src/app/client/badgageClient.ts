@@ -26,6 +26,9 @@ export class AuthBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
+    /**
+     * Création d'un nouveau compte
+     */
     register(user: UserModel): Observable<void> {
         let url_ = this.baseUrl + "/api/Auth/register";
         url_ = url_.replace(/[?&]$/, "");
@@ -81,6 +84,9 @@ export class AuthBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Connexion à un compte et renvoi un Bearer Token
+     */
     login(userLogin: UserLogin): Observable<string> {
         let url_ = this.baseUrl + "/api/Auth/login";
         url_ = url_.replace(/[?&]$/, "");
@@ -195,61 +201,6 @@ export class AuthBadgageClient {
         }
         return _observableOf(null as any);
     }
-
-    forgotMdp(userLogin: UserLogin): Observable<void> {
-        let url_ = this.baseUrl + "/api/Auth/forgotMdp";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(userLogin);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json",
-            })
-        };
-
-        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processForgotMdp(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processForgotMdp(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<void>;
-        }));
-    }
-
-    protected processForgotMdp(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
-            }));
-        } else if (status === 401) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = Exception.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
 }
 
 @Injectable()
@@ -263,6 +214,9 @@ export class ProjectBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
+    /**
+     * Récupérer un projet via idTeam
+     */
     getProjectByTeam(idTeam: number): Observable<ProjectModel[]> {
         let url_ = this.baseUrl + "/api/Project/Team/{idTeam}";
         if (idTeam === undefined || idTeam === null)
@@ -321,6 +275,9 @@ export class ProjectBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Récupérer un projet via le Bearer Token de l'utilisateur
+     */
     getProjectByUser(): Observable<ProjectModel[]> {
         let url_ = this.baseUrl + "/api/Project/User";
         url_ = url_.replace(/[?&]$/, "");
@@ -376,6 +333,11 @@ export class ProjectBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Mettre à jour le nom d'un projet
+     * @param idProject (optional) 
+     * @param name (optional) 
+     */
     updateProjectName(idProject: number | undefined, name: string | null | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/Project?";
         if (idProject === null)
@@ -621,6 +583,9 @@ export class SessionBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Récupère une session l'id de l'utilisateur
+     */
     getSessionByIdUser(idUser: number): Observable<SessionModel[]> {
         let url_ = this.baseUrl + "/api/Session/User/{idUser}";
         if (idUser === undefined || idUser === null)
@@ -679,6 +644,9 @@ export class SessionBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Récupère une session l'idTask
+     */
     getSessionByIdTask(idTask: number): Observable<SessionModel[]> {
         let url_ = this.baseUrl + "/api/Session/Task/{idTask}";
         if (idTask === undefined || idTask === null)
@@ -749,6 +717,9 @@ export class TaskBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
+    /**
+     * Récupérer un ticket via le Bearer Token de l'utilisateur
+     */
     getTasksByUser(): Observable<TaskModel[]> {
         let url_ = this.baseUrl + "/api/Task";
         url_ = url_.replace(/[?&]$/, "");
@@ -804,6 +775,11 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Met à jour le nom du ticket
+     * @param idTask (optional) 
+     * @param name (optional) 
+     */
     updateTaskName(idTask: number | undefined, name: string | null | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/Task?";
         if (idTask === null)
@@ -923,6 +899,11 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Met à jour de la date d'écheance
+     * @param idTask (optional) 
+     * @param dateFin (optional) 
+     */
     updateTimeEndTask(idTask: number | undefined, dateFin: Date | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/Task/DateFin?";
         if (idTask === null)
@@ -982,6 +963,9 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Récupère des ticket via l'id de l'utilisateur
+     */
     getTasksByIdUser(idUser: number): Observable<TaskModel[]> {
         let url_ = this.baseUrl + "/api/Task/User/{IdUser}";
         if (idUser === undefined || idUser === null)
@@ -1040,6 +1024,9 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Récupère des ticket via l'idProject
+     */
     getTaskFromProject(idProject: number): Observable<TaskModel[]> {
         let url_ = this.baseUrl + "/api/Task/Project/{idProject}";
         if (idProject === undefined || idProject === null)
@@ -1098,7 +1085,7 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
-    deleteTask(idTask: number): Observable<TaskModel[]> {
+    deleteTask(idTask: number): Observable<void> {
         let url_ = this.baseUrl + "/api/Task/{idTask}";
         if (idTask === undefined || idTask === null)
             throw new Error("The parameter 'idTask' must be defined.");
@@ -1109,7 +1096,6 @@ export class TaskBadgageClient {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Accept": "application/json"
             })
         };
 
@@ -1120,14 +1106,14 @@ export class TaskBadgageClient {
                 try {
                     return this.processDeleteTask(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<TaskModel[]>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<TaskModel[]>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processDeleteTask(response: HttpResponseBase): Observable<TaskModel[]> {
+    protected processDeleteTask(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1136,17 +1122,14 @@ export class TaskBadgageClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(TaskModel.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return _observableOf(result200);
+            return _observableOf(null as any);
+            }));
+        } else if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = Exception.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -1156,6 +1139,9 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Récupère la liste des utilisateurs associer au ticket via idTask
+     */
     getListUserByIdTask(idTask: number): Observable<UserOnTaskModelWithName[]> {
         let url_ = this.baseUrl + "/api/Task/ListUser/{idTask}";
         if (idTask === undefined || idTask === null)
@@ -1214,6 +1200,11 @@ export class TaskBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Assigner un utilisateur à une tâche
+     * @param idTask (optional) 
+     * @param idUser (optional) 
+     */
     joinTask(idTask: number | undefined, idUser: number | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/Task/Join?";
         if (idTask === null)
@@ -1285,6 +1276,9 @@ export class TeamBadgageClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "https://localhost:7106";
     }
 
+    /**
+     * Récupère toutes les teams de l'utilisateur
+     */
     getTeamByUser(): Observable<TeamModel[]> {
         let url_ = this.baseUrl + "/api/Team";
         url_ = url_.replace(/[?&]$/, "");
@@ -1395,6 +1389,11 @@ export class TeamBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Modifie le nom de l'équipe
+     * @param idTeam (optional) 
+     * @param name (optional) 
+     */
     updateTeamName(idTeam: number | undefined, name: string | null | undefined): Observable<void> {
         let url_ = this.baseUrl + "/api/Team?";
         if (idTeam === null)
@@ -1452,6 +1451,9 @@ export class TeamBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Assigner un utilisateur à une équipe
+     */
     joinTeam(userOnTeamModel: UserOnTeamModel): Observable<void> {
         let url_ = this.baseUrl + "/api/Team/Join";
         url_ = url_.replace(/[?&]$/, "");
@@ -1514,6 +1516,9 @@ export class TeamBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Récupère toutes les équipes via idProject
+     */
     getTeamByIdProject(idProject: number): Observable<TeamModel[]> {
         let url_ = this.baseUrl + "/api/Team/Project/{idProject}";
         if (idProject === undefined || idProject === null)
@@ -1694,6 +1699,9 @@ export class UserBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * affiche tous les utilisateurs d'une équipe
+     */
     getUsersOnTeam(idTeam: number): Observable<UserModel[]> {
         let url_ = this.baseUrl + "/api/User/Team/{idTeam}";
         if (idTeam === undefined || idTeam === null)
@@ -1752,6 +1760,9 @@ export class UserBadgageClient {
         return _observableOf(null as any);
     }
 
+    /**
+     * Affiche tous les utilisateurs via leur Mail
+     */
     getUser(email: string | null): Observable<UserModel> {
         let url_ = this.baseUrl + "/api/User/Email/{Email}";
         if (email === undefined || email === null)

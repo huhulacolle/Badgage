@@ -18,7 +18,11 @@ namespace Badgage.Controllers
             this.tokenService = tokenService;
             this.jwt = jwt;
         }
-
+        /// <summary>
+        /// Création d'un nouveau compte
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Exception))]
@@ -35,6 +39,11 @@ namespace Badgage.Controllers
             }
         }
 
+        /// <summary>
+        /// Connexion à un compte et renvoi un Bearer Token
+        /// </summary>
+        /// <param name="userLogin"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -66,22 +75,6 @@ namespace Badgage.Controllers
             {
                 int id = int.Parse(jwt.FindFirstValue("id"));
                 await authRepository.UpdateMdp(mdpInput, id);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return Unauthorized(e.Message);
-            }
-        }
-
-        [HttpPut("forgotMdp")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(Exception))]
-        public async Task<IActionResult> ForgotMdp(UserLogin userLogin)
-        {
-            try
-            {
-                await authRepository.ForgotMdp(userLogin);
                 return Ok();
             }
             catch (Exception e)

@@ -39,13 +39,22 @@ namespace Badgage.Controllers
             }
         }
 
+        /// <summary>
+        /// Récupère une session l'id de l'utilisateur
+        /// </summary>
+        /// <param name="idUser"></param>
+        /// <returns></returns>
         [HttpGet("User/{idUser}")]
         public async Task<ActionResult<IEnumerable<SessionModel>>> GetSessionByIdUser(int idUser)
         {
             var result = await sessionRepository.GetSessionsByIdUser(idUser);
             return Ok(result);
         }
-
+        /// <summary>
+        /// Récupère une session l'idTask
+        /// </summary>
+        /// <param name="idTask"></param>
+        /// <returns></returns>
         [HttpGet("Task/{idTask}")]
         public async Task<ActionResult<IEnumerable<SessionModel>>> GetSessionByIdTask(int idTask)
         {
